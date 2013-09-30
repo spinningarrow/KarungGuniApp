@@ -17,3 +17,8 @@ local.properties
 
 # Eclipse project files
 .classpath
+
+# ignore idea
+.idea/
+*.eml
+*.iml
