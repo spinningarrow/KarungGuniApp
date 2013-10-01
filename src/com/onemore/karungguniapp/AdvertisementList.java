@@ -48,7 +48,14 @@ public class AdvertisementList extends ListFragment implements LoaderManager.Loa
         progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT, Gravity.CENTER));
         progressBar.setIndeterminate(true);
-        getListView().setEmptyView(progressBar);
+        try
+        {
+        	getListView().setEmptyView(progressBar);
+        }
+        catch(Exception e)
+        {
+        	
+        }
 
         // Must add the progress bar to the root of the layout
         ViewGroup root = (ViewGroup) getActivity().findViewById(android.R.id.content);
