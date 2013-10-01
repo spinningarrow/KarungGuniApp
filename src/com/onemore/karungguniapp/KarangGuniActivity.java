@@ -4,27 +4,45 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Set;
 
-import com.mongodb.DB;
-import com.mongodb.MongoURI;
-
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 
+import com.mongodb.DB;
+import com.mongodb.MongoURI;
+
 public class KarangGuniActivity extends Activity {
-	private static TextView textView;
+//	private static TextView textView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_karang_guni);
+		ActionBar actionBar = getActionBar();
+	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	    actionBar.setDisplayShowTitleEnabled(false);
 
-		// Create the text view
-	    textView = new TextView(this);
-	    textView.setTextSize(40);		
-	    new MongoDBAPI().execute("mongodb://heroku:e003eadadbf78ed2d2c62537a1bdbd91@paulo.mongohq.com:10048/app18404502");
-	    // Set the text view as the activity layout
-	    setContentView(textView);
+	    Tab tab = actionBar.newTab()
+	                       .setText(R.string.current)
+	                       .setTabListener(new TabListener<AdvertisementList>(
+	                               this, "current", AdvertisementList.class));
+	    actionBar.addTab(tab);
+
+	    tab = actionBar.newTab()
+	                   .setText(R.string.nearby)
+	                   .setTabListener(new TabListener<AdvertisementList>(
+	                           this, "nearby", AdvertisementList.class));
+	    actionBar.addTab(tab);
+//	    
+//		// Create the text view
+//	    textView = new TextView(this);
+//	    textView.setTextSize(40);		
+//	    new MongoDBAPI().execute("mongodb://heroku:e003eadadbf78ed2d2c62537a1bdbd91@paulo.mongohq.com:10048/app18404502");
+//	    // Set the text view as the activity layout
+//	    setContentView(textView);
 	}
 
 	@Override
@@ -34,29 +52,29 @@ public class KarangGuniActivity extends Activity {
 		return true;
 	}
 	
-	private class MongoDBAPI extends AsyncTask<String, Void, String> {
-
-		@Override
-		protected String doInBackground(String... params) {
-			DB db;
-			try {
-				MongoURI mongoURI = new MongoURI(params[0]);
-				db = mongoURI.connectDB();
-				db.authenticate(mongoURI.getUsername(), mongoURI.getPassword()); 
-				//Use the db object to talk to MongoDB
-				Set<String> colls = db.getCollectionNames();
-				return Arrays.toString(colls.toArray());
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		// onPostExecute displays the results of the AsyncTask.
-		@Override
-		protected void onPostExecute(String result) {
-			textView.setText(result);
-		}
-	}
+//	private class MongoDBAPI extends AsyncTask<String, Void, String> {
+//
+//		@Override
+//		protected String doInBackground(String... params) {
+//			DB db;
+//			try {
+//				MongoURI mongoURI = new MongoURI(params[0]);
+//				db = mongoURI.connectDB();
+//				db.authenticate(mongoURI.getUsername(), mongoURI.getPassword()); 
+//				//Use the db object to talk to MongoDB
+//				Set<String> colls = db.getCollectionNames();
+//				return Arrays.toString(colls.toArray());
+//			} catch (UnknownHostException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			return null;
+//		}
+//
+//		// onPostExecute displays the results of the AsyncTask.
+//		@Override
+//		protected void onPostExecute(String result) {
+//			textView.setText(result);
+//		}
+//	}
 }
