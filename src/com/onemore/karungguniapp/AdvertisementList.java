@@ -19,9 +19,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 public class AdvertisementList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 	List<Advertisement> ads = new ArrayList<Advertisement>();
+	ListView listView;
 	  // This is the Adapter being used to display the list's data
     SimpleCursorAdapter mAdapter;
 
@@ -33,34 +35,35 @@ public class AdvertisementList extends ListFragment implements LoaderManager.Loa
     static final String SELECTION = "((" + 
             ContactsContract.Data.DISPLAY_NAME + " NOTNULL) AND (" +
             ContactsContract.Data.DISPLAY_NAME + " != '' ))";
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	return getActivity().findViewById(R.layout.ad_list);
-    };
     
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        listView = getListView(); //EX: 
+//        listView.setTextFilterEnabled(true);
+//        registerForContextMenu(listView);
+//        super.onActivityCreated(savedInstanceState);
+//    }
     @Override
-	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Create a progress bar to display while the list loads
-        ProgressBar progressBar = new ProgressBar(getActivity());
-        progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT, Gravity.CENTER));
-        progressBar.setIndeterminate(true);
-        try
-        {
-        	getListView().setEmptyView(progressBar);
-        }
-        catch(Exception e)
-        {
-        	
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
+    	
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.ad_list, container, false);
+        listView = (ListView) v.findViewById(android.R.id.list);
+        TextView text = (TextView) v.findViewById(android.R.id.empty);
+//        setListShown(false);
+//        // Create a progress bar to display while the list loads
+//        ProgressBar progressBar = new ProgressBar(getActivity());
+//        progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+//                LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+//        progressBar.setIndeterminate(true);
+//    	listView.setEmptyView(progressBar);
 
         // Must add the progress bar to the root of the layout
-        ViewGroup root = (ViewGroup) getActivity().findViewById(android.R.id.content);
-        root.addView(progressBar);
-
+//        ViewGroup root = (ViewGroup) getActivity().findViewById(android.R.id.content);
+//        root.addView(progressBar);
+        
+        listView.setEmptyView(text);
         // For the cursor adapter, specify which columns go into which views
         String[] fromColumns = {ContactsContract.Data.DISPLAY_NAME};
         int[] toViews = {android.R.id.text1}; // The TextView in simple_list_item_1
@@ -70,13 +73,16 @@ public class AdvertisementList extends ListFragment implements LoaderManager.Loa
         mAdapter = new SimpleCursorAdapter(getActivity(), 
         		android.R.layout.simple_list_item_1, null,
                 fromColumns, toViews, 0);
-        setListAdapter(mAdapter);
+        listView.setAdapter(mAdapter);
 
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
         getLoaderManager().initLoader(0, null, this);
-    }
 
+        return v;
+    }
+    
+    
     // Called when a new Loader needs to be created
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Now create and return a CursorLoader that will take care of
