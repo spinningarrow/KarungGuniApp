@@ -1,9 +1,13 @@
 package com.onemore.karungguniapp;
 
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -48,6 +53,10 @@ public class LoginActivity extends Activity {
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
 
+	CheckBox remember;
+	SharedPreferences preferences ;
+	String PREFS_NAME = "com.example.sp.LoginPrefs";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,6 +82,13 @@ public class LoginActivity extends Activity {
 					}
 				});
 
+		
+          remember = (CheckBox)findViewById(R.id.checkBox1);
+		
+		
+		preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+		
+		
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
@@ -145,8 +161,23 @@ public class LoginActivity extends Activity {
 			// perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
-			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
+		//	mAuthTask = new UserLoginTask();
+			//mAuthTask.execute((Void) null);
+			if (preferences.getString("logged", "").toString().equals("logged")) 
+			{
+				Intent i = new Intent(LoginActivity.this,AfterLogin.class);
+				i.putExtra("EMAIL",preferences.getString("mEmail", "").toString());
+				i.putExtra("PASSWORD",preferences.getString("mPassword", "").toString());
+				i.putExtra("CHECK", true);
+				startActivity(i);
+				
+			}
+			Intent i = new Intent(LoginActivity.this,AfterLogin.class);
+			i.putExtra("USERNAME", mEmail);
+			i.putExtra("PASSWORD", mPassword);
+			i.putExtra("CHECK", remember.isChecked());
+			startActivity(i);	
+			
 		}
 	}
 
