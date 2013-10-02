@@ -140,7 +140,7 @@ public class LoginActivity extends Activity {
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
-	public void attemptLogin(int type){
+	public void attemptLogin(int loginType){
 		if (mAuthTask != null) {
 			return;
 		}
@@ -149,62 +149,7 @@ public class LoginActivity extends Activity {
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
 
-		// Store values at the time of the login attempt.
-		mEmail = mEmailView.getText().toString();
-		mPassword = mPasswordView.getText().toString();
-
-		boolean cancel = false;
-		View focusView = null;
-
-		// Check for a valid password.
-		if (TextUtils.isEmpty(mPassword)) {
-			mPasswordView.setError(getString(R.string.error_field_required));
-			focusView = mPasswordView;
-			cancel = true;
-		} else if (mPassword.length() < 4) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
-			focusView = mPasswordView;
-			cancel = true;
-		}
-
-		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
-		}
-
-		if (cancel) {
-			// There was an error; don't attempt login and focus the first
-			// form field with an error.
-			focusView.requestFocus();
-		} else {
-			// Show a progress spinner, and kick off a background task to
-			// perform the user login attempt.
-			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-			showProgress(true);
-		//	mAuthTask = new UserLoginTask();
-			//mAuthTask.execute((Void) null);
-			if (preferences.getString("logged", "").toString().equals("logged")) 
-			{
-				Intent i = new Intent(LoginActivity.this,AfterLogin.class);
-				i.putExtra("EMAIL",preferences.getString("mEmail", "").toString());
-				i.putExtra("PASSWORD",preferences.getString("mPassword", "").toString());
-				i.putExtra("CHECK", true);
-				startActivity(i);
-				
-			}
-			Intent i = new Intent(LoginActivity.this,AfterLogin.class);
-			i.putExtra("USERNAME", mEmail);
-			i.putExtra("PASSWORD", mPassword);
-			i.putExtra("CHECK", remember.isChecked());
-			startActivity(i);	
-
-		switch(type){
+		switch(loginType){
 		
 			case 0 : // Login using email & password
 				// Store values at the time of the login attempt.
@@ -245,8 +190,22 @@ public class LoginActivity extends Activity {
 					// perform the user login attempt.
 					mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 					showProgress(true);
-					mAuthTask = new UserLoginTask();
-					mAuthTask.execute((Void) null);
+//					mAuthTask = new UserLoginTask();
+//					mAuthTask.execute((Void) null);
+					if (preferences.getString("logged", "").toString().equals("logged")) 
+					{
+						Intent i = new Intent(LoginActivity.this,AfterLogin.class);
+						i.putExtra("EMAIL",preferences.getString("mEmail", "").toString());
+						i.putExtra("PASSWORD",preferences.getString("mPassword", "").toString());
+						i.putExtra("CHECK", true);
+						startActivity(i);
+						
+					}
+					Intent i = new Intent(LoginActivity.this,AfterLogin.class);
+					i.putExtra("USERNAME", mEmail);
+					i.putExtra("PASSWORD", mPassword);
+					i.putExtra("CHECK", remember.isChecked());
+					startActivity(i);	
 				}
 			case 1	:	// Login using Facebook API
 			case 2	:	// Login using Google+ API
