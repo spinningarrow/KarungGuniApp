@@ -1,21 +1,25 @@
 <resources>
 
     <string name="title_activity_login">Sign in</string>
+    <string name="title_reset_password">Reset Password</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in_register"><b>Sign in</b> or register</string>
+    <string name="action_sign_in_register"><b>Login</b></string>
      <string name="action_remember"><b>Remember</b></string>
-    
     <string name="action_sign_in_short">Sign in</string>
+    <string name="sign_in_with">Or sign in with: </string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google+</string>
     <string name="action_forgot_password">Recover lost password</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is requirWed</string>
-
+    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_login_mode">Invalid login mode detected</string>
     <string name="welcome">Welcome You !!!</string>
     <string name="reset">Reset</string>
     

@@ -25,7 +25,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-           <activity android:name="com.onemore.karungguniapp.AfterLogin"></activity>
+        <activity
+            android:name="com.onemore.karungguniapp.ResetPassword"
+            android:label="@string/title_reset_password" 
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            >
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+<activity android:name="com.onemore.karungguniapp.AfterLogin"></activity>
     </application>
 
 </manifest>

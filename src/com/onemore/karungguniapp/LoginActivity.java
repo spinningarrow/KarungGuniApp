@@ -19,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -52,6 +53,7 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	private TextView mForgotView;
 
 	CheckBox remember;
 	SharedPreferences preferences ;
@@ -75,12 +77,21 @@ public class LoginActivity extends Activity {
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
 						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
+							attemptLogin(0);
 							return true;
 						}
 						return false;
 					}
 				});
+		mForgotView = (TextView) findViewById(R.id.forgot_password);
+		mForgotView.setOnClickListener(new View.OnClickListener(){
+			@Override
+            public void onClick(View view) {
+            	Intent forgotPassword = new Intent(LoginActivity.this,ResetPassword.class);
+                startActivity(forgotPassword);
+            }
+		});
+
 
 		
           remember = (CheckBox)findViewById(R.id.checkBox1);
@@ -92,15 +103,30 @@ public class LoginActivity extends Activity {
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
+		
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
+					public void onClick(View view){
+						attemptLogin(0);
+					}
+				});
+		findViewById(R.id.facebook_login_button).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
 					public void onClick(View view) {
-						attemptLogin();
+						attemptLogin(1);
+					}
+				});
+		findViewById(R.id.google_login_button).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						attemptLogin(2);
 					}
 				});
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,7 +140,7 @@ public class LoginActivity extends Activity {
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
-	public void attemptLogin() {
+	public void attemptLogin(int type){
 		if (mAuthTask != null) {
 			return;
 		}
@@ -177,7 +203,57 @@ public class LoginActivity extends Activity {
 			i.putExtra("PASSWORD", mPassword);
 			i.putExtra("CHECK", remember.isChecked());
 			startActivity(i);	
-			
+
+		switch(type){
+		
+			case 0 : // Login using email & password
+				// Store values at the time of the login attempt.
+				mEmail = mEmailView.getText().toString();
+				mPassword = mPasswordView.getText().toString();
+		
+				boolean cancel = false;
+				View focusView = null;
+		
+				// Check for a valid password.
+				if (TextUtils.isEmpty(mPassword)) {
+					mPasswordView.setError(getString(R.string.error_field_required));
+					focusView = mPasswordView;
+					cancel = true;
+				} else if (mPassword.length() < 4) {
+					mPasswordView.setError(getString(R.string.error_invalid_password));
+					focusView = mPasswordView;
+					cancel = true;
+				}
+		
+				// Check for a valid email address.
+				if (TextUtils.isEmpty(mEmail)) {
+					mEmailView.setError(getString(R.string.error_field_required));
+					focusView = mEmailView;
+					cancel = true;
+				} else if (!mEmail.contains("@")) {
+					mEmailView.setError(getString(R.string.error_invalid_email));
+					focusView = mEmailView;
+					cancel = true;
+				}
+		
+				if (cancel) {
+					// There was an error; don't attempt login and focus the first
+					// form field with an error.
+					focusView.requestFocus();
+				} else {
+					// Show a progress spinner, and kick off a background task to
+					// perform the user login attempt.
+					mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+					showProgress(true);
+					mAuthTask = new UserLoginTask();
+					mAuthTask.execute((Void) null);
+				}
+			case 1	:	// Login using Facebook API
+			case 2	:	// Login using Google+ API
+			default	:	Toast.makeText(getApplicationContext(),
+							R.string.error_invalid_login_mode,
+							Toast.LENGTH_LONG)
+							.show();
 		}
 	}
 
