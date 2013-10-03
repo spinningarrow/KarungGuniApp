@@ -49,7 +49,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		mAdapter = new SimpleCursorAdapter(getActivity(),
 				R.layout.advertisement, null,
 				new String[] { Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS },
-				new int[] { android.R.id.text1, android.R.id.text2 }, 0);
+				new int[] { R.id.title, R.id.distance }, 0);
 		setListAdapter(mAdapter);
 
 		// Start out with a progress indicator.
