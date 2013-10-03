@@ -30,8 +30,13 @@
             android:label="@string/title_activity_karang_guni" >
         </activity>
         <activity
-                android:name=".LBS.GetLocationWithGPS"
-                >
+                android:name=".LBS.GetLocationWithGPS">
+        </activity>
+        <activity android:name=".AdDetail">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

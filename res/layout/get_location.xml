@@ -14,6 +14,10 @@
             <TextView android:id="@+id/detail" android:layout_width="wrap_content"
                       android:layout_height="wrap_content" android:layout_marginBottom="5dp"
                       android:layout_marginTop="30dp" android:textAppearance="?android:attr/textAppearanceMedium" />
+            <Button android:id="@+id/openGMap_button" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp" android:text="Open GoogleMap"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content" android:layout_marginBottom="2dp"

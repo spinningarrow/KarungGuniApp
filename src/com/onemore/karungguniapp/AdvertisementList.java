@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
+import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
 
 public class AdvertisementList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 	List<Advertisement> ads = new ArrayList<Advertisement>();
@@ -99,9 +102,17 @@ public class AdvertisementList extends ListFragment implements LoaderManager.Loa
         // longer using it.
         mAdapter.swapCursor(null);
     }
-
-    @Override 
+//    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // Do something when a list item is clicked
+//        // Do something when a list item is clicked
+//        // TODO: Gm, implement the function
+        Intent adDetail = new Intent( getActivity(),AdDetail.class);
+        Intent getLocation = new Intent(getActivity(), GetLocationWithGPS.class);
+        startActivity(adDetail);
+        startActivity(getLocation);
     }
+
+
+
+
 }

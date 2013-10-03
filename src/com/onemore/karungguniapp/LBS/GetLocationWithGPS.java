@@ -18,15 +18,21 @@ import android.database.Cursor;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import com.onemore.karungguniapp.AdDetail;
+import com.onemore.karungguniapp.AdvertisementList;
 import com.onemore.karungguniapp.KarangGuniActivity;
 import com.onemore.karungguniapp.LBS.LocationHelper;
 import com.onemore.karungguniapp.R;
+import java.util.Locale;
 
 public class GetLocationWithGPS extends Activity {
 
@@ -41,6 +47,10 @@ public class GetLocationWithGPS extends Activity {
     private TextView detail;
     private TextView gpsEvents;
     private TextView satelliteStatus;
+    private Button openGMap;
+
+    private float latitude;
+    private float longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +68,36 @@ public class GetLocationWithGPS extends Activity {
         locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         gpsListener = new GpsListener();
 
+        latitude = longitude = -1;
+
+
+        openGMap = (Button) findViewById(R.id.openGMap_button);
+        openGMap.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+//                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+//                startActivity(new Intent(KarangGuniActivity.this, android.net.Uri.parse(uri) ));
+                if (latitude !=-1&& longitude!=-1){
+//                    latitude =  1351909;
+//                    longitude = 103703675;
+                        int zoom=100;
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d", latitude, longitude,zoom);
+                    Uri parsedURI = Uri.parse(uri);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, parsedURI);
+                    //openGMap.setText(parsedURI.toString());
+                    startActivity(intent);
+                }else{
+                    openGMap.setText("Location not Available");
+                }
+            }
+        });
+
         handler = new Handler() {
             public void handleMessage(Message m) {
                 Log.d(KarangGuniActivity.LOG_TAG, "Handler returned with message: " + m.toString());
                 if (m.what == LocationHelper.MESSAGE_CODE_LOCATION_FOUND) {
                     detail.setText("HANDLER RETURNED\nlat:" + m.arg1 + "\nlon:" + m.arg2);
+                    latitude = m.arg1;
+                    longitude = m.arg2;
                 } else if (m.what == LocationHelper.MESSAGE_CODE_LOCATION_NULL) {
                     detail.setText("HANDLER RETURNED\nunable to get location");
                 } else if (m.what == LocationHelper.MESSAGE_CODE_PROVIDER_NOT_PRESENT) {
@@ -95,8 +130,6 @@ public class GetLocationWithGPS extends Activity {
             alert.show();
         } else {
             LocationHelper locationHelper = new LocationHelper(locationMgr, handler, KarangGuniActivity.LOG_TAG);
-            // here we aren't using a progressdialog around getCurrentLocation (don't want to block entire UI)
-            // (but be advised that you could if the situation absolutely required it)
             locationHelper.getCurrentLocation(30);
         }
 
@@ -109,7 +142,6 @@ public class GetLocationWithGPS extends Activity {
         locationMgr.removeGpsStatusListener(gpsListener);
     }
 
-    // you can also use a GpsListener to be notified when the GPS is started/stopped, and when first "fix" is obtained
     private class GpsListener implements GpsStatus.Listener {
         public void onGpsStatusChanged(int event) {
             Log.d("GpsListener", "Status changed to " + event);
@@ -120,10 +152,8 @@ public class GetLocationWithGPS extends Activity {
                 case GpsStatus.GPS_EVENT_STOPPED:
                     gpsEvents.setText("GPS_EVENT_STOPPED");
                     break;
-                // GPS_EVENT_SATELLITE_STATUS will be called frequently
-                // all satellites in use will invoke it, don't rely on it alone
+
                 case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                    // this is *very* chatty, only very advanced use cases should need this (avoid it if you don't need it)
                     gpsStatus = locationMgr.getGpsStatus(gpsStatus);
                     StringBuilder sb = new StringBuilder();
                     for (GpsSatellite sat : gpsStatus.getSatellites()) {

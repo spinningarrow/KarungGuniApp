@@ -6,14 +6,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
 import com.onemore.karungguniapp.LBS.ProviderDetail;
+import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
+
+import java.util.Locale;
 
 //import com.mongodb.DB;
 //import com.mongodb.MongoURI;
@@ -22,7 +25,8 @@ public class KarangGuniActivity extends Activity implements AdapterView.OnItemCl
 
     private int karang_guni;
     private Button getLoc;
-    private LocationManager locationMgr;
+//    private Button openGMap;
+    //private LocationManager locationMgr;
 
     public static final String LOG_TAG = "LocationInfo";
     public static final String PROVIDER_NAME = "PROVIDER_NAME";
@@ -31,7 +35,7 @@ public class KarangGuniActivity extends Activity implements AdapterView.OnItemCl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		setContentView(R.layout.activity_karang_guni);
 		ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -55,6 +59,18 @@ public class KarangGuniActivity extends Activity implements AdapterView.OnItemCl
                 startActivity(new Intent(KarangGuniActivity.this, GetLocationWithGPS.class));
             }
         });
+        //TODO: Gm, delete this function in this file
+//        openGMap = (Button) findViewById(R.id.openGMap_button);
+//        openGMap.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v){
+////                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+////                startActivity(new Intent(KarangGuniActivity.this, Uri.parse(uri) ));
+////                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+////                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+////                context.startActivity(intent);
+//            }
+//        });
+
 //	    
 //		// Create the text view
 //	    textView = new TextView(this);
