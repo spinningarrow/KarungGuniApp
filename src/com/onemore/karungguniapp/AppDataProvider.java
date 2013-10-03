@@ -26,6 +26,7 @@ public class AppDataProvider extends ContentProvider{
 
     // Projection map for selecting columns
     private static HashMap<String, String> sUsersProjectionMap;
+    private static HashMap<String, String> sAdvertisementsProjectionMap;
 
     // URIMatcher
     private static final UriMatcher sUriMatcher;
@@ -34,11 +35,15 @@ public class AppDataProvider extends ContentProvider{
     private static final int USERS = 1; // all users
     private static final int USER_ID = 2; // specific user
 
+    private static final int ADVERTISEMENTS = 3; // all ads
+    private static final int ADVERTISEMENT_ID = 4; // specific ad
+
     // Static objects block
     static {
         // Create URI Matcher
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+        // TABLE: Users
         sUriMatcher.addURI(AppData.AUTHORITY, "users", USERS);
         sUriMatcher.addURI(AppData.AUTHORITY, "users/#", USER_ID);
 
@@ -47,6 +52,16 @@ public class AppDataProvider extends ContentProvider{
         sUsersProjectionMap.put(AppData.Users._ID, AppData.Users._ID);
         sUsersProjectionMap.put(AppData.Users.COLUMN_NAME_EMAIL, AppData.Users.COLUMN_NAME_EMAIL);
         sUsersProjectionMap.put(AppData.Users.COLUMN_NAME_CREATED, AppData.Users.COLUMN_NAME_CREATED);
+
+        // TABLE: Advertisements
+        sUriMatcher.addURI(AppData.AUTHORITY, "advertisements", ADVERTISEMENTS);
+        sUriMatcher.addURI(AppData.AUTHORITY, "advertisements/#", ADVERTISEMENT_ID);
+
+        // Create projection map that returns all columns
+        sAdvertisementsProjectionMap = new HashMap<String, String>();
+        sAdvertisementsProjectionMap.put(AppData.Advertisements._ID, AppData.Advertisements._ID);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_CREATED, AppData.Advertisements.COLUMN_NAME_CREATED);
+
     }
 
     public boolean onCreate() {
@@ -83,17 +98,34 @@ public class AppDataProvider extends ContentProvider{
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         // Constructs a new query builder and sets its table name
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(AppData.Users.TABLE_NAME);
+        String defaultSortOrder;
 
         // Pattern matching
         switch (sUriMatcher.match(uri)) {
             case USERS:
+                qb.setTables(AppData.Users.TABLE_NAME);
                 qb.setProjectionMap(sUsersProjectionMap);
+                defaultSortOrder = AppData.Users.DEFAULT_SORT_ORDER;
                 break;
 
             case USER_ID:
+                qb.setTables(AppData.Users.TABLE_NAME);
                 qb.setProjectionMap(sUsersProjectionMap);
                 qb.appendWhere(AppData.Users._ID + "=" + uri.getPathSegments().get(AppData.Users.USER_ID_PATH_POSITION));
+                defaultSortOrder = AppData.Users.DEFAULT_SORT_ORDER;
+                break;
+
+            case ADVERTISEMENTS:
+                qb.setTables(AppData.Advertisements.TABLE_NAME);
+                qb.setProjectionMap(sAdvertisementsProjectionMap);
+                defaultSortOrder = AppData.Advertisements.DEFAULT_SORT_ORDER;
+                break;
+
+            case ADVERTISEMENT_ID:
+                qb.setTables(AppData.Advertisements.TABLE_NAME);
+                qb.setProjectionMap(sAdvertisementsProjectionMap);
+                qb.appendWhere(AppData.Advertisements._ID + "=" + uri.getPathSegments().get(AppData.Advertisements.ADVERTISEMENT_ID_PATH_POSITION));
+                defaultSortOrder = AppData.Advertisements.DEFAULT_SORT_ORDER;
                 break;
 
             default:
@@ -105,7 +137,14 @@ public class AppDataProvider extends ContentProvider{
 
         // Performs the query
         // Cursor is null if error occurs while reading the database
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, AppData.Users.DEFAULT_SORT_ORDER);
+        Cursor c = qb.query(
+                db,
+                projection,
+                selection,
+                selectionArgs,
+                null, // groupBy
+                null, // having
+                sortOrder != null ? sortOrder : defaultSortOrder);
 
         // Tells the Cursor what URI to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
@@ -134,7 +173,7 @@ public class AppDataProvider extends ContentProvider{
         // Gets the current system time in milliseconds
         Long now = System.currentTimeMillis();
 
-        // If the values map doesn't contain the creation date, sets the value to the current time.
+        // Default insert values
         if (!newValues.containsKey(AppData.Users.COLUMN_NAME_CREATED)) {
             newValues.put(AppData.Users.COLUMN_NAME_CREATED, now);
         }
