@@ -1,25 +1,37 @@
 package com.onemore.karungguniapp;
 
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Set;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.content.Context;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
+import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
+import com.onemore.karungguniapp.LBS.ProviderDetail;
 
-import com.mongodb.DB;
-import com.mongodb.MongoURI;
+//import com.mongodb.DB;
+//import com.mongodb.MongoURI;
 
-public class KarangGuniActivity extends Activity {
-//	private static TextView textView;
+public class KarangGuniActivity extends Activity implements AdapterView.OnItemClickListener {
+
+    private int karang_guni;
+    private Button getLoc;
+    private LocationManager locationMgr;
+
+    public static final String LOG_TAG = "LocationInfo";
+    public static final String PROVIDER_NAME = "PROVIDER_NAME";
+
+    //	private static TextView textView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		setContentView(R.layout.activity_karang_guni);
 		ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -36,6 +48,13 @@ public class KarangGuniActivity extends Activity {
 	                   .setTabListener(new TabListener<AdvertisementList>(
 	                           this, "nearby", AdvertisementList.class));
 	    actionBar.addTab(tab);
+
+        getLoc = (Button) findViewById(R.id.getloc_button);
+        getLoc.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(KarangGuniActivity.this, GetLocationWithGPS.class));
+            }
+        });
 //	    
 //		// Create the text view
 //	    textView = new TextView(this);
@@ -44,11 +63,19 @@ public class KarangGuniActivity extends Activity {
 //	    // Set the text view as the activity layout
 //	    setContentView(textView);
 	}
-
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TextView textView = (TextView) view;
+        String providerName = textView.getText().toString();
+        Intent intent = new Intent(KarangGuniActivity.this, ProviderDetail.class);
+        intent.putExtra(PROVIDER_NAME, providerName);
+        startActivity(intent);
+    }
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.karang_guni, menu);
+        karang_guni = R.menu.karang_guni;
+        getMenuInflater().inflate(karang_guni, menu);
 		return true;
 	}
 	

@@ -8,5 +8,6 @@
     <string name="action_search">Search</string>
     <string name="current">Current</string>
     <string name="nearby">Nearby</string>
+    <string name="retrieve_KG_position">my location</string>
 
 </resources>
