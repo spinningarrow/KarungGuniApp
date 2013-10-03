@@ -13,6 +13,13 @@
         android:icon="@drawable/kg_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <provider android:name=".AppDataProvider"
+                  android:authorities="com.onemore.karungguniapp.provider"
+                  android:exported="false">
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+
         <activity
             android:name="com.onemore.karungguniapp.LoginActivity"
             android:label="@string/app_name" >
