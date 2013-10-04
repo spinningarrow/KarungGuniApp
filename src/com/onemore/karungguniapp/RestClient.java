@@ -4,16 +4,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import com.turbomanage.httpclient.AsyncCallback;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.android.AndroidHttpClient;
-import org.codeandmagic.deferredobject.Promise;
-import org.codeandmagic.deferredobject.android.DeferredAsyncTask;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.List;
 
 public class RestClient {
 
@@ -82,65 +80,65 @@ public class RestClient {
         return result;
     }
 
-    public static JSONObject query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
-        Log.w("REST_CLIENT", "Entered query");
+    // Query the server database for single objects or an array of objects
+    // Call the callback when the query is complete
+    public static void query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
+//        Log.w("REST_CLIENT", "Entered query");
         // TODO Convert URI to requestEndpoint
-        String requestEndpoint = "users";
-        JSONObject obj = null;
-//        Promise promise<AndroidHttpClient, AndroidHttpClient, Void> = new DeferredAsyncTask<AndroidHttpClient, AndroidHttpClient, Void>() {
-//
-//        }
+        // Compute requestEndpoint based on the uri
+        String requestEndpoint;
+
+        switch (AppDataUriMatcher.sUriMatcher.match(uri)) {
+            case AppDataUriMatcher.USERS:
+            case AppDataUriMatcher.ADVERTISEMENTS:
+                requestEndpoint = uri.getPathSegments().get(0);
+                break;
+
+            case AppDataUriMatcher.USER_EMAIL:
+            case AppDataUriMatcher.ADVERTISEMENT_ID:
+                List<String> pathSegments = uri.getPathSegments();
+                requestEndpoint = pathSegments.get(0) + "/" + pathSegments.get(1);
+                break;
+
+            // If the URI pattern doesn't match any permitted patterns, throws an exception.
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
 
         final Handler handler = new Handler(callback);
         final Message message = Message.obtain();
 
         AndroidHttpClient httpClient = new AndroidHttpClient(API_URL);
         httpClient.setMaxRetries(5);
+
+        // GET the result asynchronously
         httpClient.get(API_PATH + requestEndpoint, null, new AsyncCallback() {
-            Bundle data = new Bundle();
+
+            // Store the result in a bundle which will then be passed as a message to the query callback
+            // result schema:
+            // int success - whether the query was successful
+            // int status - HTTP status code returned
+            // String response - raw HTTP response (the callback handler must know what to do with it)
+            Bundle result = new Bundle();
+
             @Override
             public void onComplete(HttpResponse httpResponse) {
-                Log.w("REST_CLIENT", "Entered onComplete");
 
-                // Print response
-                Log.d("REST_CLIENT", httpResponse.getBodyAsString());
+                // Query was successful (TODO actually maybe not, does it just mean that no error occurred from this side?)
+                result.putInt("success", 1);
+                result.putInt("status", httpResponse.getStatus());
+                result.putString("response", httpResponse.getBodyAsString());
 
-                data.putInt("success", 1);
-                data.putString("response", httpResponse.getBodyAsString());
-                message.setData(data);
+                message.setData(result);
                 handler.sendMessage(message);
-
-                InputStream stream = null;
-
-                try {
-                    stream = new ByteArrayInputStream(httpResponse.getBodyAsString().getBytes("UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-                try {
-                    JSONArray result = parseJsonArray(stream);
-                    JSONObject obj = result.getJSONObject(0);
-                    Log.d("REST API", obj.getString("email"));
-                } catch (Exception e) {
-
-                    data.putInt("success", 0);
-                    data.putString("response", null);
-                    message.setData(data);
-                    handler.sendMessage(message);
-
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
             }
+
             @Override
             public void onError(Exception e) {
-                Log.w("REST_CLIENT", "Entered onError");
+
+                result.putInt("success", 0);
                 e.printStackTrace();
             }
         });
-
-        return obj;
     }
 }

@@ -11,8 +11,8 @@ public class AppData {
 
     // Contract for the Users table
     // Schema:
-    // _ID
-    // EMAIL
+    // _ID (unique)
+    // EMAIL (unique)
     // PASSWORD
     // CREATED
     public static final class Users implements BaseColumns {
@@ -22,17 +22,17 @@ public class AppData {
 
         // URI
         private static final String PATH_USERS = "/users";
-        private static final String PATH_USER_ID = "/users/";
-        public static final int USER_ID_PATH_POSITION = 1;
+        private static final String PATH_USER_EMAIL = "/users/";
+        public static final int USER_EMAIL_PATH_POSITION = 1;
 
         // Parse URL (with content:// etc)
         public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_USERS);
 
         // URI for single user. Callers must append user id to retrieve
-        public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_USER_ID);
+        public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_USER_EMAIL);
 
         // Pattern for single user matching
-        public static final Uri CONTENT_ID_URI_PATTERN  = Uri.parse(SCHEME + AUTHORITY + PATH_USER_ID + "/#");
+        public static final Uri CONTENT_ID_URI_PATTERN  = Uri.parse(SCHEME + AUTHORITY + PATH_USER_EMAIL + "/*");
 
         // Content types
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.onemore.user";

@@ -28,34 +28,14 @@ public class AppDataProvider extends ContentProvider{
     private static HashMap<String, String> sUsersProjectionMap;
     private static HashMap<String, String> sAdvertisementsProjectionMap;
 
-    // URIMatcher
-    private static final UriMatcher sUriMatcher;
-
-    // Incoming URI matches
-    private static final int USERS = 1; // all users
-    private static final int USER_ID = 2; // specific user
-
-    private static final int ADVERTISEMENTS = 3; // all ads
-    private static final int ADVERTISEMENT_ID = 4; // specific ad
-
     // Static objects block
     static {
-        // Create URI Matcher
-        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
-        // TABLE: Users
-        sUriMatcher.addURI(AppData.AUTHORITY, "users", USERS);
-        sUriMatcher.addURI(AppData.AUTHORITY, "users/#", USER_ID);
 
         // Create projection map that returns all columns
         sUsersProjectionMap = new HashMap<String, String>();
         sUsersProjectionMap.put(AppData.Users._ID, AppData.Users._ID);
         sUsersProjectionMap.put(AppData.Users.COLUMN_NAME_EMAIL, AppData.Users.COLUMN_NAME_EMAIL);
         sUsersProjectionMap.put(AppData.Users.COLUMN_NAME_CREATED, AppData.Users.COLUMN_NAME_CREATED);
-
-        // TABLE: Advertisements
-        sUriMatcher.addURI(AppData.AUTHORITY, "advertisements", ADVERTISEMENTS);
-        sUriMatcher.addURI(AppData.AUTHORITY, "advertisements/#", ADVERTISEMENT_ID);
 
         // Create projection map that returns all columns
         sAdvertisementsProjectionMap = new HashMap<String, String>();
@@ -78,14 +58,14 @@ public class AppDataProvider extends ContentProvider{
         /**
          * Chooses the MIME type based on the incoming URI pattern
          */
-        switch (sUriMatcher.match(uri)) {
+        switch (AppDataUriMatcher.sUriMatcher.match(uri)) {
 
             // If the pattern is for users, returns the general content type.
-            case USERS:
+            case AppDataUriMatcher.USERS:
                 return AppData.Users.CONTENT_TYPE;
 
             // If the pattern is for note IDs, returns the note ID content type.
-            case USER_ID:
+            case AppDataUriMatcher.USER_EMAIL:
                 return AppData.Users.CONTENT_ITEM_TYPE;
 
             // If the URI pattern doesn't match any permitted patterns, throws an exception.
@@ -101,27 +81,27 @@ public class AppDataProvider extends ContentProvider{
         String defaultSortOrder;
 
         // Pattern matching
-        switch (sUriMatcher.match(uri)) {
-            case USERS:
+        switch (AppDataUriMatcher.sUriMatcher.match(uri)) {
+            case AppDataUriMatcher.USERS:
                 qb.setTables(AppData.Users.TABLE_NAME);
                 qb.setProjectionMap(sUsersProjectionMap);
                 defaultSortOrder = AppData.Users.DEFAULT_SORT_ORDER;
                 break;
 
-            case USER_ID:
+            case AppDataUriMatcher.USER_EMAIL:
                 qb.setTables(AppData.Users.TABLE_NAME);
                 qb.setProjectionMap(sUsersProjectionMap);
-                qb.appendWhere(AppData.Users._ID + "=" + uri.getPathSegments().get(AppData.Users.USER_ID_PATH_POSITION));
+                qb.appendWhere(AppData.Users.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.Users.USER_EMAIL_PATH_POSITION));
                 defaultSortOrder = AppData.Users.DEFAULT_SORT_ORDER;
                 break;
 
-            case ADVERTISEMENTS:
+            case AppDataUriMatcher.ADVERTISEMENTS:
                 qb.setTables(AppData.Advertisements.TABLE_NAME);
                 qb.setProjectionMap(sAdvertisementsProjectionMap);
                 defaultSortOrder = AppData.Advertisements.DEFAULT_SORT_ORDER;
                 break;
 
-            case ADVERTISEMENT_ID:
+            case AppDataUriMatcher.ADVERTISEMENT_ID:
                 qb.setTables(AppData.Advertisements.TABLE_NAME);
                 qb.setProjectionMap(sAdvertisementsProjectionMap);
                 qb.appendWhere(AppData.Advertisements._ID + "=" + uri.getPathSegments().get(AppData.Advertisements.ADVERTISEMENT_ID_PATH_POSITION));

@@ -3,26 +3,11 @@ package com.onemore.karungguniapp;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.Menu;
-import org.codeandmagic.deferredobject.*;
-import org.codeandmagic.deferredobject.android.DeferredAsyncTask;
-import org.codeandmagic.deferredobject.android.DeferredHttpUrlConnection;
-import org.codeandmagic.deferredobject.merge.MergedPromiseReject;
-import org.codeandmagic.deferredobject.merge.MergedPromiseResult2;
-import org.json.JSONException;
 
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-public class LoginActivity extends Activity implements
-        ResolveCallback<HttpURLConnection>, RejectCallback<HttpURLConnection> {
-
-    private static final String TAG = "Test";
+public class LoginActivity extends Activity {
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,89 +49,11 @@ public class LoginActivity extends Activity implements
         }
 
         // Try login stuff
-
-        // Callbacks?!
-        Log.d("LOGIN_ACTIVITY", "Before callbacky stuff");
-
-        // Create a callback
-        // TODO set data to be passed to callback
-        Handler.Callback callback = new Handler.Callback() {
-            Bundle data;
-            @Override
-            public boolean handleMessage(Message message) {
-                Log.d("LOGIN_ACTIVITY", "Inside handle message");
-                data = message.getData();
-                Log.d("LOGIN_ACTIVITY SUCCESS", Integer.toString(data.getInt("success")));
-                Log.d("LOGIN_ACTIVITY RESPONSE", data.getString("response"));
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-        };
-
-//        Handler handler = new Handler(callback);
-//        handler.sendMessage(message);
-//        try {
-//            Promise<HttpURLConnection, HttpURLConnection, Void> p1 = new DeferredHttpUrlConnection(
-//                    new URL("http://www.google.com"));
-//
-//
-//            p1.done(this).fail(this);
-//
-//            DeferredObject
-//                    .when(p1, new DeferredHttpUrlConnection(new URL("http://1")))
-//                    .done(new ResolveCallback<MergedPromiseResult2<HttpURLConnection, HttpURLConnection>>() {
-//                        @Override
-//                        public void onResolve(
-//                                MergedPromiseResult2<HttpURLConnection, HttpURLConnection> resolved) {
-//                            Log.i(TAG, "Done for both!" + resolved._1 + ", " + resolved._2);
-//                        }
-//                    }).fail(new RejectCallback<MergedPromiseReject>() {
-//
-//                @Override
-//                public void onReject(MergedPromiseReject rejected) {
-//                    Log.e(TAG, "One failed: " + rejected.rejected + " index is "
-//                            + rejected.index);
-//                }
-//            });
-//        }
-//
-//        catch (MalformedURLException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-
-
-
-        try {
-            AccountManager.loginWithEmail("sahil29@gmail.com", "1234", callback);
-        } catch (JSONException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-//        try {
-//            if (AccountManager.loginWithEmail(deferred, "sahil29@gmail.com", "1234")) {
-//                Log.w("LOGIN_ACTIVITY_PROVIDER", "Logged in!");
-//            } else {
-//                Log.w("LOGIN_ACTIVITY_PROVIDER", "WTF!");
-//            }
-//        } catch (JSONException e) {
-//            Log.w("LOGIN_ACTIVITY_PROVIDER", "WHOOPSSSSIEE");
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
+        Log.w("LOGIN_ACTIVITY", "Trying to log in now...");
+        AccountManager.loginWithEmail("sahil29@gmail.com", "1234");
 
         // Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
 	}
-
-    @Override
-    public void onResolve(HttpURLConnection resolved) {
-        Log.d(TAG, "Done: " + resolved);
-    }
-
-    @Override
-    public void onReject(HttpURLConnection rejected) {
-        Log.w(TAG, "Fail: " + rejected);
-
-    }
-
 }
