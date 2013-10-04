@@ -1,6 +1,21 @@
 package com.onemore.karungguniapp;
 
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -12,6 +27,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -54,6 +71,10 @@ public class LoginActivity extends Activity {
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
 	private TextView mForgotView;
+	
+	// SHA1 variables
+	private static String SHAHash;
+	public static int NO_OPTIONS=0;
 
 	CheckBox remember;
 	SharedPreferences preferences ;
@@ -65,11 +86,7 @@ public class LoginActivity extends Activity {
 
 		setContentView(R.layout.activity_login);
 
-		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
-		mEmailView.setText(mEmail);
-
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -190,22 +207,22 @@ public class LoginActivity extends Activity {
 					// perform the user login attempt.
 					mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 					showProgress(true);
-//					mAuthTask = new UserLoginTask();
-//					mAuthTask.execute((Void) null);
-					if (preferences.getString("logged", "").toString().equals("logged")) 
-					{
-						Intent i = new Intent(LoginActivity.this,AfterLogin.class);
-						i.putExtra("EMAIL",preferences.getString("mEmail", "").toString());
-						i.putExtra("PASSWORD",preferences.getString("mPassword", "").toString());
-						i.putExtra("CHECK", true);
-						startActivity(i);
-						
-					}
-					Intent i = new Intent(LoginActivity.this,AfterLogin.class);
-					i.putExtra("USERNAME", mEmail);
-					i.putExtra("PASSWORD", mPassword);
-					i.putExtra("CHECK", remember.isChecked());
-					startActivity(i);	
+					mAuthTask = new UserLoginTask();
+					mAuthTask.execute((Void) null);
+//					if (preferences.getString("logged", "").toString().equals("logged")) 
+//					{
+//						Intent i = new Intent(LoginActivity.this,AfterLogin.class);
+//						i.putExtra("EMAIL",preferences.getString("mEmail", "").toString());
+//						i.putExtra("PASSWORD",preferences.getString("mPassword", "").toString());
+//						i.putExtra("CHECK", true);
+//						startActivity(i);
+//						
+//					}
+//					Intent i = new Intent(LoginActivity.this,AfterLogin.class);
+//					i.putExtra("USERNAME", mEmail);
+//					i.putExtra("PASSWORD", mPassword);
+//					i.putExtra("CHECK", remember.isChecked());
+//					startActivity(i);	
 				}
 			case 1	:	// Login using Facebook API
 			case 2	:	// Login using Google+ API
@@ -262,26 +279,53 @@ public class LoginActivity extends Activity {
 	 * the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
+			
 			// TODO: attempt authentication against a network service.
-
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost(getString(R.string.http_post));
+			ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+			HttpResponse response;
+			
+			postParameters.add(new BasicNameValuePair("email",computeSHAHash(mEmail)));
+			postParameters.add(new BasicNameValuePair("password",computeSHAHash(mPassword)));
+			
 			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
+				httppost.setEntity(new UrlEncodedFormEntity(postParameters));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
+			try {
+				response = httpclient.execute(httppost);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			// If Account doesn't exist
+//			return false;
 
-			// TODO: register the new account here.
+			// If Account exists
+			// Insert SharedPreferences stuff
+//			 If Account type is Seller
+//			Intent i = new Intent(LoginActivity.this,<Seller>.class);
+//			i.putExtra("USERNAME", mEmail);
+//			i.putExtra("PASSWORD", mPassword);
+//			i.putExtra("ROLE", "Seller");
+//			i.putExtra("CHECK", remember.isChecked());
+//			If Account type is KG
+//			Intent i = new Intent(LoginActivity.this,<KG>.class);
+//			i.putExtra("USERNAME", mEmail);
+//			i.putExtra("PASSWORD", mPassword);
+//			i.putExtra("ROLE", "Seller");
+//			i.putExtra("CHECK", remember.isChecked());
+//			startActivity(i);
 			return true;
 		}
 
@@ -293,9 +337,9 @@ public class LoginActivity extends Activity {
 			if (success) {
 				finish();
 			} else {
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				mEmailView
+						.setError(getString(R.string.error_invalid_credentials));
+				mEmailView.requestFocus();
 			}
 		}
 
@@ -304,5 +348,49 @@ public class LoginActivity extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 		}
+	}
+
+		
+	/**
+	* Used by computeSHAHash
+	*/	
+	private String convertToHex(byte[] data) throws java.io.IOException 
+	{         
+		StringBuffer sb = new StringBuffer();
+		String hex=null;
+		 
+		hex=Base64.encodeToString(data, 0, data.length, NO_OPTIONS);
+		 
+		sb.append(hex);
+		             
+		return sb.toString();
+	}
+	 
+	/**
+	* Used to generate a hashed string
+	*/	 
+	private String computeSHAHash(String password)
+	{
+		MessageDigest mdSha1 = null;
+		try {
+		  mdSha1 = MessageDigest.getInstance("SHA-1");
+	}
+	catch (NoSuchAlgorithmException e1) {
+		Log.e("myapp", "Error initializing SHA1 message digest");
+	}
+	try {
+		mdSha1.update(password.getBytes("ASCII"));
+		}
+		catch (UnsupportedEncodingException e) {
+		    e.printStackTrace();
+		}
+		byte[] data = mdSha1.digest();
+		try {
+			SHAHash=convertToHex(data);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return SHAHash;
 	}
 }

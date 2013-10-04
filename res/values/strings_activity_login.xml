@@ -17,10 +17,13 @@
     <string name="login_progress_signing_in">Signing in&#8230;</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_invalid_credentials">Invalid Login Credentials</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_login_mode">Invalid login mode detected</string>
     <string name="welcome">Welcome You !!!</string>
     <string name="reset">Reset</string>
+    
+    <!-- Httppost address -->
+    <string name="http_post">http://www..com</string>
     
 </resources>
