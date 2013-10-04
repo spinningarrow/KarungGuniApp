@@ -1,10 +1,14 @@
 package com.onemore.karungguniapp;
 
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import com.turbomanage.httpclient.AsyncCallback;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.android.AndroidHttpClient;
+import org.codeandmagic.deferredobject.Promise;
+import org.codeandmagic.deferredobject.android.DeferredAsyncTask;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -77,15 +81,29 @@ public class RestClient {
         return result;
     }
 
-    public void query(Uri requestEndpoint, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public static JSONObject query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
+        Log.w("REST_CLIENT", "Entered query");
+        // TODO Convert URI to requestEndpoint
+        String requestEndpoint = "users";
+        JSONObject obj = null;
+//        Promise promise<AndroidHttpClient, AndroidHttpClient, Void> = new DeferredAsyncTask<AndroidHttpClient, AndroidHttpClient, Void>() {
+//
+//        }
+
+        final Handler handler = new Handler(callback);
+        final Message message = new Message();
+
         AndroidHttpClient httpClient = new AndroidHttpClient(API_URL);
         httpClient.setMaxRetries(5);
         httpClient.get(API_PATH + requestEndpoint, null, new AsyncCallback() {
             @Override
             public void onComplete(HttpResponse httpResponse) {
+                Log.w("REST_CLIENT", "Entered onComplete");
 
                 // Print response
-                Log.d("REST API", httpResponse.getBodyAsString());
+                Log.d("REST_CLIENT", httpResponse.getBodyAsString());
+
+                handler.sendMessage(message);
 
                 InputStream stream = null;
 
@@ -99,7 +117,7 @@ public class RestClient {
                 try {
                     JSONArray result = parseJsonArray(stream);
                     JSONObject obj = result.getJSONObject(0);
-                    Log.d("REST API", obj.getString("name"));
+                    Log.d("REST API", obj.getString("email"));
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -107,8 +125,11 @@ public class RestClient {
             }
             @Override
             public void onError(Exception e) {
+                Log.w("REST_CLIENT", "Entered onError");
                 e.printStackTrace();
             }
         });
+
+        return obj;
     }
 }
