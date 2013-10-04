@@ -49,8 +49,8 @@ public class GetLocationWithGPS extends Activity {
     private TextView satelliteStatus;
     private Button openGMap;
 
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,16 +77,23 @@ public class GetLocationWithGPS extends Activity {
 //                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
 //                startActivity(new Intent(KarangGuniActivity.this, android.net.Uri.parse(uri) ));
                 if (latitude !=-1&& longitude!=-1){
-//                    latitude =  1351909;
-//                    longitude = 103703675;
-                        int zoom=100;
-                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d", latitude, longitude,zoom);
+//                    latitude =  1.351909;
+//                    longitude = 103.703675;
+                        int zoom=16;
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f", latitude*1e-6, longitude*1e-6,zoom,latitude*1e-6,longitude*1e-6); /*,latitude/1000000,longitude/1000000,zoom);*/
                     Uri parsedURI = Uri.parse(uri);
                     Intent intent = new Intent(Intent.ACTION_VIEW, parsedURI);
-                    //openGMap.setText(parsedURI.toString());
+                    openGMap.setText(parsedURI.toString());
                     startActivity(intent);
-                }else{
+                 }else{
                     openGMap.setText("Location not Available");
+//                    latitude =  1351909.0;
+//                    longitude = 103703675.0;
+//                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f", latitude*1e-6, longitude*1e-6,20,latitude*1e-6,longitude*1e-6);
+//                    Uri parsedURI = Uri.parse(uri);
+//                    openGMap.setText(parsedURI.toString());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    startActivity(intent);
                 }
             }
         });
