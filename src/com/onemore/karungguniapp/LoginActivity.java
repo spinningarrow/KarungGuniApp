@@ -289,7 +289,7 @@ public class LoginActivity extends Activity {
 			ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 			HttpResponse response;
 			
-			postParameters.add(new BasicNameValuePair("email",computeSHAHash(mEmail)));
+			postParameters.add(new BasicNameValuePair("email",mEmail));
 			postParameters.add(new BasicNameValuePair("password",computeSHAHash(mPassword)));
 			
 			try {
