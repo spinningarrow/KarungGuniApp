@@ -24,9 +24,6 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
 {
  // Variable Declaration should be in onCreate()
  private Button mSubmit;
-
-
-
  private EditText mUsername;
  private EditText mPassword;
  private EditText mEmail;

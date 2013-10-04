@@ -20,8 +20,7 @@ public class welcome extends ListActivity
  protected Cursor cursor;
  protected ListAdapter adapter;
  protected TextView mUname;
- protected TextView mFname;
- protected TextView mLname;
+
  protected TextView mEmail;
  
  

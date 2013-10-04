@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class Main extends Activity{
 	Button login,signup;
-	String PREFS_NAME = "com.example.sp.LoginPrefs";
+	String PREFS_NAME = "com.onemore.karungguniapp";
 	SharedPreferences preferences ;
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,11 @@ public class Main extends Activity{
 		preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 		if (preferences.getString("logged", "").toString().equals("logged")) 
 		{
-			//Intent i = new Intent(FirstPage.this,AfterLogin.class);
-		//	i.putExtra("EMAIL",preferences.getString("email", "").toString());
-			//i.putExtra("PASSWORD",preferences.getString("password", "").toString());
-		//	i.putExtra("CHECK", true);
-		//(i);
+			Intent i = new Intent(Main.this,AfterLogin.class);
+			i.putExtra("EMAIL",preferences.getString("email", "").toString());
+			i.putExtra("PASSWORD",preferences.getString("password", "").toString());
+		
+			 startActivity(i);
 			
 		}
 		
