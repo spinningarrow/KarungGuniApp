@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class MongoAdapter extends ArrayAdapter<Advertisement> {
 
 	private Context mContext;
+	
 	private LayoutInflater mInflater;
 	Advertisement[] AdvertisementData;
 	public MongoAdapter(Context context, int resource) {
