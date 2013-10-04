@@ -7,36 +7,32 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="6dip"
-        android:contentDescription="TODO"
-        android:layout_toRightOf="@id/icon"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:contentDescription="Ad Photo"
         android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/distance"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_alignBottom="@+id/icon"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="16dp"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Description"
+        android:text="Distance"
         android:textSize="12sp" />
 
-    <TextView        
+    <TextView
         android:id="@+id/title"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/distance"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="true"
+        android:layout_above="@+id/distance"
+        android:layout_alignLeft="@+id/distance"
         android:gravity="center_vertical"
-        android:text="Example application"
-        android:textSize="16sp" />
-    
+        android:text="Ad Title"
+        android:textSize="18sp" />
 
 </RelativeLayout> 
