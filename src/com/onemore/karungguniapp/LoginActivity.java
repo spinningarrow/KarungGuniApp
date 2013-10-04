@@ -67,14 +67,17 @@ public class LoginActivity extends Activity implements
 
         // Callbacks?!
         Log.d("LOGIN_ACTIVITY", "Before callbacky stuff");
-        Message message = new Message();
 
         // Create a callback
         // TODO set data to be passed to callback
         Handler.Callback callback = new Handler.Callback() {
+            Bundle data;
             @Override
             public boolean handleMessage(Message message) {
                 Log.d("LOGIN_ACTIVITY", "Inside handle message");
+                data = message.getData();
+                Log.d("LOGIN_ACTIVITY SUCCESS", Integer.toString(data.getInt("success")));
+                Log.d("LOGIN_ACTIVITY RESPONSE", data.getString("response"));
                 return false;  //To change body of implemented methods use File | Settings | File Templates.
             }
         };

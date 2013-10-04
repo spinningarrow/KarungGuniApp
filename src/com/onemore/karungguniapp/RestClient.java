@@ -1,6 +1,7 @@
 package com.onemore.karungguniapp;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -91,11 +92,12 @@ public class RestClient {
 //        }
 
         final Handler handler = new Handler(callback);
-        final Message message = new Message();
+        final Message message = Message.obtain();
 
         AndroidHttpClient httpClient = new AndroidHttpClient(API_URL);
         httpClient.setMaxRetries(5);
         httpClient.get(API_PATH + requestEndpoint, null, new AsyncCallback() {
+            Bundle data = new Bundle();
             @Override
             public void onComplete(HttpResponse httpResponse) {
                 Log.w("REST_CLIENT", "Entered onComplete");
@@ -103,6 +105,9 @@ public class RestClient {
                 // Print response
                 Log.d("REST_CLIENT", httpResponse.getBodyAsString());
 
+                data.putInt("success", 1);
+                data.putString("response", httpResponse.getBodyAsString());
+                message.setData(data);
                 handler.sendMessage(message);
 
                 InputStream stream = null;
@@ -119,6 +124,12 @@ public class RestClient {
                     JSONObject obj = result.getJSONObject(0);
                     Log.d("REST API", obj.getString("email"));
                 } catch (Exception e) {
+
+                    data.putInt("success", 0);
+                    data.putString("response", null);
+                    message.setData(data);
+                    handler.sendMessage(message);
+
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
