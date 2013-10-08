@@ -84,23 +84,22 @@ public class RestClient {
     // Call the callback when the query is complete
     public static void query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
 //        Log.w("REST_CLIENT", "Entered query");
-        // TODO Convert URI to requestEndpoint
         // Compute requestEndpoint based on the uri
         String requestEndpoint;
+        List<String> pathSegments = uri.getPathSegments();
 
         switch (AppDataUriMatcher.sUriMatcher.match(uri)) {
             case AppDataUriMatcher.USERS:
             case AppDataUriMatcher.ADVERTISEMENTS:
-                requestEndpoint = uri.getPathSegments().get(0);
+                requestEndpoint = pathSegments.get(0);
                 break;
 
             case AppDataUriMatcher.USER_EMAIL:
             case AppDataUriMatcher.ADVERTISEMENT_ID:
-                List<String> pathSegments = uri.getPathSegments();
                 requestEndpoint = pathSegments.get(0) + "/" + pathSegments.get(1);
                 break;
 
-            // If the URI pattern doesn't match any permitted patterns, throws an exception.
+            // If the URI pattern doesn't match any permitted patterns, throw an exception
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }

@@ -27,55 +27,44 @@ public class AccountManager {
         Handler.Callback queryCallback = new Handler.Callback() {
             Bundle result;
             JSONObject user;
-            boolean success;
 
             @Override
             public boolean handleMessage(Message message) {
                 result = message.getData();
 
-                // Check that no error occurred
-                if (result.getInt("success") == 1 && result.getInt("status") == 200) {
-                    try {
-                        user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
-
-                        // Check if a user was found
-                        if (user != null) {
-
-                            // Check if the password hash matches the found user's hash
-                            try {
-                                if (AccountManager.hashPassword(password).equals(user.getString(AppData.Users.COLUMN_NAME_PASSWORD))) {
-                                    // TODO log the user in
-                                    Log.w("ACCOUNT_MANAGER", "User logged in!");
-                                    success = true;
-                                }
-
-                                else {
-                                    // TODO ask the user to enter the password or email again
-                                    success = false;
-                                }
-                            }
-
-                            catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        else {
-                            // TODO ask the user to create an account
-                            success = false;
-                        }
-                    }
-
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                // Return if an error occurs
+                if (result.getInt("success") != 1 || result.getInt("status") != 200) {
+                    Log.w("ACCOUNT_MANAGER", "Login error occurred");
+                    return false;
                 }
 
-                else {
-                    success = false;
+                try {
+                    user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
+
+                    // TODO If no user was found, prompt the user to create an account
+                    if (user == null) {
+                        return false;
+                    }
+
+                    // TODO If the password hash doesn't match, ask the user to enter the password again
+                    if (!AccountManager.hashPassword(password).equals(user.getString(AppData.Users.COLUMN_NAME_PASSWORD))) {
+                        return false;
+                    }
+
+                    // TODO Log the user in
+                    Log.w("ACCOUNT_MANAGER", "User logged in!");
+                    return true;
                 }
 
-                return success;
+                catch (JSONException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+                catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
             }
         };
 
