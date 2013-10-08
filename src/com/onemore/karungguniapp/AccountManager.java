@@ -13,8 +13,7 @@ import java.io.IOException;
 
 public class AccountManager {
     public static String hashPassword(String password) {
-        // TODO return hashed password
-        return password;
+        return SHA1.computeHash(password);
     }
 
     // Standard login (email with password)
@@ -44,16 +43,18 @@ public class AccountManager {
 
                     // TODO If no user was found, prompt the user to create an account
                     if (user == null) {
+                        Log.w("ACCOUNT_MANAGER", "ERROR: No user found.");
                         return false;
                     }
 
                     // TODO If the password hash doesn't match, ask the user to enter the password again
                     if (!AccountManager.hashPassword(password).equals(user.getString(AppData.Users.COLUMN_NAME_PASSWORD))) {
+                        Log.w("ACCOUNT_MANAGER", "ERROR: Password mismatch.");
                         return false;
                     }
 
                     // TODO Log the user in
-                    Log.w("ACCOUNT_MANAGER", "User logged in!");
+                    Log.w("ACCOUNT_MANAGER", "User logged in.");
                     return true;
                 }
 
