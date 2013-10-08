@@ -207,8 +207,11 @@ public class LoginActivity extends Activity {
 					// perform the user login attempt.
 					mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 					showProgress(true);
-					mAuthTask = new UserLoginTask();
-					mAuthTask.execute((Void) null);
+
+                    AccountManager.loginWithEmail(mEmail, mPassword);
+
+//					mAuthTask = new UserLoginTask();
+//					mAuthTask.execute((Void) null);
 //					if (preferences.getString("logged", "").toString().equals("logged")) 
 //					{
 //						Intent i = new Intent(LoginActivity.this,AfterLogin.class);
@@ -224,8 +227,15 @@ public class LoginActivity extends Activity {
 //					i.putExtra("CHECK", remember.isChecked());
 //					startActivity(i);	
 				}
-			case 1	:	// Login using Facebook API
+
+                break;
+
+            case 1	:	// Login using Facebook API
+                break;
+
 			case 2	:	// Login using Google+ API
+                break;
+
 			default	:	Toast.makeText(getApplicationContext(),
 							R.string.error_invalid_login_mode,
 							Toast.LENGTH_LONG)

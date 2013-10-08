@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class AccountManager {
     public static String hashPassword(String password) {
@@ -61,7 +62,7 @@ public class AccountManager {
                     return false;
                 }
 
-                catch (Exception e) {
+                catch (IOException e) {
                     e.printStackTrace();
                     return false;
                 }

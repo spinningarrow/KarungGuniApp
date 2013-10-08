@@ -8,6 +8,7 @@ import com.turbomanage.httpclient.AsyncCallback;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.android.AndroidHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -19,7 +20,7 @@ public class RestClient {
     private static final String API_PATH = "api/1.0/";
 
     // Helper method to parse JSON array and return it
-    public static JSONArray parseJsonArray(InputStream json) throws Exception {
+    public static JSONArray parseJsonArray(InputStream json) throws IOException, JSONException {
 
         // The JSON parser needs the data to be in memory entirely
         BufferedReader reader = new BufferedReader(new InputStreamReader(json));
@@ -50,7 +51,7 @@ public class RestClient {
     }
 
     // Helper method to parse JSON object and return it
-    public static JSONObject parseJsonObject(InputStream json) throws Exception {
+    public static JSONObject parseJsonObject(InputStream json) throws IOException, JSONException {
 
         // The JSON parser needs the data to be in memory entirely
         BufferedReader reader = new BufferedReader(new InputStreamReader(json));
