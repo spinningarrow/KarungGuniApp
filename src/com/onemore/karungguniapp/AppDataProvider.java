@@ -35,12 +35,12 @@ public class AppDataProvider extends ContentProvider{
         sUsersProjectionMap = new HashMap<String, String>();
         sUsersProjectionMap.put(AppData.Users._ID, AppData.Users._ID);
         sUsersProjectionMap.put(AppData.Users.COLUMN_NAME_EMAIL, AppData.Users.COLUMN_NAME_EMAIL);
-        sUsersProjectionMap.put(AppData.Users.COLUMN_NAME_CREATED, AppData.Users.COLUMN_NAME_CREATED);
+        sUsersProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
 
         // Create projection map that returns all columns
         sAdvertisementsProjectionMap = new HashMap<String, String>();
         sAdvertisementsProjectionMap.put(AppData.Advertisements._ID, AppData.Advertisements._ID);
-        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_CREATED, AppData.Advertisements.COLUMN_NAME_CREATED);
+        sAdvertisementsProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
 
     }
 
@@ -91,7 +91,7 @@ public class AppDataProvider extends ContentProvider{
             case AppDataUriMatcher.USER_EMAIL:
                 qb.setTables(AppData.Users.TABLE_NAME);
                 qb.setProjectionMap(sUsersProjectionMap);
-                qb.appendWhere(AppData.Users.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.Users.USER_EMAIL_PATH_POSITION));
+                qb.appendWhere(AppData.Users.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.Users.PATH_POSITION));
                 defaultSortOrder = AppData.Users.DEFAULT_SORT_ORDER;
                 break;
 
@@ -104,7 +104,7 @@ public class AppDataProvider extends ContentProvider{
             case AppDataUriMatcher.ADVERTISEMENT_ID:
                 qb.setTables(AppData.Advertisements.TABLE_NAME);
                 qb.setProjectionMap(sAdvertisementsProjectionMap);
-                qb.appendWhere(AppData.Advertisements._ID + "=" + uri.getPathSegments().get(AppData.Advertisements.ADVERTISEMENT_ID_PATH_POSITION));
+                qb.appendWhere(AppData.Advertisements._ID + "=" + uri.getPathSegments().get(AppData.Advertisements.PATH_POSITION));
                 defaultSortOrder = AppData.Advertisements.DEFAULT_SORT_ORDER;
                 break;
 
@@ -154,8 +154,8 @@ public class AppDataProvider extends ContentProvider{
         Long now = System.currentTimeMillis();
 
         // Default insert values
-        if (!newValues.containsKey(AppData.Users.COLUMN_NAME_CREATED)) {
-            newValues.put(AppData.Users.COLUMN_NAME_CREATED, now);
+        if (!newValues.containsKey(AppData.COLUMN_NAME_DATE_CREATED)) {
+            newValues.put(AppData.COLUMN_NAME_DATE_CREATED, now);
         }
 
         if (!newValues.containsKey(AppData.Users.COLUMN_NAME_EMAIL)) {
@@ -219,7 +219,7 @@ public class AppDataProvider extends ContentProvider{
                     + AppData.Users._ID + " INTEGER PRIMARY KEY,"
                     + AppData.Users.COLUMN_NAME_EMAIL + " TEXT,"
                     + AppData.Users.COLUMN_NAME_PASSWORD + " TEXT,"
-                    + AppData.Users.COLUMN_NAME_CREATED + " INTEGER"
+                    + AppData.COLUMN_NAME_DATE_CREATED + " INTEGER"
                     + ");");
 
             /* db.execSQL("CREATE TABLE " + NotePad.Notes.TABLE_NAME + " ("
