@@ -14,15 +14,18 @@ public class AppData {
 
     // All tables consist of the following columns:
     // _id [ObjectId (BSON)]
-    // date_created [ISODate]
-    // date_modified [ISODate]
+    // date_created [Integer]
+    // date_modified [Integer]
+    // NOTE: _id is always unique, but the users table gets individual records
+    // by email since that is easier
     public static final String COLUMN_NAME_DATE_CREATED = "date_created";
     public static final String COLUMN_NAME_DATE_MODIFIED = "date_modified";
 
     // Contract for the Users table:
-    // email [String] [unique]
+    // email [String]
     // password [String]
     // display_name [String]
+    // UNIQUE KEY: email
     public static final class Users implements BaseColumns {
         private Users() {}
 
@@ -36,7 +39,7 @@ public class AppData {
         // Parse URL (with content:// etc)
         public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH);
 
-        // URI for single user. Callers must append user id to retrieve
+        // URI for single user. Callers must append user email to retrieve
         public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_ID_BASE);
 
         // Pattern for single user matching
@@ -71,7 +74,7 @@ public class AppData {
         // Parse URL (with content:// etc)
         public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH);
 
-        // URI for single user. Callers must append user id to retrieve
+        // URI for single user. Callers must append id to retrieve
         public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_ID_BASE);
 
         // Pattern for single user matching
@@ -105,7 +108,7 @@ public class AppData {
         // Parse URL (with content:// etc)
         public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH);
 
-        // URI for single user. Callers must append user id to retrieve
+        // URI for single user. Callers must append id to retrieve
         public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_ID_BASE);
 
         // Pattern for single user matching
@@ -144,7 +147,7 @@ public class AppData {
         // Parse URL (with content:// etc)
         public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH);
 
-        // URI for single user. Callers must append user id to retrieve
+        // URI for single user. Callers must append id to retrieve
         public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_ID_BASE);
 
         // Pattern for single user matching
@@ -171,6 +174,7 @@ public class AppData {
     // advertisement [ObjectId (BSON)]
     // karung_guni [ObjectId (BSON)]
     // status [String]
+    // UNIQUE KEY: advertisement + karung_guni
     public static final class Requests implements BaseColumns {
         private Requests() {}
 
@@ -184,7 +188,7 @@ public class AppData {
         // Parse URL (with content:// etc)
         public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH);
 
-        // URI for single user. Callers must append user id to retrieve
+        // URI for single user. Callers must append id to retrieve
         public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_ID_BASE);
 
         // Pattern for single user matching
