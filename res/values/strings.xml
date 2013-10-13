@@ -12,4 +12,5 @@
     <string name="error_invalid_credentials">Invalid Login Credentials</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
     <string name="PREFS_NAME">com.example.sp.LoginPrefs</string>
+    <string name="app_id"/>
 </resources>

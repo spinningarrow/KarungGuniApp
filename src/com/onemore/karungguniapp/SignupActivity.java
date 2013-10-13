@@ -30,7 +30,7 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
  private Spinner mRole;
  private String rol;
  
-// protected DBHelper DB = new DBHelper(Registration.this); 
+ protected DBHelper DB = new DBHelper(SignupActivity.this); 
  
  @Override
  protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
    String uname = mUsername.getText().toString();
    String pass = mPassword.getText().toString();
    String email = mEmail.getText().toString();
-   
+   String rol= mRole.toString();
    
    boolean invalid = false;
       
@@ -107,8 +107,18 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
       if(invalid == false)
       {
        addEntry(rol, uname, pass, email);
-       Intent i_register = new Intent(SignupActivity.this, LoginActivity.class);
-       startActivity(i_register);
+       
+       
+       Intent i;
+				if (rol.equals("Seller")){
+//					i = new Intent(getBaseContext(), <Seller>.class);
+				}
+				else if (rol.equals("KG")){
+//					i = new Intent(getBaseContext(), <KG>.class);
+				}
+//				startActivity(i);
+      // Intent i_register = new Intent(SignupActivity.this, LoginActivity.class);
+     //  startActivity(i_register);
        //finish();
       }
       
@@ -131,7 +141,7 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
  private void addEntry( String rol, String uname, String pass, String email) 
  {
   
-  //SQLiteDatabase db = DB.getWritableDatabase();
+  SQLiteDatabase db = DB.getWritableDatabase();
   
   ContentValues values = new ContentValues();
 
@@ -142,7 +152,7 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
   
   try
   {
-  // db.insert(DBHelper.DATABASE_TABLE_NAME, null, values);
+   db.insert(DBHelper.DATABASE_TABLE_NAME, null, values);
    
    Toast.makeText(getApplicationContext(), "your details submitted Successfully...", Toast.LENGTH_SHORT).show();
   }
