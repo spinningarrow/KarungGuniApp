@@ -32,7 +32,7 @@
         <activity
                 android:name=".LBS.GetLocationWithGPS">
         </activity>
-        <activity android:name=".TestActivity">
+        <activity android:name=".AdDetailActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

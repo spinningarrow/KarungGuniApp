@@ -28,7 +28,7 @@ public class TestActivity extends ListActivity {
 
         // Check to see if we have a frame in which to embed the details
         // fragment directly in the containing UI.
-        TextView detailsFrame = (TextView)findViewById(R.id.catalog);
+        TextView detailsFrame = (TextView)findViewById(R.id.category);
         mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
         if (savedInstanceState != null) {

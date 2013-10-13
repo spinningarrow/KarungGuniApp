@@ -38,7 +38,7 @@ public class AdDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View dealView = inflater.inflate(R.layout.fragment_ad_detail,container,false);
+        View dealView = inflater.inflate(R.layout.ad_detail,container,false);
         progressBar = (ProgressBar) dealView.findViewById(R.id.progress);
         progressBar.setIndeterminate(true);
         Advertisement item = new Advertisement(AdType.NEWSPAPER,"abc","ddd",1);
@@ -52,7 +52,7 @@ public class AdDetailFragment extends Fragment {
 
     //    @Override
 //    public View onCreateView(LayoutInflater inflater,ViewGroup container,    Bundle savedInstanceState) {
-//        View dealView = inflater.inflate(R.layout.fragment_ad_detail,container,false);
+//        View dealView = inflater.inflate(R.layout.ad_detail,container,false);
 //        progressBar = (ProgressBar) dealView.findViewById(R.id.progress);
 //        progressBar.setIndeterminate(true);
 //        Advertisement item = new Advertisement(AdType.NEWSPAPER,"abc","ddd",1);
@@ -67,7 +67,7 @@ public class AdDetailFragment extends Fragment {
 //
 //    }
     private void populateDealView(View dealView, Advertisement item) {
-        TextView catalog =(TextView) dealView.findViewById(R.id.catalog);
+        TextView catalog =(TextView) dealView.findViewById(R.id.category);
         catalog.setText(item.type.toString());
         TextView seller =(TextView) dealView.findViewById(R.id.seller);
         seller.setText(item.userID);

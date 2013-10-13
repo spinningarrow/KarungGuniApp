@@ -12,12 +12,12 @@ public final class Item {
 
     private long itemId;
     private long endTime;
-//    private String picUrl;
+    private String picUrl;
 //    private String smallPicUrl;
-    private String title;
+
 //    private String desc;
-//    private String category;
-//    private String location;
+    private String category;
+    private String addr_short;
 
 
     // favor "copy constructor/getInstance" over clone, clone is tricky and error prone
@@ -27,11 +27,11 @@ public final class Item {
 //        copy.desc = item.desc;
         copy.endTime = item.endTime;
         copy.itemId = item.itemId;
-//        copy.location = item.location;
-//        copy.picUrl = item.picUrl;
+       copy.addr_short = item.addr_short;
+        copy.picUrl = item.picUrl;
 //        copy.primaryCategoryName = item.primaryCategoryName;
 //        copy.smallPicUrl = item.smallPicUrl;
-        copy.title = item.title;
+        copy.category = item.category;
         return copy;
     }
 
@@ -51,13 +51,13 @@ public final class Item {
         this.endTime = endTime;
     }
 
-//    public String getPicUrl() {
-//        return this.picUrl;
-//    }
-//
-//    public void setPicUrl(String picUrl) {
-//        this.picUrl = picUrl;
-//    }
+    public String getPicUrl() {
+        return this.picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
 //
 //    public String getSmallPicUrl() {
 //        return this.smallPicUrl;
@@ -75,12 +75,12 @@ public final class Item {
 //        this.pic175Url = pic175Url;
 //    }
 
-    public String getTitle() {
-        return this.title;
+    public String getCategory() {
+        return this.category;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 //    public String getDesc() {
@@ -110,13 +110,13 @@ public final class Item {
 //        this.primaryCategoryName = primaryCategoryName;
 //    }
 
-//    public String getLocation() {
-//        return this.location;
-//    }
-//
-//    public void setLocation(String location) {
-//        this.location = location;
-//    }
+    public String getLocation() {
+        return this.addr_short;
+    }
+
+    public void setLocation(String addr_short) {
+        this.addr_short = addr_short;
+    }
 
 
 
@@ -125,12 +125,12 @@ public final class Item {
     public String toString() {
 //        return "Item [convertedCurrentPrice=" + this.convertedCurrentPrice + ", dealUrl=" + this.dealUrl + ", desc="
 //                + this.desc + ", endTime=" + this.endTime + ", hot=" + this.hot + ", itemId=" + this.itemId
-//                + ", location=" + this.location + ", msrp=" + this.msrp + ", pic175Url=" + this.pic175Url + ", picUrl="
+//                + ", addr_short=" + this.addr_short + ", msrp=" + this.msrp + ", pic175Url=" + this.pic175Url + ", picUrl="
 //                + this.picUrl + ", primaryCategoryName=" + this.primaryCategoryName + ", quantity=" + this.quantity
 //                + ", quantitySold=" + this.quantitySold + ", savingsRate=" + this.savingsRate + ", smallPicUrl="
-//                + this.smallPicUrl + ", title=" + this.title + "]";
+//                + this.smallPicUrl + ", category=" + this.category + "]";
                 return "Item [ endTime=" + this.endTime + ", itemId=" + this.itemId
-                +  ", title=" + this.title + "]";
+                +  ", category=" + this.category + "]";
     }
 
     @Override
@@ -142,7 +142,7 @@ public final class Item {
 //        result = prime * result + ((this.desc == null) ? 0 : this.desc.hashCode());
         // end time and hot not part of hashCode
         result = prime * result + (int) (this.itemId ^ (this.itemId >>> 32));
-//        result = prime * result + ((this.location == null) ? 0 : this.location.hashCode());
+//        result = prime * result + ((this.addr_short == null) ? 0 : this.addr_short.hashCode());
 //        result = prime * result + ((this.msrp == null) ? 0 : this.msrp.hashCode());
 //        result = prime * result + ((this.pic175Url == null) ? 0 : this.pic175Url.hashCode());
 //        result = prime * result + ((this.picUrl == null) ? 0 : this.picUrl.hashCode());
@@ -150,7 +150,7 @@ public final class Item {
         // quantity sold and quantity not part of hashCode
 //        result = prime * result + ((this.savingsRate == null) ? 0 : this.savingsRate.hashCode());
 //        result = prime * result + ((this.smallPicUrl == null) ? 0 : this.smallPicUrl.hashCode());
-        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
+        result = prime * result + ((this.category == null) ? 0 : this.category.hashCode());
         return result;
     }
 
@@ -191,11 +191,11 @@ public final class Item {
 //        if (this.itemId != other.itemId) {
 //            return false;
 //        }
-//        if (this.location == null) {
-//            if (other.location != null) {
+//        if (this.addr_short == null) {
+//            if (other.addr_short != null) {
 //                return false;
 //            }
-//        } else if (!this.location.equals(other.location)) {
+//        } else if (!this.addr_short.equals(other.addr_short)) {
 //            return false;
 //        }
 //        if (this.msrp == null) {
@@ -241,11 +241,11 @@ public final class Item {
 //        } else if (!this.smallPicUrl.equals(other.smallPicUrl)) {
 //            return false;
 //        }
-        if (this.title == null) {
-            if (other.title != null) {
+        if (this.category == null) {
+            if (other.category != null) {
                 return false;
             }
-        } else if (!this.title.equals(other.title)) {
+        } else if (!this.category.equals(other.category)) {
             return false;
         }
         return true;
