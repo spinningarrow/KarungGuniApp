@@ -9,12 +9,9 @@
 package com.onemore.karungguniapp.LBS;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListFragment;
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.LocationManager;
@@ -27,10 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.onemore.karungguniapp.AdDetail;
-import com.onemore.karungguniapp.AdvertisementList;
 import com.onemore.karungguniapp.KarangGuniActivity;
-import com.onemore.karungguniapp.LBS.LocationHelper;
 import com.onemore.karungguniapp.R;
 import java.util.Locale;
 

@@ -106,10 +106,10 @@ public class AdvertisementList extends ListFragment implements LoaderManager.Loa
     public void onListItemClick(ListView l, View v, int position, long id) {
 //        // Do something when a list item is clicked
 //        // TODO: Gm, implement the function
-        Intent adDetail = new Intent( getActivity(),AdDetail.class);
-        Intent getLocation = new Intent(getActivity(), GetLocationWithGPS.class);
-        startActivity(adDetail);
-        startActivity(getLocation);
+        //Intent adDetail = new Intent( getActivity(),AdDetailFragment.class);
+        //Intent getLocation = new Intent(getActivity(), GetLocationWithGPS.class);
+        //startActivity(adDetail);
+        //startActivity(getLocation);
     }
 
 
