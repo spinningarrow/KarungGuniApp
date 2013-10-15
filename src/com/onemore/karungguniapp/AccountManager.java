@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import com.turbomanage.httpclient.ParameterMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +15,60 @@ import java.io.IOException;
 public class AccountManager {
     public static String hashPassword(String password) {
         return SHA1.computeHash(password);
+    }
+
+    // Create a new account (with email and password)
+    public static void createWithEmail(String email, String password, final String role) {
+        final ParameterMap params = new ParameterMap();
+        params.put("email", email);
+        params.put("password", SHA1.computeHash(password));
+
+        final Handler.Callback insertRoleCallback = new Handler.Callback() {
+            Bundle result;
+            JSONObject user;
+            Uri uri;
+
+            @Override
+            public boolean handleMessage(Message message) {
+                result = message.getData();
+
+                if (result.getInt("success") != 1 || result.getInt("status") != 201) {
+                    Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
+                    return false;
+                }
+
+                // TODO If insert was successful, do whatever needs to happen next after the user is created
+                return true;
+            }
+        };
+
+        Handler.Callback insertUserCallback = new Handler.Callback() {
+            Bundle result;
+            JSONObject user;
+            Uri uri;
+
+            @Override
+            public boolean handleMessage(Message message) {
+                result = message.getData();
+
+                if (result.getInt("success") != 1 || result.getInt("status") != 201) {
+                    Log.w("ACCOUNT_MANAGER", "Insert user error occurred");
+                    return false;
+                }
+
+                // If insert was successful, also insert into the karung_gunis or sellers table
+                if (role.equals("Karung Guni")) {
+                    uri = AppData.KarungGunis.CONTENT_ID_URI_BASE;
+                } else {
+                    uri = AppData.Sellers.CONTENT_ID_URI_BASE;
+                }
+
+                RestClient.insert(uri, params, insertRoleCallback);
+                return true;
+            }
+        };
+
+        RestClient.insert(AppData.Users.CONTENT_ID_URI_BASE, params, insertUserCallback);
     }
 
     // Standard login (email with password)
