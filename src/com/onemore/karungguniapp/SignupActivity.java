@@ -1,30 +1,29 @@
 package com.onemore.karungguniapp;
 
 import android.app.Activity;
-import android.content.ContentValues;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import android.widget.AdapterView.OnItemSelectedListener;
-import com.turbomanage.httpclient.ParameterMap;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
-
-public class SignupActivity extends Activity implements OnClickListener, OnItemSelectedListener {
+public class SignupActivity extends Activity implements OnClickListener {
     // Variable Declaration should be in onCreate()
     private Button mSubmit;
-    private EditText mUsername;
+    private EditText mDisplayName;
     private EditText mPassword;
     private EditText mEmail;
     private Spinner mRole;
-    private String rol;
-
-    protected DBHelper DB = new DBHelper(SignupActivity.this);
+    private ProgressDialog signingIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +35,9 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
         mSubmit = (Button) findViewById(R.id.submit);
         mSubmit.setOnClickListener(this);
 
-
-        mUsername = (EditText) findViewById(R.id.reuname);
+        mDisplayName = (EditText) findViewById(R.id.reuname);
         mPassword = (EditText) findViewById(R.id.repass);
         mEmail = (EditText) findViewById(R.id.eemail);
-
-
         mRole = (Spinner) findViewById(R.id.spinner1);
 
         // Spinner method to read the on selected value
@@ -51,107 +47,120 @@ public class SignupActivity extends Activity implements OnClickListener, OnItemS
                 new State("Seller")});
 
         mRole.setAdapter(spinnerArrayAdapter);
-        mRole.setOnItemSelectedListener(this);
+//        mRole.setOnItemSelectedListener(this);
     }
-
 
     public void onClick(View v) {
 
-        switch (v.getId()) {
+        if (v.getId() == R.id.submit) {
 
+            String displayName = mDisplayName.getText().toString();
+            String password = mPassword.getText().toString();
+            String email = mEmail.getText().toString();
+            final String role = mRole.getSelectedItem().toString();
 
-            case R.id.submit:
+            boolean invalid = false;
 
+            if (displayName.equals("")) {
+                invalid = true;
+                Toast.makeText(getApplicationContext(), "Please enter your name", Toast.LENGTH_SHORT).show();
+            } else if (password.equals("")) {
+                invalid = true;
+                Toast.makeText(getApplicationContext(), "Please enter your Password", Toast.LENGTH_SHORT).show();
+            } else if (email.equals("")) {
+                invalid = true;
+                Toast.makeText(getApplicationContext(), "Please enter your Email ID", Toast.LENGTH_SHORT).show();
+            }
 
-                String uname = mUsername.getText().toString();
-                String pass = mPassword.getText().toString();
-                String email = mEmail.getText().toString();
-                String role = mRole.getSelectedItem().toString();
+            if (invalid == false) {
 
-                boolean invalid = false;
+                // Callback for  when a new user is inserted to karung_gunis or sellers table
+                // If the insertion is successful, show the appropriate activity
+                // Also add the user state to the SharedPrefs
+                Handler.Callback createWithEmailCallback = new Handler.Callback() {
+                    Bundle result;
+                    JSONObject user;
+//                    Uri uri;
 
+                    @Override
+                    public boolean handleMessage(Message message) {
+                        result = message.getData();
 
-                if (uname.equals("")) {
-                    invalid = true;
-                    Toast.makeText(getApplicationContext(), "Please enter your Username", Toast.LENGTH_SHORT).show();
-                } else if (pass.equals("")) {
-                    invalid = true;
-                    Toast.makeText(getApplicationContext(), "Please enter your Password", Toast.LENGTH_SHORT).show();
+                        if (result.getInt("success") != 1 || result.getInt("status") != 201) {
+                            // Dismiss the progress dialog
+                            signingIn.dismiss();
+                            Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
 
-                } else if (email.equals("")) {
-                    invalid = true;
-                    Toast.makeText(getApplicationContext(), "Please enter your Email ID", Toast.LENGTH_SHORT).show();
-                } else if (invalid == false) {
+                            // Show an error to the user if a user with that email address already exists
+                            if (result.getInt("status") == 409) {
+                                Toast toast = Toast.makeText(getApplicationContext(), R.string.signup_user_exists, Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            return false;
+                        }
 
-//                    addEntry(rol, uname, pass, email);
-                    AccountManager.createWithEmail(email, pass, role);
+                        try {
+                            user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
 
-                    Intent i;
-                    if (role.equals("Seller")) {
-//					i = new Intent(getBaseContext(), <Seller>.class);
-                    } else if (role.equals("KG")) {
-//					i = new Intent(getBaseContext(), <KG>.class);
+                            // Set the current user in the Shared Preferences so it can be used by other activities
+                            AccountManager.setCurrentUser(getApplicationContext(), user.getString("email"), role);
+                            Intent intent = null;
+
+                            if (role.equals("Karung Guni")) {
+                                intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+                            }
+
+                            else if (role.equals("Seller")) {
+                                intent = new Intent(getBaseContext(), SellerActivity.class);
+                            }
+
+                            // Dismiss the progress dialog and start the new activity
+                            signingIn.dismiss();
+                            startActivity(intent);
+
+                        }
+
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+
+                        catch (IOException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+
+                        return true;
                     }
-//				startActivity(i);
-                    // Intent i_register = new Intent(SignupActivity.this, LoginActivity.class);
-                    //  startActivity(i_register);
-                    //finish();
-                }
+                };
 
-                break;
+                // Show a progress dialog to the user
+                signingIn = ProgressDialog.show(this, getString(R.string.signup_progress_title), getString(R.string.signup_progress_message), true);
+
+                // Create a new user with the supplied details
+                AccountManager.createWithEmail(email, password, role, createWithEmailCallback);
+            }
         }
     }
 
-
-    public void onDestroy() {
-        super.onDestroy();
-        //DB.close();
-    }
-
-
-//    private void addEntry(String rol, String uname, String pass, String email) {
+//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        // Get the currently selected State object from the spinner
+//        State st = (State) mRole.getSelectedItem();
 //
-//        SQLiteDatabase db = DB.getWritableDatabase();
+//        // Show it via a toast
+//        toastState("onItemSelected", st);
+//    }
 //
-//        ContentValues values = new ContentValues();
+//    public void toastState(String name, State st) {
+//        if (st != null) {
+//            rol = st.name;
+//            //Toast.makeText(getBaseContext(), rol, Toast.LENGTH_SHORT).show();
 //
-//        values.put("role", rol);
-//        values.put("username", uname);
-//        values.put("password", pass);
-//        values.put("email", email);
-//
-//        try {
-//            db.insert(DBHelper.DATABASE_TABLE_NAME, null, values);
-//
-//            Toast.makeText(getApplicationContext(), "your details submitted Successfully...", Toast.LENGTH_SHORT).show();
-//        } catch (Exception e) {
-//            e.printStackTrace();
 //        }
 //    }
 
-
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // Get the currently selected State object from the spinner
-        State st = (State) mRole.getSelectedItem();
-
-        // Show it via a toast
-        toastState("onItemSelected", st);
-    }
-
-
-    public void toastState(String name, State st) {
-        if (st != null) {
-            rol = st.name;
-            //Toast.makeText(getBaseContext(), rol, Toast.LENGTH_SHORT).show();
-
-        }
-
-    }
-
-
-    public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
+//    public void onNothingSelected(AdapterView<?> arg0) {
+//        // TODO Auto-generated method stub
+//
+//    }
 }

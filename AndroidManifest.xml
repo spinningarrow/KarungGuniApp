@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"  />
 
     <application
         android:allowBackup="true"
@@ -19,11 +19,16 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <provider android:name=".AppDataProvider"
-                  android:authorities="com.onemore.karungguniapp.provider"
-                  android:exported="false">
+        <provider
+            android:name="com.onemore.karungguniapp.AppDataProvider"
+            android:authorities="com.onemore.karungguniapp.provider"
+            android:exported="false" >
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
+
+        <meta-data
+                android:name="com.facebook.sdk.ApplicationId"
+                android:value="@string/app_id" />
 
         <activity
             android:name="com.onemore.karungguniapp.Main"
@@ -34,17 +39,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-          <activity
+        <activity
             android:name="com.onemore.karungguniapp.LoginActivity"
             android:label="@string/app_name" />
-          <activity
+        <activity
             android:name="com.onemore.karungguniapp.SignupActivity"
             android:label="@string/app_name" />
-           <activity
+        <activity
             android:name="com.onemore.karungguniapp.welcome"
             android:label="@string/app_name" />
-           <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
-           
+        <activity
+            android:name="com.onemore.karungguniapp.KarungGuniActivity"
+            android:label="@string/title_activity_karung_guni" >
+        </activity>
+        <activity
+            android:name="com.onemore.karungguniapp.SellerActivity"
+            android:label="@string/title_activity_seller" >
+        </activity>
     </application>
+
 </manifest>

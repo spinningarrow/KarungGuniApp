@@ -1,9 +1,12 @@
 package com.onemore.karungguniapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.turbomanage.httpclient.ParameterMap;
 import org.json.JSONException;
@@ -13,35 +16,16 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class AccountManager {
-    public static String hashPassword(String password) {
-        return SHA1.computeHash(password);
-    }
 
     // Create a new account (with email and password)
-    public static void createWithEmail(String email, String password, final String role) {
+    public static void createWithEmail(String email, String password, final String role, final Handler.Callback callback) {
         final ParameterMap params = new ParameterMap();
         params.put("email", email);
-        params.put("password", SHA1.computeHash(password));
+        params.put("password", hashPassword(password));
 
-        final Handler.Callback insertRoleCallback = new Handler.Callback() {
-            Bundle result;
-            JSONObject user;
-            Uri uri;
-
-            @Override
-            public boolean handleMessage(Message message) {
-                result = message.getData();
-
-                if (result.getInt("success") != 1 || result.getInt("status") != 201) {
-                    Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
-                    return false;
-                }
-
-                // TODO If insert was successful, do whatever needs to happen next after the user is created
-                return true;
-            }
-        };
-
+        // Callback for creating a new user in the users table
+        // If the insertion is successful, it inserts the data into the karung_gunis or sellers table,
+        // depending on the user's role and notifies the callback provided the createWithEmail method
         Handler.Callback insertUserCallback = new Handler.Callback() {
             Bundle result;
             JSONObject user;
@@ -53,6 +37,13 @@ public class AccountManager {
 
                 if (result.getInt("success") != 1 || result.getInt("status") != 201) {
                     Log.w("ACCOUNT_MANAGER", "Insert user error occurred");
+
+                    // If insertion returned a 409 Conflict error (i.e., user already exists),
+                    // pass this message on to the callback
+                    if (result.getInt("status") == 409) {
+                        Handler handler = new Handler(callback);
+                        handler.sendMessage(Message.obtain(message));
+                    }
                     return false;
                 }
 
@@ -63,7 +54,7 @@ public class AccountManager {
                     uri = AppData.Sellers.CONTENT_ID_URI_BASE;
                 }
 
-                RestClient.insert(uri, params, insertRoleCallback);
+                RestClient.insert(uri, params, callback);
                 return true;
             }
         };
@@ -134,5 +125,37 @@ public class AccountManager {
                 null,
                 null,
                 queryCallback);
+    }
+
+    // Get the current user, if any
+    public static Bundle getCurrentUser(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Bundle currentUser = new Bundle();
+        currentUser.putString("email", prefs.getString("currentUser.email", null));
+        currentUser.putString("role", prefs.getString("currentUser.role", null));
+
+        // Don't return the bundle at all if the current user is null
+        if (currentUser.getString("email") == null) {
+            return null;
+        }
+
+        return currentUser;
+    }
+
+
+    // Set the current user
+    public static void setCurrentUser(Context context, String email, String role) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString("currentUser.email", email);
+        editor.putString("currentUser.role", role);
+
+        editor.commit();
+    }
+
+    // Helper method for password hashing
+    public static String hashPassword(String password) {
+        return SHA1.computeHash(password);
     }
 }

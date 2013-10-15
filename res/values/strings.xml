@@ -4,13 +4,21 @@
     <string name="app_name">KarungGuniApp</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-	<string name="welcome">Welcome!</string>
-	
-	<!-- login-related -->
+    <string name="welcome">Welcome!</string>
+
+    <!-- login-related -->
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_credentials">Invalid Login Credentials</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
     <string name="PREFS_NAME">com.example.sp.LoginPrefs</string>
-    <string name="app_id"/>
+    <string name="app_id" />
+    <string name="title_activity_karung_guni">KarungGuniActivity</string>
+    <string name="title_activity_seller">SellerActivity</string>
+
+    <!-- signup-related -->
+    <string name="signup_progress_title">Creating account&#8230;</string>
+    <string name="signup_progress_message">Please wait while your brand new account is created.</string>
+    <string name="signup_user_exists">An account associated with your email address already exists. Use the Sign In button to login.</string>
+
 </resources>
