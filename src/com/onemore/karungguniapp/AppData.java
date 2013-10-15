@@ -24,7 +24,6 @@ public class AppData {
     // Contract for the Users table:
     // email [String]
     // password [String]
-    // display_name [String]
     // UNIQUE KEY: email
     public static final class Users implements BaseColumns {
         private Users() {}
@@ -52,7 +51,6 @@ public class AppData {
         // Column names
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_PASSWORD = "password";
-        public static final String COLUMN_NAME_DISPLAY_NAME = "display_name";
         public static final String COLUMN_NAME_ROLE = "role"; // role is returned by the REST API but not actually present in the users table
 
         // Default sort order
@@ -61,6 +59,7 @@ public class AppData {
 
     // Contract for the Sellers table:
     // email [String] [unique]
+    // display_name [String]
     // address [String]
     public static final class Sellers implements BaseColumns {
         private Sellers() {}
@@ -87,15 +86,26 @@ public class AppData {
 
         // Column names
         public static final String COLUMN_NAME_EMAIL = "email";
+        public static final String COLUMN_NAME_DISPLAY_NAME = "display_name";
         public static final String COLUMN_NAME_ADDRESS = "address";
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
+
+        // Create table SQL
+        public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
+            + _ID + " INTEGER PRIMARY KEY,"
+            + COLUMN_NAME_EMAIL + " TEXT,"
+            + COLUMN_NAME_ADDRESS + " TEXT,"
+            + COLUMN_NAME_DISPLAY_NAME + " TEXT,"
+            + COLUMN_NAME_DATE_CREATED + " INTEGER"
+            + ");";
     }
 
-    // Contract for the Sellers table:
+    // Contract for the KarungGunis table:
     // email [String] [unique]
-    // rating [Float]
+    // display_name [String]
+    // rating [Int]
     public static final class KarungGunis implements BaseColumns {
         private KarungGunis() {}
 
@@ -121,10 +131,20 @@ public class AppData {
 
         // Column names
         public static final String COLUMN_NAME_EMAIL = "email";
+        public static final String COLUMN_NAME_DISPLAY_NAME = "display_name";
         public static final String COLUMN_NAME_RATING = "rating";
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
+
+        // Create table SQL
+        public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
+            + _ID + " INTEGER PRIMARY KEY,"
+            + COLUMN_NAME_EMAIL + " TEXT,"
+            + COLUMN_NAME_RATING + " INTEGER,"
+            + COLUMN_NAME_DISPLAY_NAME + " TEXT,"
+            + COLUMN_NAME_DATE_CREATED + " INTEGER"
+            + ");";
     }
 
     // Contract for the Advertisements table:
@@ -169,6 +189,19 @@ public class AppData {
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
+
+        // Create table SQL
+        public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
+            + _ID + " INTEGER PRIMARY KEY,"
+            + COLUMN_NAME_OWNER + " TEXT,"
+            + COLUMN_NAME_TITLE + " TEXT,"
+            + COLUMN_NAME_DESCRIPTION + " TEXT,"
+            + COLUMN_NAME_PHOTO + " TEXT,"
+            + COLUMN_NAME_CATEGORY + " TEXT,"
+            + COLUMN_NAME_STATUS + " TEXT,"
+            + COLUMN_NAME_TIMING + " TEXT,"
+            + COLUMN_NAME_DATE_CREATED + " INTEGER"
+            + ");";
     }
 
     // Contract for the Requests table:
@@ -206,5 +239,14 @@ public class AppData {
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
+
+        // Create table SQL
+        public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
+            + _ID + " INTEGER PRIMARY KEY,"
+            + COLUMN_NAME_ADVERTISEMENT + " TEXT,"
+            + COLUMN_NAME_KARUNG_GUNI + " TEXT,"
+            + COLUMN_NAME_STATUS + " TEXT,"
+            + COLUMN_NAME_DATE_CREATED + " INTEGER"
+            + ");";
     }
 }

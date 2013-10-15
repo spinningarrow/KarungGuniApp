@@ -2,6 +2,7 @@ package com.onemore.karungguniapp;
 
 import android.content.*;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -133,61 +134,81 @@ public class AppDataProvider extends ContentProvider{
     }
 
     // Insert data
+    // Values must not be null as there are no defaults specified
     @Override
-    public Uri insert(Uri uri, ContentValues initialValues) {
+    public Uri insert(Uri uri, ContentValues values) {
 
-        // Validate the incoming URI
-
-        // A map to hold the new record's values.
-        ContentValues newValues;
-
-        // If the incoming values map is not null, use it for the new values.
-        if (initialValues != null) {
-            newValues = new ContentValues(initialValues);
-
-        } else {
-            // Otherwise, create a new value map
-            newValues = new ContentValues();
+        // Return if no ContentValues provided
+        if (values == null) {
+            return null;
         }
 
-        // Gets the current system time in milliseconds
+        String tableName;
+        Uri baseUri, resultUri = null;
+
+        // Match the incoming URI to a table name
+        // Also set the uri base which is used in the URI returned by this method
+        switch (AppDataUriMatcher.sUriMatcher.match(uri)) {
+            case AppDataUriMatcher.USERS:
+            case AppDataUriMatcher.USER_ID:
+                tableName = AppData.Users.TABLE_NAME;
+                baseUri = AppData.Users.CONTENT_ID_URI_BASE;
+                break;
+
+            case AppDataUriMatcher.KARUNG_GUNIS:
+            case AppDataUriMatcher.KARUNG_GUNI_ID:
+                tableName = AppData.KarungGunis.TABLE_NAME;
+                baseUri = AppData.KarungGunis.CONTENT_ID_URI_BASE;
+                break;
+
+            case AppDataUriMatcher.SELLERS:
+            case AppDataUriMatcher.SELLER_ID:
+                tableName = AppData.Sellers.TABLE_NAME;
+                baseUri = AppData.Sellers.CONTENT_ID_URI_BASE;
+                break;
+
+            case AppDataUriMatcher.ADVERTISEMENTS:
+            case AppDataUriMatcher.ADVERTISEMENT_ID:
+                tableName = AppData.Advertisements.TABLE_NAME;
+                baseUri = AppData.Advertisements.CONTENT_ID_URI_BASE;
+                break;
+
+            case AppDataUriMatcher.REQUESTS:
+            case AppDataUriMatcher.REQUEST_ID:
+                tableName = AppData.Requests.TABLE_NAME;
+                baseUri = AppData.Requests.CONTENT_ID_URI_BASE;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        // Get the current system time in milliseconds
         Long now = System.currentTimeMillis();
+        values.put(AppData.COLUMN_NAME_DATE_CREATED, now / 1000);
 
-        // Default insert values
-        if (!newValues.containsKey(AppData.COLUMN_NAME_DATE_CREATED)) {
-            newValues.put(AppData.COLUMN_NAME_DATE_CREATED, now);
-        }
-
-        if (!newValues.containsKey(AppData.Users.COLUMN_NAME_EMAIL)) {
-            newValues.put(AppData.Users.COLUMN_NAME_EMAIL, "sahil29@gmail.com");
-        }
-
-        if (!newValues.containsKey(AppData.Users.COLUMN_NAME_PASSWORD)) {
-            newValues.put(AppData.Users.COLUMN_NAME_PASSWORD, "123456");
-        }
-
-        // Gets a writable database (will create if it doesn't exist)
+        // Get a writable database (will create if it doesn't exist)
         db = mOpenHelper.getWritableDatabase();
 
-        // Insert and return ID
-        long rowId = db.insert(AppData.Users.TABLE_NAME, AppData.Users.COLUMN_NAME_EMAIL, newValues);
+        try {
+            // Insert and return ID
+            long rowId = db.insert(tableName, AppData.COLUMN_NAME_DATE_MODIFIED, values);
 
-        // If the insert succeeded, the row ID exists.
-        if (rowId > 0) {
-            // Creates a URI with the note ID pattern and the new row ID appended to it.
-            Uri userUri = ContentUris.withAppendedId(AppData.Users.CONTENT_ID_URI_BASE, rowId);
+            // If the insert succeeded, the row ID exists.
+            if (rowId > 0) {
+                // Creates a URI with the note ID pattern and the new row ID appended to it.
+                resultUri = ContentUris.withAppendedId(baseUri, rowId);
 
-            // Notifies observers registered against this provider that the data changed.
-            getContext().getContentResolver().notifyChange(userUri, null);
-            return userUri;
+                // Notifies observers registered against this provider that the data changed.
+                getContext().getContentResolver().notifyChange(resultUri, null);
+            }
         }
 
-//        try {
-//            throw new SQLException("Failed to insert row into " + uri);
-//        } catch (SQLException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
-        return null;
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultUri;
     }
 
     @Override
@@ -212,23 +233,12 @@ public class AppDataProvider extends ContentProvider{
         // Creates the data repository.
         // Called when the provider attempts to open the repository and SQL reports that it doesn't exist
         public void onCreate(SQLiteDatabase db) {
-            // Create the main table
-//            db.execSQL(SQL_CREATE_MAIN_TABLE);
 
-            db.execSQL("CREATE TABLE " + AppData.Users.TABLE_NAME + " ("
-                    + AppData.Users._ID + " INTEGER PRIMARY KEY,"
-                    + AppData.Users.COLUMN_NAME_EMAIL + " TEXT,"
-                    + AppData.Users.COLUMN_NAME_PASSWORD + " TEXT,"
-                    + AppData.COLUMN_NAME_DATE_CREATED + " INTEGER"
-                    + ");");
-
-            /* db.execSQL("CREATE TABLE " + NotePad.Notes.TABLE_NAME + " ("
-                   + NotePad.Notes._ID + " INTEGER PRIMARY KEY,"
-                   + NotePad.Notes.COLUMN_NAME_TITLE + " TEXT,"
-                   + NotePad.Notes.COLUMN_NAME_NOTE + " TEXT,"
-                   + NotePad.Notes.COLUMN_NAME_CREATE_DATE + " INTEGER,"
-                   + NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER"
-                   + ");"); */
+            // Create the required tables
+            db.execSQL(AppData.KarungGunis.CREATE_TABLE_SQL);
+            db.execSQL(AppData.Sellers.CREATE_TABLE_SQL);
+            db.execSQL(AppData.Advertisements.CREATE_TABLE_SQL);
+            db.execSQL(AppData.Requests.CREATE_TABLE_SQL);
         }
 
         @Override
@@ -239,8 +249,11 @@ public class AppDataProvider extends ContentProvider{
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
 
-            // Kills the table and existing data
-            db.execSQL("DROP TABLE IF EXISTS users");
+            // Kill the tables and existing data
+            db.execSQL("DROP TABLE IF EXISTS " + AppData.KarungGunis.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + AppData.Sellers.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + AppData.Advertisements.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + AppData.Requests.TABLE_NAME);
 
             // Recreates the database with a new version
             onCreate(db);
