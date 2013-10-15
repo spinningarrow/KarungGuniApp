@@ -19,10 +19,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="40sp" />
 
-<com.google.android.gms.common.SignInButton
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/google"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" >
+        android:layout_gravity="center_horizontal"
+    </com.google.android.gms.common.SignInButton>
 
   <com.facebook.widget.LoginButton
             android:id="@+id/fbbtn"

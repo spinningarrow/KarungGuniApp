@@ -29,10 +29,12 @@ import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 
 import com.facebook.android.AsyncFacebookRunner.*;
+import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.*;
 import com.facebook.android.FacebookError;
-import com.facebook.samples.hellofacebook.LoginButton;
+import com.facebook.widget.LoginButton;
 
 public class Main extends Activity implements  OnClickListener,
 ConnectionCallbacks, OnConnectionFailedListener {
@@ -67,7 +69,7 @@ public static String APP_ID = "**************";
 	Button signup;
 
 	SignInButton google;
-	LoginButton btnfacebook;
+	Button btnfacebook;
 	String PREFS_NAME = "com.onemore.karungguniapp";
 	String role;
 //	SharedPreferences preferences ;
@@ -190,6 +192,17 @@ public static String APP_ID = "**************";
      
         if (access_token != null) {
             facebook.setAccessToken(access_token);
+            
+            Intent i = new Intent();
+            if (role.equals("Seller")){
+//				i = new Intent(getBaseContext(), <Seller>.class);
+			}
+			else if (role.equals("KG")){
+//				i = new Intent(getBaseContext(), <KG>.class);
+			}
+//			
+            startActivity(i);
+            
         }
      
         if (expires != 0) {
@@ -234,7 +247,7 @@ public static String APP_ID = "**************";
         }
     }
     
-    
+  /*  
     
     public void getProfileInformation() {
         mAsyncRunner.request("me", new RequestListener() {
@@ -286,7 +299,7 @@ public static String APP_ID = "**************";
     
     
     
-
+*/
 	
 	@Override
 	 public void onClick(View view) {
