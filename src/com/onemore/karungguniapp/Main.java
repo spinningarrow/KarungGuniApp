@@ -1,5 +1,9 @@
 package com.onemore.karungguniapp;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -247,9 +251,10 @@ public static String APP_ID = "**************";
         }
     }
     
-  /*  
+  
     
-    public void getProfileInformation() {
+    @SuppressWarnings("deprecation")
+	public void getProfileInformation() {
         mAsyncRunner.request("me", new RequestListener() {
             @Override
             public void onComplete(String response, Object state) {
@@ -258,9 +263,9 @@ public static String APP_ID = "**************";
                 try {
                     JSONObject profile = new JSONObject(json);
                     // getting name of the user
-                    String name = profile.getString("name");
+                    final String name = profile.getString("name");
                     // getting email of the user
-                    String email = profile.getString("email");
+                    final String email = profile.getString("email");
      
                     runOnUiThread(new Runnable() {
      
@@ -299,7 +304,7 @@ public static String APP_ID = "**************";
     
     
     
-*/
+
 	
 	@Override
 	 public void onClick(View view) {
