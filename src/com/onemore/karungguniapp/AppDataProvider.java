@@ -65,7 +65,7 @@ public class AppDataProvider extends ContentProvider{
                 return AppData.Users.CONTENT_TYPE;
 
             // If the pattern is for note IDs, returns the note ID content type.
-            case AppDataUriMatcher.USER_EMAIL:
+            case AppDataUriMatcher.USER_ID:
                 return AppData.Users.CONTENT_ITEM_TYPE;
 
             // If the URI pattern doesn't match any permitted patterns, throws an exception.
@@ -88,7 +88,7 @@ public class AppDataProvider extends ContentProvider{
                 defaultSortOrder = AppData.Users.DEFAULT_SORT_ORDER;
                 break;
 
-            case AppDataUriMatcher.USER_EMAIL:
+            case AppDataUriMatcher.USER_ID:
                 qb.setTables(AppData.Users.TABLE_NAME);
                 qb.setProjectionMap(sUsersProjectionMap);
                 qb.appendWhere(AppData.Users.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.Users.PATH_POSITION));
