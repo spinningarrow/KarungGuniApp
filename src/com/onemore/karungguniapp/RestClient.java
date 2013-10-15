@@ -1,11 +1,13 @@
 package com.onemore.karungguniapp;
 
+import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import com.turbomanage.httpclient.AsyncCallback;
 import com.turbomanage.httpclient.HttpResponse;
+import com.turbomanage.httpclient.ParameterMap;
 import com.turbomanage.httpclient.android.AndroidHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +19,11 @@ public class RestClient {
 
     private static final String API_URL = "http://kgserver.herokuapp.com/";
     private static final String API_PATH = "api/1.0/";
+
+    private static AndroidHttpClient httpClient = new AndroidHttpClient(API_URL);
+    static {
+        httpClient.setMaxRetries(5);
+    }
 
     // Helper method to parse JSON array and return it
     public static JSONArray parseJsonArray(InputStream json) throws IOException, JSONException {
@@ -80,22 +87,25 @@ public class RestClient {
         return result;
     }
 
-    // Query the server database for single objects or an array of objects
-    // Call the callback when the query is complete
-    public static void query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
-//        Log.w("REST_CLIENT", "Entered query");
-        // Compute requestEndpoint based on the uri
+    // Helper method that converts the Uri into a request endpoint
+    private static String getRequestEndpoint(Uri uri) {
         String requestEndpoint;
         List<String> pathSegments = uri.getPathSegments();
 
         switch (AppDataUriMatcher.sUriMatcher.match(uri)) {
             case AppDataUriMatcher.USERS:
+            case AppDataUriMatcher.SELLERS:
+            case AppDataUriMatcher.KARUNG_GUNIS:
             case AppDataUriMatcher.ADVERTISEMENTS:
+            case AppDataUriMatcher.REQUESTS:
                 requestEndpoint = pathSegments.get(0);
                 break;
 
-            case AppDataUriMatcher.USER_EMAIL:
+            case AppDataUriMatcher.USER_ID:
+            case AppDataUriMatcher.SELLER_ID:
+            case AppDataUriMatcher.KARUNG_GUNI_ID:
             case AppDataUriMatcher.ADVERTISEMENT_ID:
+            case AppDataUriMatcher.REQUEST_ID:
                 requestEndpoint = pathSegments.get(0) + "/" + pathSegments.get(1);
                 break;
 
@@ -104,14 +114,55 @@ public class RestClient {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
+        return requestEndpoint;
+    }
+
+    // Query the server database for single objects or an array of objects
+    // Call the callback when the query is complete
+    public static void query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
+
         final Handler handler = new Handler(callback);
         final Message message = Message.obtain();
 
-        AndroidHttpClient httpClient = new AndroidHttpClient(API_URL);
-        httpClient.setMaxRetries(5);
-
         // GET the result asynchronously
-        httpClient.get(API_PATH + requestEndpoint, null, new AsyncCallback() {
+        httpClient.get(API_PATH + getRequestEndpoint(uri), null, new AsyncCallback() {
+
+            // Store the result in a bundle which will then be passed as a message to the query callback
+            // result schema:
+            // int success - whether the query was successful
+            // int status - HTTP status code returned
+            // String response - raw HTTP response (the callback handler must know what to do with it)
+            Bundle result = new Bundle();
+
+            @Override
+            public void onComplete(HttpResponse httpResponse) {
+
+                // Query was successful (TODO actually maybe not, does it just mean that no error occurred from this side?)
+                result.putInt("success", 1);
+                result.putInt("status", httpResponse.getStatus());
+                result.putString("response", httpResponse.getBodyAsString());
+
+                message.setData(result);
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+                result.putInt("success", 0);
+                e.printStackTrace();
+            }
+        });
+    }
+
+    // Insert into the database
+    public static void insert(Uri uri, ParameterMap params, Handler.Callback callback) {
+
+        final Handler handler = new Handler(callback);
+        final Message message = Message.obtain();
+
+        // POST params to the API request endpoint asynchronously
+        httpClient.post(API_PATH + getRequestEndpoint(uri), params, new AsyncCallback() {
 
             // Store the result in a bundle which will then be passed as a message to the query callback
             // result schema:
