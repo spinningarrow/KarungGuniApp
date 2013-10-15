@@ -53,6 +53,7 @@ public class AppData {
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_PASSWORD = "password";
         public static final String COLUMN_NAME_DISPLAY_NAME = "display_name";
+        public static final String COLUMN_NAME_ROLE = "role"; // role is returned by the REST API but not actually present in the users table
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
