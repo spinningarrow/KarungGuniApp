@@ -1,31 +1,27 @@
 package com.onemore.karungguniapp;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.CharArrayBuffer;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.*;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 public class LoginActivity extends Activity {
 
@@ -35,12 +31,6 @@ public class LoginActivity extends Activity {
     EditText mPasswordView;
     String mEmail, mPassword;
 
-    DBHelper DB = null;
-
-    private UserLoginTask mAuthTask = null;
-    private View mLoginFormView;
-    private View mLoginStatusView;
-    private TextView mLoginStatusMessageView;
     private ProgressDialog loggingIn;
 
     SharedPreferences preferences;
@@ -73,9 +63,6 @@ public class LoginActivity extends Activity {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         mEmailView = (EditText) findViewById(R.id.Leditemail);
         mPasswordView = (EditText) findViewById(R.id.Leditpw);
@@ -190,125 +177,5 @@ public class LoginActivity extends Activity {
 
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            // TODO: attempt authentication against a network service.
-            String role = validateLogin(mEmail, mPassword, getBaseContext());
-            if (role != null) {
-                editor.clear();
-                editor.putString("email", mEmail);
-                editor.putString("role", role);
-                editor.commit();
-                Intent i;
-                if (role.equals("Seller")) {
-//					i = new Intent(getBaseContext(), <Seller>.class);
-                } else if (role.equals("KG")) {
-//					i = new Intent(getBaseContext(), <KG>.class);
-                }
-//				startActivity(i);
-                return true;
-            } else
-                return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mEmailView
-                        .setError(getString(R.string.error_invalid_credentials));
-                mEmailView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-    private String validateLogin(String email, String password, Context baseContext) {
-        DB = new DBHelper(baseContext);
-        SQLiteDatabase db = DB.getReadableDatabase();
-        CharArrayBuffer role = null;
-
-        String[] columns = {"_id", "role"};
-
-        String selection = "email=? AND password=?";
-        String[] selectionArgs = {email, SHA1.computeHash(password)};
-
-        Cursor cursor = null;
-        try {
-
-            cursor = db.query(DBHelper.DATABASE_TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-            startManagingCursor(cursor);
-        } catch (Exception e)
-
-        {
-            e.printStackTrace();
-        }
-        int numberOfRows = cursor.getCount();
-
-        if (numberOfRows <= 0) {
-
-            Toast.makeText(getApplicationContext(), "Email and Password mismatch..\nPlease Try Again", Toast.LENGTH_LONG).show();
-        } else {
-            cursor.copyStringToBuffer(1, role);
-        }
-        cursor.close();
-        return role.toString();
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(
-                    android.R.integer.config_shortAnimTime);
-
-            mLoginStatusView.setVisibility(View.VISIBLE);
-            mLoginStatusView.animate().setDuration(shortAnimTime)
-                    .alpha(show ? 1 : 0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginStatusView.setVisibility(show ? View.VISIBLE
-                                    : View.GONE);
-                        }
-                    });
-
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime)
-                    .alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(show ? View.GONE
-                                    : View.VISIBLE);
-                        }
-                    });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
+    
 }
