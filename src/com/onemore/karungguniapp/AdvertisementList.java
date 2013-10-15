@@ -1,26 +1,13 @@
 package com.onemore.karungguniapp;
 
 import android.app.ListFragment;
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract.Contacts;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SearchView.OnCloseListener;
-import android.widget.SearchView.OnQueryTextListener;
-import android.widget.SimpleCursorAdapter;
 
 public class AdvertisementList extends ListFragment
 //implements OnQueryTextListener, OnCloseListener,
@@ -29,11 +16,11 @@ public class AdvertisementList extends ListFragment
 
 	// This is the Adapter being used to display the list's data.
 //	SimpleCursorAdapter mAdapter;
-	ArrayAdapter<Advertisement> mAdapter;
+	MongoAdapter mAdapter;
 
 	// The SearchView for doing filtering.
 	SearchView mSearchView;
-
+	ListView mListView;
 	// If non-null, this is the current filter the user has provided.
 	String mCurFilter;
 
@@ -45,15 +32,37 @@ public class AdvertisementList extends ListFragment
 		// Give some text to display if there is no data. 
 		setEmptyText(getResources().getString(R.string.noData));
 
+		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		// We have a menu item to show in action bar.
 		setHasOptionsMenu(true);
-
+		mListView = getListView();
+		LayoutInflater inflator = getActivity().getLayoutInflater();
+		View header = inflator.inflate(R.layout.list_header, null);
+		header.setOnClickListener(new OnClickListener()
+		{
+			   @Override
+			   public void onClick(View v)
+			   {
+				   mAdapter.updateAdvertisements();
+			   }
+			});
+		
+		mListView.addHeaderView(header);
+		View footer = inflator.inflate(R.layout.list_footer, null);
+		footer.setOnClickListener(new OnClickListener()
+		{
+			   @Override
+			   public void onClick(View v)
+			   {
+				   mAdapter.loadMore();
+			   }
+			});
+		mListView.addFooterView(footer);
 		// Create an empty adapter we will use to display the loaded data.
 //		mAdapter = new SimpleCursorAdapter(getActivity(),
 //				R.layout.advertisement, null,
 //				new String[] { Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS },
 //				new int[] { R.id.title, R.id.distance }, 0);
-		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		setListAdapter(mAdapter);
 
 		// Start out with a progress indicator.
@@ -64,6 +73,12 @@ public class AdvertisementList extends ListFragment
 //		getLoaderManager().initLoader(0, null, this);
 	}
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		return super.onCreateView(inflater, container, savedInstanceState);
+	}
 //	public static class MySearchView extends SearchView {
 //		public MySearchView(Context context) {
 //			super(context);
@@ -161,9 +176,9 @@ public class AdvertisementList extends ListFragment
 //		String select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
 //				+ Contacts.HAS_PHONE_NUMBER + "=1) AND ("
 //				+ Contacts.DISPLAY_NAME + " != '' ))";
-//		return new CursorLoader(getActivity(), baseUri,
-//				CONTACTS_SUMMARY_PROJECTION, select, null,
-//				Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+		return new CursorLoader(getActivity(), baseUri,
+				CONTACTS_SUMMARY_PROJECTION, select, null,
+				Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
 //	}
 //
 //	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

@@ -9,5 +9,7 @@
     <string name="current">Current</string>
     <string name="nearby">Nearby</string>
     <string name="noData">No advertisements found.</string>
+    <string name="header">Load new Advertisements</string>
+    <string name="footer">Load more...</string>
 
 </resources>
