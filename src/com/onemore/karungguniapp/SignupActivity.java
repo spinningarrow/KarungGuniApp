@@ -106,11 +106,11 @@ public class SignupActivity extends Activity implements OnClickListener {
                             AccountManager.setCurrentUser(getApplicationContext(), user.getString("email"), role);
                             Intent intent = null;
 
-                            if (role.equals("Karung Guni")) {
+                            if (role.equals(AppData.ROLE_KG)) {
                                 intent = new Intent(getBaseContext(), KarungGuniActivity.class);
                             }
 
-                            else if (role.equals("Seller")) {
+                            else if (role.equals(AppData.ROLE_SELLER)) {
                                 intent = new Intent(getBaseContext(), SellerActivity.class);
                             }
 
@@ -138,7 +138,7 @@ public class SignupActivity extends Activity implements OnClickListener {
                 signingIn = ProgressDialog.show(this, getString(R.string.signup_progress_title), getString(R.string.signup_progress_message), true);
 
                 // Create a new user with the supplied details
-                AccountManager.createWithEmail(email, password, role, createWithEmailCallback);
+                AccountManager.createWithEmail(email, password, role, displayName, createWithEmailCallback);
             }
         }
     }

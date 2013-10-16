@@ -18,7 +18,8 @@ import java.io.IOException;
 public class AccountManager {
 
     // Create a new account (with email and password)
-    public static void createWithEmail(String email, String password, final String role, final Handler.Callback callback) {
+    public static void createWithEmail(String email, String password, final String role,
+    		final String displayName, final Handler.Callback callback) {
         final ParameterMap params = new ParameterMap();
         params.put("email", email);
         params.put("password", hashPassword(password));
@@ -48,12 +49,13 @@ public class AccountManager {
                 }
 
                 // If insert was successful, also insert into the karung_gunis or sellers table
-                if (role.equals("Karung Guni")) {
+                if (role.equals(AppData.ROLE_KG)) {
                     uri = AppData.KarungGunis.CONTENT_ID_URI_BASE;
                 } else {
                     uri = AppData.Sellers.CONTENT_ID_URI_BASE;
                 }
-
+                params.put("display_name", displayName);
+                
                 RestClient.insert(uri, params, callback);
                 return true;
             }
