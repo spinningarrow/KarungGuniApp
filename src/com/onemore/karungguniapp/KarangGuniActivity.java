@@ -7,6 +7,7 @@ import java.util.Set;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,7 +25,7 @@ public class KarangGuniActivity extends Activity {
 		ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	    actionBar.setDisplayShowTitleEnabled(false);
-
+	    doStupidStuff();
 	    Tab tab = actionBar.newTab()
 	                       .setText(R.string.current)
 	                       .setTabListener(new TabListener<AdvertisementList>(
@@ -36,6 +37,7 @@ public class KarangGuniActivity extends Activity {
 	                   .setTabListener(new TabListener<AdvertisementList>(
 	                           this, "nearby", AdvertisementList.class));
 	    actionBar.addTab(tab);
+	    
 //	    
 //		// Create the text view
 //	    textView = new TextView(this);
@@ -44,6 +46,26 @@ public class KarangGuniActivity extends Activity {
 //	    // Set the text view as the activity layout
 //	    setContentView(textView);
 	}
+
+	private void doStupidStuff() {
+	    ContentValues content = new ContentValues();
+//	    content.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, "Newspaper");
+	    content.put(AppData.Advertisements.COLUMN_NAME_DESCRIPTION, "Newspapersssssssssssssssss");
+//	    content.put(AppData.Advertisements.COLUMN_NAME_OWNER, "1");
+//	    content.put(AppData.Advertisements.COLUMN_NAME_PHOTO, "bit.ly/i3lkjsdj");
+//	    content.put(AppData.Advertisements.COLUMN_NAME_STATUS, "OPEN");
+//	    content.put(AppData.Advertisements.COLUMN_NAME_TIMING, "3-6pm");
+	    content.put(AppData.Advertisements.COLUMN_NAME_TITLE, "Selling random stuff");
+	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+//	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+//	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+//	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+//	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+//	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+//	    getContentResolver().insert(AppData.Advertisements.CONTENT_URI, content);
+	
+}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

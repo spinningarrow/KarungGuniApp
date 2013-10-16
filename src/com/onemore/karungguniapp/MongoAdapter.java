@@ -29,7 +29,7 @@ public class MongoAdapter extends SimpleCursorAdapter {
 		{
 			AdvertisementData.add(new Advertisement());
 		}
-		this.addAll(AdvertisementData);
+//		this.addAll(AdvertisementData);
 		this.notifyDataSetChanged();
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
@@ -65,7 +65,7 @@ public class MongoAdapter extends SimpleCursorAdapter {
 	{
 		Advertisement advertisement = new Advertisement();
 		AdvertisementData.addFirst(advertisement);
-		insert(advertisement, 0);
+//		insert(advertisement, 0);
 		notifyDataSetChanged();
 	}
 	private static class ViewHolder {
@@ -76,7 +76,7 @@ public class MongoAdapter extends SimpleCursorAdapter {
 	public void loadMore() {
 		Advertisement advertisement = new Advertisement();
 		AdvertisementData.add(advertisement);
-		add(new Advertisement());
+//		add(new Advertisement());
 		notifyDataSetChanged();
 	}
 }

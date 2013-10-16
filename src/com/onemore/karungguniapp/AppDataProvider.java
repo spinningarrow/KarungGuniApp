@@ -41,6 +41,8 @@ public class AppDataProvider extends ContentProvider{
         sAdvertisementsProjectionMap = new HashMap<String, String>();
         sAdvertisementsProjectionMap.put(AppData.Advertisements._ID, AppData.Advertisements._ID);
         sAdvertisementsProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_DESCRIPTION, AppData.Advertisements.COLUMN_NAME_DESCRIPTION);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_TITLE);
 
     }
 
@@ -158,19 +160,25 @@ public class AppDataProvider extends ContentProvider{
             newValues.put(AppData.COLUMN_NAME_DATE_CREATED, now);
         }
 
-        if (!newValues.containsKey(AppData.Users.COLUMN_NAME_EMAIL)) {
-            newValues.put(AppData.Users.COLUMN_NAME_EMAIL, "sahil29@gmail.com");
-        }
-
-        if (!newValues.containsKey(AppData.Users.COLUMN_NAME_PASSWORD)) {
-            newValues.put(AppData.Users.COLUMN_NAME_PASSWORD, "123456");
-        }
+//        if (!newValues.containsKey(AppData.Users.COLUMN_NAME_EMAIL)) {
+//            newValues.put(AppData.Users.COLUMN_NAME_EMAIL, "sahil29@gmail.com");
+//        }
+//
+//        if (!newValues.containsKey(AppData.Users.COLUMN_NAME_PASSWORD)) {
+//            newValues.put(AppData.Users.COLUMN_NAME_PASSWORD, "123456");
+//        }
 
         // Gets a writable database (will create if it doesn't exist)
         db = mOpenHelper.getWritableDatabase();
-
+        
+//        db.execSQL("CREATE TABLE " + AppData.Advertisements.TABLE_NAME + " ("
+//                + AppData.Advertisements._ID + " INTEGER PRIMARY KEY,"
+//                + AppData.Advertisements.COLUMN_NAME_TITLE + " TEXT,"
+//                + AppData.Advertisements.COLUMN_NAME_DESCRIPTION + " TEXT,"
+//                + AppData.COLUMN_NAME_DATE_CREATED + " INTEGER"
+//                + ");");
         // Insert and return ID
-        long rowId = db.insert(AppData.Users.TABLE_NAME, AppData.Users.COLUMN_NAME_EMAIL, newValues);
+        long rowId = db.insert(AppData.Advertisements.TABLE_NAME, AppData.Advertisements.COLUMN_NAME_TITLE, newValues);
 
         // If the insert succeeded, the row ID exists.
         if (rowId > 0) {
@@ -215,10 +223,10 @@ public class AppDataProvider extends ContentProvider{
             // Create the main table
 //            db.execSQL(SQL_CREATE_MAIN_TABLE);
 
-            db.execSQL("CREATE TABLE " + AppData.Users.TABLE_NAME + " ("
-                    + AppData.Users._ID + " INTEGER PRIMARY KEY,"
-                    + AppData.Users.COLUMN_NAME_EMAIL + " TEXT,"
-                    + AppData.Users.COLUMN_NAME_PASSWORD + " TEXT,"
+            db.execSQL("CREATE TABLE " + AppData.Advertisements.TABLE_NAME + " ("
+                    + AppData.Advertisements._ID + " INTEGER PRIMARY KEY,"
+                    + AppData.Advertisements.COLUMN_NAME_TITLE + " TEXT,"
+                    + AppData.Advertisements.COLUMN_NAME_DESCRIPTION + " TEXT,"
                     + AppData.COLUMN_NAME_DATE_CREATED + " INTEGER"
                     + ");");
 

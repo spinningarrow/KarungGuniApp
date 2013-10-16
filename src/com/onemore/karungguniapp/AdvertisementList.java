@@ -1,6 +1,8 @@
 package com.onemore.karungguniapp;
 
 import android.app.ListFragment;
+import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -9,26 +11,25 @@ import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SimpleCursorAdapter;
 
 public class AdvertisementList extends ListFragment
-//implements OnQueryTextListener, OnCloseListener,
-//LoaderManager.LoaderCallbacks<Cursor> 
+implements LoaderManager.LoaderCallbacks<Cursor> 
 {
 
 	// This is the Adapter being used to display the list's data.
-//	SimpleCursorAdapter mAdapter;
-	MongoAdapter mAdapter;
+	SimpleCursorAdapter mAdapter;
+//	MongoAdapter mAdapter;
 
 	// The SearchView for doing filtering.
 	SearchView mSearchView;
 	ListView mListView;
 	// If non-null, this is the current filter the user has provided.
 	String mCurFilter;
-
+	Context mContext;
 	@Override 
 	public void onActivityCreated(Bundle savedInstanceState) 
 	{
@@ -37,45 +38,45 @@ public class AdvertisementList extends ListFragment
 		// Give some text to display if there is no data. 
 		setEmptyText(getResources().getString(R.string.noData));
 
-		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
+//		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		// We have a menu item to show in action bar.
 		setHasOptionsMenu(true);
 		mListView = getListView();
 		LayoutInflater inflator = getActivity().getLayoutInflater();
 		View header = inflator.inflate(R.layout.list_header, null);
-		header.setOnClickListener(new OnClickListener()
-		{
-			   @Override
-			   public void onClick(View v)
-			   {
-				   mAdapter.updateAdvertisements();
-			   }
-			});
-		
-		mListView.addHeaderView(header);
-		View footer = inflator.inflate(R.layout.list_footer, null);
-		footer.setOnClickListener(new OnClickListener()
-		{
-			   @Override
-			   public void onClick(View v)
-			   {
-				   mAdapter.loadMore();
-			   }
-			});
-		mListView.addFooterView(footer);
+//		header.setOnClickListener(new OnClickListener()
+//		{
+//			   @Override
+//			   public void onClick(View v)
+//			   {
+//				   mAdapter.updateAdvertisements();
+//			   }
+//			});
+//		
+//		mListView.addHeaderView(header);
+//		View footer = inflator.inflate(R.layout.list_footer, null);
+//		footer.setOnClickListener(new OnClickListener()
+//		{
+//			   @Override
+//			   public void onClick(View v)
+//			   {
+//				   mAdapter.loadMore();
+//			   }
+//			});
+//		mListView.addFooterView(footer);
 		// Create an empty adapter we will use to display the loaded data.
-//		mAdapter = new SimpleCursorAdapter(getActivity(),
-//				R.layout.advertisement, null,
-//				new String[] { Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS },
-//				new int[] { R.id.title, R.id.distance }, 0);
+		mAdapter = new SimpleCursorAdapter(getActivity(),
+				R.layout.advertisement, null,
+				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION},
+				new int[] { R.id.title, R.id.distance }, 0);
 		setListAdapter(mAdapter);
-
+		mContext = getActivity();
 		// Start out with a progress indicator.
 //		setListShown(false);
 
 		// Prepare the loader.  Either re-connect with an existing one,
 		// or start a new one.
-//		getLoaderManager().initLoader(0, null, this);
+		getLoaderManager().initLoader(0, null, this);
 	}
 
 	@Override
@@ -154,55 +155,48 @@ public class AdvertisementList extends ListFragment
 //	}
 //
 	// These are the Contacts rows that we will retrieve.
-	static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
-		Contacts._ID,
-		Contacts.DISPLAY_NAME,
-		Contacts.CONTACT_STATUS,
-		Contacts.CONTACT_PRESENCE,
-		Contacts.PHOTO_ID,
-		Contacts.LOOKUP_KEY,
-	};
+//	static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
+//		Contacts._ID,
+//		Contacts.DISPLAY_NAME,
+//		Contacts.CONTACT_STATUS,
+//		Contacts.CONTACT_PRESENCE,
+//		Contacts.PHOTO_ID,
+//		Contacts.LOOKUP_KEY,
+//	};
 
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		// This is called when a new Loader needs to be created.  This
 		// sample only has one Loader, so we don't care about the ID.
 		// First, pick the base URI to use depending on whether we are
 		// currently filtering.
-		Uri baseUri;
-		if (mCurFilter != null) {
-			baseUri = Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI,
-					Uri.encode(mCurFilter));
-		} else {
-			baseUri = Contacts.CONTENT_URI;
-		}
-
+		Uri baseUri = AppData.Advertisements.CONTENT_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
-		String select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
-				+ Contacts.HAS_PHONE_NUMBER + "=1) AND ("
-				+ Contacts.DISPLAY_NAME + " != '' ))";
+//		String select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
+//				+ Contacts.HAS_PHONE_NUMBER + "=1) AND ("
+//				+ Contacts.DISPLAY_NAME + " != '' ))";
 		return new CursorLoader(getActivity(), baseUri,
-				CONTACTS_SUMMARY_PROJECTION, select, null,
-				Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+				null, null, null,
+				null);
 	}
-//
-//	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//		// Swap the new cursor in.  (The framework will take care of closing the
-//		// old cursor once we return.)
-//		mAdapter.swapCursor(data);
-//
-//		// The list should now be shown.
-//		if (isResumed()) {
-//			setListShown(true);
-//		} else {
-//			setListShownNoAnimation(true);
-//		}
-//	}
-//
-//	public void onLoaderReset(Loader<Cursor> loader) {
-//		// This is called when the last Cursor provided to onLoadFinished()
-//		// above is about to be closed.  We need to make sure we are no
-//		// longer using it.
-//		mAdapter.swapCursor(null);
-//	}
+
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		// Swap the new cursor in.  (The framework will take care of closing the
+		// old cursor once we return.)
+		mAdapter.swapCursor(data);
+
+		// The list should now be shown.
+		if (isResumed()) {
+			setListShown(true);
+		} else {
+			setListShownNoAnimation(true);
+		}
+	}
+
+	public void onLoaderReset(Loader<Cursor> loader) {
+		// This is called when the last Cursor provided to onLoadFinished()
+		// above is about to be closed.  We need to make sure we are no
+		// longer using it.
+		mAdapter.swapCursor(null);
+	}
 }
