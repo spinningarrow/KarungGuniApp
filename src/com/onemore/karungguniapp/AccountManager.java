@@ -84,7 +84,11 @@ public class AccountManager {
         Bundle currentUser = new Bundle();
         currentUser.putString("email", prefs.getString("currentUser.email", null));
         currentUser.putString("role", prefs.getString("currentUser.role", null));
-
+        
+        // For facebook session
+        currentUser.putString("access_token", prefs.getString("currentUser.access_token", null));
+        currentUser.putLong("access_expires", prefs.getLong("currentUser.access_expires", 0));
+        
         // Don't return the bundle at all if the current user is null
         if (currentUser.getString("email") == null) {
             return null;
@@ -99,6 +103,20 @@ public class AccountManager {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
 
+        editor.putString("currentUser.email", email);
+        editor.putString("currentUser.role", role);
+
+        editor.commit();
+    }
+    
+ // Set the current user for facebook session
+    public static void setCurrentUser(Context context, String access_token, Long access_expires,
+    		String email, String role) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString("currentUser.access_token", access_token);
+        editor.putLong("currentUser.access_expires", access_expires);
         editor.putString("currentUser.email", email);
         editor.putString("currentUser.role", role);
 
