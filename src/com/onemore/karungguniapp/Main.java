@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
@@ -20,25 +19,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.plus.PlusClient;
-import com.google.android.gms.plus.model.people.Person;
-
-import com.facebook.android.AsyncFacebookRunner.*;
 import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
-import com.facebook.android.Facebook.*;
+import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.facebook.widget.LoginButton;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.model.people.Person;
 
 public class Main extends Activity implements  OnClickListener,
 ConnectionCallbacks, OnConnectionFailedListener {
@@ -59,12 +56,12 @@ private PlusClient mPlusClient;
 private ConnectionResult mConnectionResult;
 
 
-public static String APP_ID = "**************";
+public static String APP_ID = "521174844642024";
 // Instance of Facebook Class
  private Facebook facebook = new Facebook(APP_ID);
  private AsyncFacebookRunner mAsyncRunner;
  String FILENAME = "AndroidSSO_data";
- private SharedPreferences mPrefs;
+ private Bundle mPrefs;
 
 
     
@@ -74,9 +71,7 @@ public static String APP_ID = "**************";
 
 	SignInButton google;
 	Button btnfacebook;
-	String PREFS_NAME = "com.onemore.karungguniapp";
 	String role;
-//	SharedPreferences preferences ;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,16 +88,18 @@ public static String APP_ID = "**************";
 		login = (Button) findViewById(R.id.signin);
 		signup =(Button) findViewById(R.id.signup);
 		
-		mPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-	//	if (preferences.getString("logged", "").toString().equals("logged")) 
-		//{
-			//Intent i = new Intent(Main.this,AfterLogin.class);
-			//i.putExtra("EMAIL",preferences.getString("email", "").toString());
-			//i.putExtra("PASSWORD",preferences.getString("password", "").toString());
-		
-//			 startActivity(i);
-			
-	//	}
+		mPrefs = AccountManager.getCurrentUser(getApplicationContext());
+		if (mPrefs != null) 
+		{
+			if (mPrefs.get("role") == AppData.ROLE_KG){
+				Intent i = new Intent(Main.this,KarungGuniActivity.class);
+				startActivity(i);
+			}
+			else if (mPrefs.get("role") == AppData.ROLE_SELLER){
+				Intent i = new Intent(Main.this,SellerActivity.class);
+				startActivity(i);
+			}
+		}
 		
 		
 		btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
@@ -128,7 +125,7 @@ public static String APP_ID = "**************";
 
                  @Override
                  public void onClick(View v) {
-                	 role="KG";
+                	 role=AppData.ROLE_KG;
                 	 
                   // TODO Auto-generated method stub
                   popupWindow.dismiss();
@@ -140,7 +137,7 @@ public static String APP_ID = "**************";
                  @Override
                  public void onClick(View v) {
                   // TODO Auto-generated method stub
-                	 role="seller";
+                	 role=AppData.ROLE_SELLER;
                   popupWindow.dismiss();
                  }});
                        
@@ -190,7 +187,7 @@ public static String APP_ID = "**************";
      * */
     @SuppressWarnings("deprecation")
     public void loginToFacebook() {
-        mPrefs = getPreferences(MODE_PRIVATE);
+        mPrefs = AccountManager.getCurrentUser(getApplicationContext());
         String access_token = mPrefs.getString("access_token", null);
         long expires = mPrefs.getLong("access_expires", 0);
      
@@ -198,13 +195,13 @@ public static String APP_ID = "**************";
             facebook.setAccessToken(access_token);
             
             Intent i = new Intent();
-            if (role.equals("Seller")){
-//				i = new Intent(getBaseContext(), <Seller>.class);
+            if (role.equals(AppData.ROLE_SELLER)){
+				i = new Intent(getApplicationContext(), SellerActivity.class);
 			}
-			else if (role.equals("KG")){
-//				i = new Intent(getBaseContext(), <KG>.class);
+			else if (role.equals(AppData.ROLE_KG)){
+				i = new Intent(getApplicationContext(), KarungGuniActivity.class);
 			}
-//			
+			
             startActivity(i);
             
         }
@@ -227,12 +224,9 @@ public static String APP_ID = "**************";
                         public void onComplete(Bundle values) {
                             // Function to handle complete event
                             // Edit Preferences and update facebook acess_token
-                            SharedPreferences.Editor editor = mPrefs.edit();
-                            editor.putString("access_token",
-                                    facebook.getAccessToken());
-                            editor.putLong("access_expires",
-                                    facebook.getAccessExpires());
-                            editor.commit();
+                        	// TODO: Insert code for retrieving user email
+//                        	AccountManager.setCurrentUser(getApplicationContext(), facebook.getAccessToken(),
+//                        			facebook.getAccessExpires(), email, role);
                         }
      
                         @Override
@@ -325,7 +319,7 @@ public static String APP_ID = "**************";
 
          @Override
          public void onClick(View v) {
-        	 role="KG";
+        	 role=AppData.ROLE_KG;
         	 
           // TODO Auto-generated method stub
           popupWindow.dismiss();
@@ -337,7 +331,7 @@ public static String APP_ID = "**************";
          @Override
          public void onClick(View v) {
           // TODO Auto-generated method stub
-        	 role="seller";
+        	 role=AppData.ROLE_SELLER;
           popupWindow.dismiss();
          }});
                
