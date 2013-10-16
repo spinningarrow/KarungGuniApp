@@ -15,6 +15,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SignupActivity extends Activity implements OnClickListener {
     // Variable Declaration should be in onCreate()
@@ -24,6 +26,12 @@ public class SignupActivity extends Activity implements OnClickListener {
     private EditText mEmail;
     private Spinner mRole;
     private ProgressDialog signingIn;
+
+    private static HashMap<String, String> roles = new HashMap<String, String>();
+    static {
+        roles.put("Karung Guni", AppData.ROLE_KG);
+        roles.put("Seller", AppData.ROLE_SELLER);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +49,10 @@ public class SignupActivity extends Activity implements OnClickListener {
         mRole = (Spinner) findViewById(R.id.spinner1);
 
         // Spinner method to read the on selected value
-        ArrayAdapter<State> spinnerArrayAdapter = new ArrayAdapter<State>(this,
-                android.R.layout.simple_spinner_item, new State[] {
-                new State("Karung Guni"),
-                new State("Seller")});
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_spinner_item,
+            new ArrayList<String>(roles.keySet()));
 
         mRole.setAdapter(spinnerArrayAdapter);
 //        mRole.setOnItemSelectedListener(this);
@@ -57,7 +65,7 @@ public class SignupActivity extends Activity implements OnClickListener {
             String displayName = mDisplayName.getText().toString();
             String password = mPassword.getText().toString();
             String email = mEmail.getText().toString();
-            final String role = mRole.getSelectedItem().toString();
+            final String role = roles.get(mRole.getSelectedItem());
 
             boolean invalid = false;
 
