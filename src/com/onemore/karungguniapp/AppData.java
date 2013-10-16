@@ -8,6 +8,10 @@ public class AppData {
 
     private AppData() {}
     private static final String SCHEME = "content://";
+    
+    // SharedPreferences names
+    public static final String ROLE_KG = "KARUNGGUNI";
+    public static final String ROLE_SELLER = "SELLER";
 
     // Contracts for the various tables that are used by the application (including ones that may
     // not be synced to the local SQLite database)

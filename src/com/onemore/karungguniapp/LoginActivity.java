@@ -33,7 +33,7 @@ public class LoginActivity extends Activity {
 
     private ProgressDialog loggingIn;
 
-    SharedPreferences preferences;
+    Bundle preferences;
     Editor editor;
 
 
@@ -52,9 +52,7 @@ public class LoginActivity extends Activity {
                         attemptLogin();
                     }
                 });
-        preferences = getApplicationContext()
-                .getSharedPreferences(getString(R.string.PREFS_NAME), Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        preferences = AccountManager.getCurrentUser(getApplicationContext());
     }
 
     /**
@@ -149,9 +147,9 @@ public class LoginActivity extends Activity {
                         // Show the appropriate activity
                         Intent intent = null;
 
-                        if (role.equals("KARUNG_GUNI")) {
+                        if (role.equals(AppData.ROLE_KG)) {
                             intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-                        } else if (role.equals("SELLER")) {
+                        } else if (role.equals(AppData.ROLE_SELLER)) {
                             intent = new Intent(getBaseContext(), SellerActivity.class);
                         }
 
