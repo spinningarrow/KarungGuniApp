@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,7 +45,7 @@ import com.facebook.widget.LoginButton;
 
 public class Main extends Activity implements  OnClickListener,
 ConnectionCallbacks, OnConnectionFailedListener {
-	
+
 private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 
 private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
@@ -67,7 +70,7 @@ public static String APP_ID = "**************";
  private SharedPreferences mPrefs;
 
 
-    
+
 	Button login;
 
 	Button signup;
@@ -77,63 +80,70 @@ public static String APP_ID = "**************";
 	String PREFS_NAME = "com.onemore.karungguniapp";
 	String role;
 //	SharedPreferences preferences ;
-	
-	protected void onCreate(Bundle savedInstanceState) {
+
+    Account mAccount;
+    public static final String ACCOUNT = "dummyaccount";
+    public static final String ACCOUNT_TYPE = "com.onemore.karungguni";
+
+    protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        // Set up dummy account for SyncAdapter
+        mAccount = CreateSyncAccount(this);
 
 		mPlusClient = new PlusClient.Builder(this, this, this)
         .setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
         .build();
-		
+
 		mConnectionProgressDialog = new ProgressDialog(this);
         mConnectionProgressDialog.setMessage("Signing in...");
-		
+
 		setContentView(R.layout.main);
-		
+
 		login = (Button) findViewById(R.id.signin);
 		signup =(Button) findViewById(R.id.signup);
-		
+
 		mPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-	//	if (preferences.getString("logged", "").toString().equals("logged")) 
+	//	if (preferences.getString("logged", "").toString().equals("logged"))
 		//{
 			//Intent i = new Intent(Main.this,AfterLogin.class);
 			//i.putExtra("EMAIL",preferences.getString("email", "").toString());
 			//i.putExtra("PASSWORD",preferences.getString("password", "").toString());
-		
+
 //			 startActivity(i);
-			
+
 	//	}
-		
-		
+
+
 		btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
-		
+
 		btnfacebook.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-            	
-            	
-            	
-            	 LayoutInflater layoutInflater 
+
+
+
+            	 LayoutInflater layoutInflater
                  = (LayoutInflater)getBaseContext()
-                  .getSystemService(LAYOUT_INFLATER_SERVICE);  
-                View popupView = layoutInflater.inflate(R.layout.role, null);  
+                  .getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popupView = layoutInflater.inflate(R.layout.role, null);
                          final PopupWindow popupWindow = new PopupWindow(
-                           popupView, 
-                           LayoutParams.WRAP_CONTENT,  
-                                 LayoutParams.WRAP_CONTENT);  
-                         
+                           popupView,
+                           LayoutParams.WRAP_CONTENT,
+                                 LayoutParams.WRAP_CONTENT);
+
                          Button kg = (Button)popupView.findViewById(R.id.kg);
                         kg.setOnClickListener(new Button.OnClickListener(){
 
                  @Override
                  public void onClick(View v) {
                 	 role="KG";
-                	 
+
                   // TODO Auto-generated method stub
                   popupWindow.dismiss();
                  }});
-                           
+
             Button seller = (Button)popupView.findViewById(R.id.seller);
                         seller.setOnClickListener(new Button.OnClickListener(){
 
@@ -143,48 +153,83 @@ public static String APP_ID = "**************";
                 	 role="seller";
                   popupWindow.dismiss();
                  }});
-                       
-            	
-         	
-            	
+
+
+
+
              Log.d("Image Button", "button Clicked");
              loginToFacebook();
 
             }
            });
-		
-		
+
+
 		findViewById(R.id.google).setOnClickListener(this);
 
-		
+
 	login.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-			
+
 					Intent i = new Intent(Main.this,LoginActivity.class);
-					
-					startActivity(i);	
-			
-				
+
+					startActivity(i);
+
+
 			}
 		});
-		
+
 	signup.setOnClickListener(new View.OnClickListener() {
-		
+
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-		
+
 				Intent i = new Intent(Main.this,SignupActivity.class);
-				
-			startActivity(i);	
-		
-			
+
+			startActivity(i);
+
+
 		}
-	});	
-		
-		
+	});
+
+
 	}
+
+    /**
+     * Create a new dummy account for the sync adapter
+     *
+     * @param context The application context
+     */
+    public static Account CreateSyncAccount(Context context) {
+        // Create the account type and default account
+        Account newAccount = new Account(
+                ACCOUNT, ACCOUNT_TYPE);
+        // Get an instance of the Android account manager
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(
+                        ACCOUNT_SERVICE);
+        /*
+         * Add the account and account type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         */
+        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+            /*
+             * If you don't set android:syncable="true" in
+             * in your <provider> element in the manifest,
+             * then call context.setIsSyncable(account, AUTHORITY, 1)
+             * here.
+             */
+        } else {
+            /*
+             * The account exists or some other error occurred. Log this, report it,
+             * or handle it internally.
+             */
+        }
+
+        return null; // TODO return the right thing
+    }
+
 	  /**
      * Function to login into facebook
      * */
@@ -193,10 +238,10 @@ public static String APP_ID = "**************";
         mPrefs = getPreferences(MODE_PRIVATE);
         String access_token = mPrefs.getString("access_token", null);
         long expires = mPrefs.getLong("access_expires", 0);
-     
+
         if (access_token != null) {
             facebook.setAccessToken(access_token);
-            
+
             Intent i = new Intent();
             if (role.equals("Seller")){
 //				i = new Intent(getBaseContext(), <Seller>.class);
@@ -206,23 +251,23 @@ public static String APP_ID = "**************";
 			}
 //			
             startActivity(i);
-            
+
         }
-     
+
         if (expires != 0) {
             facebook.setAccessExpires(expires);
         }
-     
+
         if (!facebook.isSessionValid()) {
             facebook.authorize(this,
                     new String[] { "email", "publish_stream" },
                     new DialogListener() {
-     
+
                         @Override
                         public void onCancel() {
                             // Function to handle cancel event
                         }
-     
+
                         @Override
                         public void onComplete(Bundle values) {
                             // Function to handle complete event
@@ -234,25 +279,25 @@ public static String APP_ID = "**************";
                                     facebook.getAccessExpires());
                             editor.commit();
                         }
-     
+
                         @Override
                         public void onError(DialogError error) {
                             // Function to handle error
-     
+
                         }
-     
+
                         @Override
                         public void onFacebookError(FacebookError fberror) {
                             // Function to handle Facebook errors
-     
+
                         }
-     
+
                     });
         }
     }
-    
-  
-    
+
+
+
     @SuppressWarnings("deprecation")
 	public void getProfileInformation() {
         mAsyncRunner.request("me", new RequestListener() {
@@ -266,71 +311,71 @@ public static String APP_ID = "**************";
                     final String name = profile.getString("name");
                     // getting email of the user
                     final String email = profile.getString("email");
-     
+
                     runOnUiThread(new Runnable() {
-     
+
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Name: " + name + "\nEmail: " + email, Toast.LENGTH_LONG).show();
                         }
-     
+
                     });
-     
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-     
+
             @Override
             public void onIOException(IOException e, Object state) {
             }
-     
+
             @Override
             public void onFileNotFoundException(FileNotFoundException e,
                     Object state) {
             }
-     
+
             @Override
             public void onMalformedURLException(MalformedURLException e,
                     Object state) {
             }
-     
+
             @Override
             public void onFacebookError(FacebookError e, Object state) {
             }
         });
     }
-    
-    
-    
-    
 
-	
+
+
+
+
+
 	@Override
 	 public void onClick(View view) {
-		
-		
-		
-    	 LayoutInflater layoutInflater 
+
+
+
+    	 LayoutInflater layoutInflater
          = (LayoutInflater)getBaseContext()
-          .getSystemService(LAYOUT_INFLATER_SERVICE);  
-        View popupView = layoutInflater.inflate(R.layout.role, null);  
+          .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.role, null);
                  final PopupWindow popupWindow = new PopupWindow(
-                   popupView, 
-                   LayoutParams.WRAP_CONTENT,  
-                         LayoutParams.WRAP_CONTENT);  
-                 
+                   popupView,
+                   LayoutParams.WRAP_CONTENT,
+                         LayoutParams.WRAP_CONTENT);
+
                  Button kg = (Button)popupView.findViewById(R.id.kg);
                 kg.setOnClickListener(new Button.OnClickListener(){
 
          @Override
          public void onClick(View v) {
         	 role="KG";
-        	 
+
           // TODO Auto-generated method stub
           popupWindow.dismiss();
          }});
-                   
+
     Button seller = (Button)popupView.findViewById(R.id.seller);
                 seller.setOnClickListener(new Button.OnClickListener(){
 
@@ -340,10 +385,10 @@ public static String APP_ID = "**************";
         	 role="seller";
           popupWindow.dismiss();
          }});
-               
-		
-		
-		
+
+
+
+
         if (view.getId() == R.id.google && !mPlusClient.isConnected()) {
             if (mConnectionResult == null) {
                 mConnectionProgressDialog.show();
@@ -369,8 +414,8 @@ public static String APP_ID = "**************";
 	        super.onStop();
 	        mPlusClient.disconnect();
 	    }
-	
-	
+
+
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
@@ -390,39 +435,39 @@ public static String APP_ID = "**************";
       // Save the intent so that we can start an activity when the user clicks
       // the sign-in button.
       mConnectionResult = result;
-		
+
 	}
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
-		
+
 		 Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
-		
+
 		 mConnectionProgressDialog.dismiss();
 		 if (mPlusClient.getCurrentPerson() != null) {
 			    String email = mPlusClient.getAccountName();
 		        Person currentPerson = mPlusClient.getCurrentPerson();
 		        String personName = currentPerson.getDisplayName();
-		       
+
 		    }
-		 
-		 
-		 
+
+
+
 	}
 
 	@Override
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
+
 	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
 	    if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
 	        mConnectionResult = null;
 	        mPlusClient.connect();
 	    }
 	}
-	
+
 }
