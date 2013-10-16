@@ -11,7 +11,7 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_credentials">Invalid Login Credentials</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
-    <string name="app_id" />
+    <string name="app_id" >521174844642024</string>
     <string name="title_activity_karung_guni">KarungGuniActivity</string>
     <string name="title_activity_seller">SellerActivity</string>
     <string name="login_progress_title">Signing in&#8230;</string>

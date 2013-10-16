@@ -10,25 +10,25 @@ import org.json.JSONObject;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.android.AsyncFacebookRunner.RequestListener;
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.FacebookError;
+
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -36,6 +36,14 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
+import com.facebook.*;
+import com.facebook.android.*;
+import com.facebook.internal.*;
+import com.facebook.model.*;
+import com.facebook.widget.*;
+
+
+
 
 public class Main extends Activity implements  OnClickListener,
 ConnectionCallbacks, OnConnectionFailedListener {
@@ -47,7 +55,7 @@ private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
 private static final int REQUEST_CODE_SIGN_IN = 1;
 private static final int REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES = 2;
 
-private TextView mSignInStatus;
+
 
 
 
@@ -59,8 +67,7 @@ private ConnectionResult mConnectionResult;
 public static String APP_ID = "521174844642024";
 // Instance of Facebook Class
  private Facebook facebook = new Facebook(APP_ID);
- private AsyncFacebookRunner mAsyncRunner;
- String FILENAME = "AndroidSSO_data";
+
  private Bundle mPrefs;
 
 
@@ -105,21 +112,16 @@ public static String APP_ID = "521174844642024";
 		btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
 		
 		btnfacebook.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-            	
-            	
-            	
+			
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				showPopup(Main.this);	
+         	try {
             	 LayoutInflater layoutInflater 
                  = (LayoutInflater)getBaseContext()
                   .getSystemService(LAYOUT_INFLATER_SERVICE);  
                 View popupView = layoutInflater.inflate(R.layout.role, null);  
-                         final PopupWindow popupWindow = new PopupWindow(
-                           popupView, 
-                           LayoutParams.WRAP_CONTENT,  
-                                 LayoutParams.WRAP_CONTENT);  
-                         
+                         final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, true);
                          Button kg = (Button)popupView.findViewById(R.id.kg);
                         kg.setOnClickListener(new Button.OnClickListener(){
 
@@ -140,14 +142,49 @@ public static String APP_ID = "521174844642024";
                 	 role=AppData.ROLE_SELLER;
                   popupWindow.dismiss();
                  }});
-                       
+            	 } catch (Exception e) {
+                     e.printStackTrace();
+                 }      
             	
          	
             	
              Log.d("Image Button", "button Clicked");
-             loginToFacebook();
+           //  loginToFacebook();
+        	  
+        	  
+        	/* if ( FacebookUtil. isLoggedIn()){
+        		 Context context = getApplicationContext();
+        		 CharSequence text = "already logged in";
+        		 int duration = Toast.LENGTH_SHORT;
 
-            }
+        		 Toast toast = Toast.makeText(context, text, duration);
+        		 toast.show();
+        	 }else{
+             FacebookUtil.login(Main.this,
+                     new Session.StatusCallback() {
+
+                         @Override
+                         public void call(Session _session, SessionState _state, Exception _exception) {
+                             if(_session.isOpened()) {
+                             FacebookUtil.askMe(new Request.GraphUserCallback() {
+                                 public void onCompleted(GraphUser user, Response response) {
+                                     if (user != null) {
+                                    	 
+                                    	 
+
+                                     }
+
+                                 }
+                             }); }
+                         }
+                     });
+            }*/
+          
+          
+          
+          }
+          
+          
            });
 		
 		
@@ -185,7 +222,7 @@ public static String APP_ID = "521174844642024";
 	  /**
      * Function to login into facebook
      * */
-    @SuppressWarnings("deprecation")
+  /*  @SuppressWarnings("deprecation")
     public void loginToFacebook() {
         mPrefs = AccountManager.getCurrentUser(getApplicationContext());
         String access_token = mPrefs.getString("access_token", null);
@@ -296,7 +333,7 @@ public static String APP_ID = "521174844642024";
     }
     
     
-    
+    */
     
 
 	
@@ -304,38 +341,7 @@ public static String APP_ID = "521174844642024";
 	 public void onClick(View view) {
 		
 		
-		
-    	 LayoutInflater layoutInflater 
-         = (LayoutInflater)getBaseContext()
-          .getSystemService(LAYOUT_INFLATER_SERVICE);  
-        View popupView = layoutInflater.inflate(R.layout.role, null);  
-                 final PopupWindow popupWindow = new PopupWindow(
-                   popupView, 
-                   LayoutParams.WRAP_CONTENT,  
-                         LayoutParams.WRAP_CONTENT);  
-                 
-                 Button kg = (Button)popupView.findViewById(R.id.kg);
-                kg.setOnClickListener(new Button.OnClickListener(){
-
-         @Override
-         public void onClick(View v) {
-        	 role=AppData.ROLE_KG;
-        	 
-          // TODO Auto-generated method stub
-          popupWindow.dismiss();
-         }});
-                   
-    Button seller = (Button)popupView.findViewById(R.id.seller);
-                seller.setOnClickListener(new Button.OnClickListener(){
-
-         @Override
-         public void onClick(View v) {
-          // TODO Auto-generated method stub
-        	 role=AppData.ROLE_SELLER;
-          popupWindow.dismiss();
-         }});
-               
-		
+		showPopup(Main.this);
 		
 		
         if (view.getId() == R.id.google && !mPlusClient.isConnected()) {
@@ -411,12 +417,71 @@ public static String APP_ID = "521174844642024";
 		
 	}
 	
-	
+	/*
 	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
 	    if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
 	        mConnectionResult = null;
 	        mPlusClient.connect();
+	    } else{
+	    	 super.onActivityResult(requestCode, responseCode, intent);
+	 	    FacebookUtil.onActivityResult(this, requestCode, responseCode, intent);
+	 	}
 	    }
-	}
+	}*/
 	
+	@Override
+	protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
+	    super.onActivityResult(_requestCode, _resultCode, _data);
+	    FacebookUtil.onActivityResult(this, _requestCode, _resultCode, _data);
+	}
+
+	private void showPopup(final Activity context) {
+		   int popupWidth = 400;
+		   int popupHeight = 350;
+
+		   // Inflate the popup_layout.xml
+		   LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
+		   LayoutInflater layoutInflater = (LayoutInflater) context
+		     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		   View layout = layoutInflater.inflate(R.layout.role, viewGroup);
+
+		   // Creating the PopupWindow
+		   final PopupWindow popup = new PopupWindow(context);
+		   popup.setContentView(layout);
+		   popup.setWidth(popupWidth);
+		   popup.setHeight(popupHeight);
+		   popup.setFocusable(true);
+
+		   // Some offset to align the popup a bit to the right, and a bit down, relative to button's position.
+		   int OFFSET_X = 50;
+		   int OFFSET_Y = 150;
+
+		   // Clear the default translucent background
+		   popup.setBackgroundDrawable(new BitmapDrawable());
+
+		   // Displaying the popup at the specified location, + offsets.
+		   popup.showAtLocation(layout, Gravity.NO_GRAVITY,  OFFSET_X,OFFSET_Y);
+
+		   Button kg = (Button)layout.findViewById(R.id.kg);
+           kg.setOnClickListener(new Button.OnClickListener(){
+
+    @Override
+    public void onClick(View v) {
+   	 role=AppData.ROLE_KG;
+   	 
+     // TODO Auto-generated method stub
+   	popup.dismiss();
+    }});
+              
+Button seller = (Button)layout.findViewById(R.id.seller);
+           seller.setOnClickListener(new Button.OnClickListener(){
+
+    @Override
+    public void onClick(View v) {
+     // TODO Auto-generated method stub
+   	 role=AppData.ROLE_SELLER;
+   	popup.dismiss();
+    }});
+		}
 }
+
