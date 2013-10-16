@@ -15,7 +15,8 @@
         android:allowBackup="true"
         android:icon="@drawable/kg_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.DeviceDefault.Light" >
+        android:theme="@android:style/Theme.DeviceDefault.Light"
+            android:name=".KGApp">
         <activity
             android:name="com.onemore.karungguniapp.LoginActivity"
             android:label="@string/app_name" >

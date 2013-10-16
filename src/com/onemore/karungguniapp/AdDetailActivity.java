@@ -23,19 +23,17 @@ import com.onemore.karungguniapp.model.Item;
  * To change this template use File | Settings | File Templates.
  */
 public class AdDetailActivity extends Activity {
-    private KGApp app;
+    private KGApp app = new KGApp();
     private ProgressBar progressBar;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ad_detail
-
-        );
+        setContentView(R.layout.ad_detail);
 
         app = (KGApp) getApplication();
 
         progressBar = (ProgressBar) findViewById(R.id.progress);
-        progressBar.setIndeterminate(true);
+//        progressBar.setIndeterminate(true);
 
         Item item = app.getCurrentItem();
 
