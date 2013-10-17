@@ -155,11 +155,11 @@ public static String APP_ID = "521174844642024";
 		mPrefs = AccountManager.getCurrentUser(getApplicationContext());
 		if (mPrefs != null) 
 		{
-			if (mPrefs.get("role") == AppData.ROLE_KG){
+			if (mPrefs.get("role").equals(AppData.ROLE_KG)){
 				Intent i = new Intent(Main.this,KarungGuniActivity.class);
 				startActivity(i);
 			}
-			else if (mPrefs.get("role") == AppData.ROLE_SELLER){
+			else if (mPrefs.get("role").equals(AppData.ROLE_SELLER)){
 				Intent i = new Intent(Main.this,SellerActivity.class);
 				startActivity(i);
 			}
