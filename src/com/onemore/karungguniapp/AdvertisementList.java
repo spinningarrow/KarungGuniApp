@@ -4,6 +4,7 @@ import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -70,9 +71,16 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION},
 				new int[] { R.id.title, R.id.distance }, 0);
 		setListAdapter(mAdapter);
+        mListView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(this,);
+//                intent.putExtra();
+            }
+        });
 		mContext = getActivity();
 		// Start out with a progress indicator.
-//		setListShown(false);
+		setListShown(false);
 
 		// Prepare the loader.  Either re-connect with an existing one,
 		// or start a new one.
