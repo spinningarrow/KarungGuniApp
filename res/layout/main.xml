@@ -7,14 +7,16 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="275dp"
-        android:layout_height="194dp"
+        android:layout_width="247dp"
+        android:layout_height="174dp"
+        android:layout_gravity="center_horizontal"
         android:src="@drawable/horn" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="Karung Guni"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="40sp" />
@@ -22,36 +24,38 @@
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-    </com.google.android.gms.common.SignInButton>
+        android:layout_marginTop="10dp" />
 
-  <com.facebook.widget.LoginButton
-            android:id="@+id/fbbtn"
+    <com.facebook.widget.LoginButton
+        android:id="@+id/fbbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:layout_weight="0.05"
+         android:layout_marginTop="20dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/signin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp" />
+            android:layout_height="31dp"
+            android:layout_gravity="left"
+            android:text="Sign In" />
 
-
-    <Button
-        android:id="@+id/signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign In" />
-
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create account" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView1"
-        android:layout_marginTop="48dp" />
+        <Button
+            android:id="@+id/signup"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+             android:layout_marginLeft="50dp"
+            android:text="Create account" />
+    </LinearLayout>
 
 </LinearLayout>

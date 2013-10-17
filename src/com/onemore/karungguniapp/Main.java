@@ -1,5 +1,6 @@
 package com.onemore.karungguniapp;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,6 +18,8 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -57,7 +61,7 @@ private static final int REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES = 2;
 
 
 
-
+private ProgressDialog signingIn;
 
 private ProgressDialog mConnectionProgressDialog;
 private PlusClient mPlusClient;
@@ -70,15 +74,68 @@ public static String APP_ID = "521174844642024";
 
  private Bundle mPrefs;
 
-
+ private GraphUser user;
     
 	Button login;
 
 	Button signup;
 
 	SignInButton google;
-	Button btnfacebook;
+	LoginButton btnfacebook;
 	String role;
+	
+	static boolean chosen=false;
+	
+
+
+	    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
+	        @Override
+	        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+	            Log.d("Facebook", String.format("Error: %s", error.toString()));
+	        }
+
+	        @Override
+	        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+	            Log.d("Facebook", "Success!");
+	        }
+	    };
+	    private void updateUI() {
+	        Session session = Session.getActiveSession();
+	      
+
+	    
+
+	        if (session != null && user != null) {
+	           
+	        	 String displayName=user.getUsername();
+            	 String email=displayName+"@facebook.com";
+
+                   // Create a new user with the supplied details
+                 //
+   		           //                       	 
+            	 //
+            	 //
+            	 
+            	 
+           //      AccountManager.setCurrentUser(getApplicationContext(), email, role);
+                
+            
+            	// Intent intent = null;
+
+              //   if (role.equals(AppData.ROLE_KG)) {
+                  //   intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+                // }
+
+                 //else if (role.equals(AppData.ROLE_SELLER)) {
+                   //  intent = new Intent(getBaseContext(), SellerActivity.class);
+                 //}
+	        }
+	      
+	    }
+	
+	  
+	
+	
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -110,56 +167,31 @@ public static String APP_ID = "521174844642024";
 		
 		
 		btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
-		
+	/*	btnfacebook.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+            @Override
+            public void onUserInfoFetched(GraphUser user) {
+                Main.this.user = user;
+             
+                updateUI();
+                }
+                
+            
+        });*/
+
 		btnfacebook.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				showPopup(Main.this);	
-         	try {
-            	 LayoutInflater layoutInflater 
-                 = (LayoutInflater)getBaseContext()
-                  .getSystemService(LAYOUT_INFLATER_SERVICE);  
-                View popupView = layoutInflater.inflate(R.layout.role, null);  
-                         final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, true);
-                         Button kg = (Button)popupView.findViewById(R.id.kg);
-                        kg.setOnClickListener(new Button.OnClickListener(){
-
-                 @Override
-                 public void onClick(View v) {
-                	 role=AppData.ROLE_KG;
-                	 
-                  // TODO Auto-generated method stub
-                  popupWindow.dismiss();
-                 }});
-                           
-            Button seller = (Button)popupView.findViewById(R.id.seller);
-                        seller.setOnClickListener(new Button.OnClickListener(){
-
-                 @Override
-                 public void onClick(View v) {
-                  // TODO Auto-generated method stub
-                	 role=AppData.ROLE_SELLER;
-                  popupWindow.dismiss();
-                 }});
-            	 } catch (Exception e) {
-                     e.printStackTrace();
-                 }      
-            	
+				 chosen=false;
+            	 while(!chosen){
+            		 chosen=   showPopup(Main.this);
+             }	
          	
             	
-             Log.d("Image Button", "button Clicked");
+             
            //  loginToFacebook();
         	  
-        	  
-        	/* if ( FacebookUtil. isLoggedIn()){
-        		 Context context = getApplicationContext();
-        		 CharSequence text = "already logged in";
-        		 int duration = Toast.LENGTH_SHORT;
-
-        		 Toast toast = Toast.makeText(context, text, duration);
-        		 toast.show();
-        	 }else{
+        	
              FacebookUtil.login(Main.this,
                      new Session.StatusCallback() {
 
@@ -170,6 +202,32 @@ public static String APP_ID = "521174844642024";
                                  public void onCompleted(GraphUser user, Response response) {
                                      if (user != null) {
                                     	 
+                                    	 String displayName=user.getUsername();
+                                    	 String email=displayName+"@facebook.com";
+                
+
+                                           // Create a new user with the supplied details
+                                         //
+                           		           //                       	 
+                                    	 //
+                                    	 //
+                                    	 
+                                    	 
+                                         AccountManager.setCurrentUser(getApplicationContext(), email, role);
+                                   /*      Intent intent = null;
+
+                                         if (role.equals(AppData.ROLE_KG)) {
+                                             intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+                                         }
+
+                                         else if (role.equals(AppData.ROLE_SELLER)) {
+                                             intent = new Intent(getBaseContext(), SellerActivity.class);
+                                         }*/
+                                    	 
+                                    	 
+                                    	 
+                                    	 
+                                    	 
                                     	 
 
                                      }
@@ -178,7 +236,7 @@ public static String APP_ID = "521174844642024";
                              }); }
                          }
                      });
-            }*/
+        
           
           
           
@@ -403,8 +461,81 @@ public static String APP_ID = "521174844642024";
 		 if (mPlusClient.getCurrentPerson() != null) {
 			    String email = mPlusClient.getAccountName();
 		        Person currentPerson = mPlusClient.getCurrentPerson();
-		        String personName = currentPerson.getDisplayName();
+		        String displayName = currentPerson.getDisplayName();
 		       
+		        
+		        
+		        
+                Handler.Callback createWithEmailCallback = new Handler.Callback() {
+                    Bundle result;
+                    JSONObject user;
+//                    Uri uri;
+
+                    @Override
+                    public boolean handleMessage(Message message) {
+                        result = message.getData();
+
+                        if (result.getInt("success") != 1 || result.getInt("status") != 201) {
+                            // Dismiss the progress dialog
+                            signingIn.dismiss();
+                            Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
+
+                            // Show an error to the user if a user with that email address already exists
+                            if (result.getInt("status") == 409) {
+                                Toast toast = Toast.makeText(getApplicationContext(), R.string.signup_user_exists, Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            return false;
+                        }
+
+                        try {
+                            user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
+
+                            // Set the current user in the Shared Preferences so it can be used by other activities
+                            AccountManager.setCurrentUser(getApplicationContext(), user.getString("email"), role);
+                            Intent intent = null;
+
+                            if (role.equals(AppData.ROLE_KG)) {
+                                intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+                            }
+
+                            else if (role.equals(AppData.ROLE_SELLER)) {
+                                intent = new Intent(getBaseContext(), SellerActivity.class);
+                            }
+
+                            // Dismiss the progress dialog and start the new activity
+                            signingIn.dismiss();
+                            startActivity(intent);
+
+                        }
+
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+
+                        catch (IOException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+
+                        return true;
+                    }
+                };
+		        
+                // Show a progress dialog to the user
+                signingIn = ProgressDialog.show(this, getString(R.string.signup_progress_title), getString(R.string.signup_progress_message), true);
+
+                // Create a new user with the supplied details
+                AccountManager.createWithEmail(email, "", role, displayName, createWithEmailCallback);
+		        
+		        
+		        
+		        
+		        
+		        
+		        
+		        
 		    }
 		 
 		 
@@ -433,11 +564,15 @@ public static String APP_ID = "521174844642024";
 	protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
 	    super.onActivityResult(_requestCode, _resultCode, _data);
 	    FacebookUtil.onActivityResult(this, _requestCode, _resultCode, _data);
+	    
+	    
+	    
 	}
 
-	private void showPopup(final Activity context) {
+	private boolean showPopup(final Activity context) {
 		   int popupWidth = 400;
 		   int popupHeight = 350;
+		  
 
 		   // Inflate the popup_layout.xml
 		   LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
@@ -463,15 +598,21 @@ public static String APP_ID = "521174844642024";
 		   popup.showAtLocation(layout, Gravity.NO_GRAVITY,  OFFSET_X,OFFSET_Y);
 
 		   Button kg = (Button)layout.findViewById(R.id.kg);
-           kg.setOnClickListener(new Button.OnClickListener(){
+           kg.setOnClickListener(
+        		   new Button.OnClickListener()
+        		   {
 
     @Override
     public void onClick(View v) {
    	 role=AppData.ROLE_KG;
-   	 
+   	 chosen=true;
      // TODO Auto-generated method stub
    	popup.dismiss();
-    }});
+   
+    }
+    }
+         
+        		   );
               
 Button seller = (Button)layout.findViewById(R.id.seller);
            seller.setOnClickListener(new Button.OnClickListener(){
@@ -480,8 +621,11 @@ Button seller = (Button)layout.findViewById(R.id.seller);
     public void onClick(View v) {
      // TODO Auto-generated method stub
    	 role=AppData.ROLE_SELLER;
+   	 chosen=true;
    	popup.dismiss();
     }});
-		}
+           return chosen;
+           }
+	
 }
 
