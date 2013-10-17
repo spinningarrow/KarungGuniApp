@@ -11,5 +11,6 @@
     <string name="noData">No advertisements found.</string>
     <string name="header">Load new Advertisements</string>
     <string name="footer">Load more...</string>
+    <string name="retrieve_KG_position">my location</string>
 
 </resources>
