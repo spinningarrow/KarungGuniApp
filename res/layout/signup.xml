@@ -12,18 +12,27 @@
             android:id="@+id/linearLayout1" 
             android:layout_width="match_parent" 
             android:layout_height="match_parent"
+             android:layout_marginTop="20dp"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up" 
+                android:layout_gravity="center_horizontal"
+                android:textSize="45sp" />
 
     <TextView
         android:id="@+id/runame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Name"
-         android:layout_marginLeft="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        android:text="User Name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="25sp" 
+         android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/reuname"
@@ -40,6 +49,7 @@
         android:text="Password"
          android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:textSize="25sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
@@ -59,6 +69,7 @@
         android:text="Email"
          android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:textSize="25sp"
         />
 
 
@@ -77,6 +88,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:text="Role"
+        android:textSize="25sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Spinner
@@ -97,8 +109,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit" 
-         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+         android:layout_marginLeft="220dp"
+        android:layout_marginRight="5dp"
+         />
     
     </RelativeLayout>
 </LinearLayout>
