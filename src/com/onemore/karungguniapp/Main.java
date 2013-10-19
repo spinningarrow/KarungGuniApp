@@ -60,7 +60,7 @@ public class Main extends Activity implements OnClickListener,
     // Instance of Facebook Class
     private Facebook facebook = new Facebook(APP_ID);
 
-    private Bundle mPrefs;
+    private Bundle currentUser;
 
     private GraphUser user;
 
@@ -110,6 +110,31 @@ public class Main extends Activity implements OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Log the user in if login was performed earlier (the current user is stored in the shared preferences)
+        // Get the role from the user the account exists but it hasn't been set (e.g. if a new account was created
+        // using Facebook or Google login
+        currentUser = AccountManager.getCurrentUser(getApplicationContext());
+
+        if (currentUser != null) {
+            if (currentUser.get("role").equals(AppData.ROLE_KG)) {
+                Intent i = new Intent(Main.this, KarungGuniActivity.class);
+                startActivity(i);
+            } else if (currentUser.get("role").equals(AppData.ROLE_SELLER)) {
+                Intent i = new Intent(Main.this, SellerActivity.class);
+                startActivity(i);
+            } else if (currentUser.get("role") == null) {
+
+
+                ///////////method add role to the user in db
+                ///////
+                ///////
+
+
+                showPopup(this);
+                AccountManager.setCurrentUser(getApplicationContext(), currentUser.get("email").toString(), role);
+            }
+        }
+
         mPlusClient = new PlusClient.Builder(this, this, this)
                 .setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
                 .build();
@@ -122,30 +147,7 @@ public class Main extends Activity implements OnClickListener,
         login = (Button) findViewById(R.id.signin);
         signup = (Button) findViewById(R.id.signup);
 
-        mPrefs = AccountManager.getCurrentUser(getApplicationContext());
-        if (mPrefs != null) {
-            if (mPrefs.get("role").equals(AppData.ROLE_KG)) {
-                Intent i = new Intent(Main.this, KarungGuniActivity.class);
-                startActivity(i);
-            } else if (mPrefs.get("role").equals(AppData.ROLE_SELLER)) {
-                Intent i = new Intent(Main.this, SellerActivity.class);
-                startActivity(i);
-            } else if (mPrefs.get("role") == null) {
-
-
-                ///////////method add role to the user in db
-                ///////
-                ///////
-
-
-                showPopup(Main.this);
-                AccountManager.setCurrentUser(getApplicationContext(), mPrefs.get("email").toString(), role);
-
-
-            }
-        }
-
-
+        // Setup the 'Login with Facebook' button
         btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
 	/*	btnfacebook.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
@@ -161,13 +163,11 @@ public class Main extends Activity implements OnClickListener,
         btnfacebook.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-
                 FacebookUtil.login(Main.this, new Session.StatusCallback() {
 
                     @Override
                     public void call(Session _session, SessionState _state, Exception _exception) {
-                        if (_session.isOpened()) {
+//                        if (_session.isOpened()) {
                             FacebookUtil.askMe(new Request.GraphUserCallback() {
                                 public void onCompleted(GraphUser user, Response response) {
                                     if (user != null) {
@@ -175,22 +175,17 @@ public class Main extends Activity implements OnClickListener,
                                         String displayName = user.getUsername();
                                         String email = displayName + "@facebook.com";
 
+//                                        Handler.Callback callback = new Handler.Callback() {
+//                                            intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+//                                        };
 
                                         // Create a new user with the supplied details
-                                        //
-                                        //
-                                        //
-                                        //
-
-
+                                        AccountManager.createWithFacebook(getApplicationContext(), email, null);
                                         AccountManager.setCurrentUser(getApplicationContext(), email, null);
-
-
                                     }
-
                                 }
                             });
-                        }
+//                        }
                     }
                 });
             }
@@ -199,32 +194,18 @@ public class Main extends Activity implements OnClickListener,
         findViewById(R.id.google).setOnClickListener(this);
 
         login.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-
                 Intent i = new Intent(Main.this, LoginActivity.class);
-
                 startActivity(i);
-
-
             }
         });
 
         signup.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-
                 Intent i = new Intent(Main.this, SignupActivity.class);
-
                 startActivity(i);
-
-
             }
         });
-
-
     }
 
     /**
@@ -232,9 +213,9 @@ public class Main extends Activity implements OnClickListener,
      */
   /*  @SuppressWarnings("deprecation")
     public void loginToFacebook() {
-        mPrefs = AccountManager.getCurrentUser(getApplicationContext());
-        String access_token = mPrefs.getString("access_token", null);
-        long expires = mPrefs.getLong("access_expires", 0);
+        currentUser = AccountManager.getCurrentUser(getApplicationContext());
+        String access_token = currentUser.getString("access_token", null);
+        long expires = currentUser.getLong("access_expires", 0);
      
         if (access_token != null) {
             facebook.setAccessToken(access_token);
@@ -368,7 +349,6 @@ public class Main extends Activity implements OnClickListener,
     protected void onStart() {
         super.onStart();
         mPlusClient.connect();
-
     }
 
     @Override
@@ -379,13 +359,10 @@ public class Main extends Activity implements OnClickListener,
 
     public void onResume() {
         super.onResume();
-
-
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        // TODO Auto-generated method stub
         if (mConnectionProgressDialog.isShowing()) {
             // The user clicked the sign-in button already. Start to resolve
             // connection errors. Wait until onConnected() to dismiss the

@@ -144,14 +144,18 @@ public class LoginActivity extends Activity {
                         Log.w("ACCOUNT_MANAGER", "User logged in.");
                         AccountManager.setCurrentUser(getApplicationContext(), email, role);
 
-                        // Show the appropriate activity
-                        Intent intent = null;
+//                        // Show the appropriate activity
+//                        Intent intent = null;
+//
+//                        if (role.equals(AppData.ROLE_KG)) {
+//                            intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+//                        } else if (role.equals(AppData.ROLE_SELLER)) {
+//                            intent = new Intent(getBaseContext(), SellerActivity.class);
+//                        }
 
-                        if (role.equals(AppData.ROLE_KG)) {
-                            intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-                        } else if (role.equals(AppData.ROLE_SELLER)) {
-                            intent = new Intent(getBaseContext(), SellerActivity.class);
-                        }
+                        // Go back to the main activity, which shows the appropriate activity depending on whether the
+                        // user is a seller or a karung guni
+                        Intent intent = new Intent(getBaseContext(), Main.class);
 
                         // Dismiss the progress dialog and start the new activity
                         loggingIn.dismiss();
