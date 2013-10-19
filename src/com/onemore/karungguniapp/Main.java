@@ -88,7 +88,7 @@ public static String APP_ID = "521174844642024";
 	
 
 
-	    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
+	 /*     private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
 	        @Override
 	        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
 	            Log.d("Facebook", String.format("Error: %s", error.toString()));
@@ -99,7 +99,7 @@ public static String APP_ID = "521174844642024";
 	            Log.d("Facebook", "Success!");
 	        }
 	    };
-	    private void updateUI() {
+	  private void updateUI() {
 	        Session session = Session.getActiveSession();
 	      
 
@@ -111,27 +111,12 @@ public static String APP_ID = "521174844642024";
             	 String email=displayName+"@facebook.com";
 
                    // Create a new user with the supplied details
-                 //
-   		           //                       	 
-            	 //
-            	 //
             	 
-            	 
-           //      AccountManager.setCurrentUser(getApplicationContext(), email, role);
-                
-            
-            	// Intent intent = null;
-
-              //   if (role.equals(AppData.ROLE_KG)) {
-                  //   intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-                // }
-
-                 //else if (role.equals(AppData.ROLE_SELLER)) {
-                   //  intent = new Intent(getBaseContext(), SellerActivity.class);
-                 //}
+           //      AccountManager.setCurrentUser(getApplicationContext(), email, null);
+                              
 	        }
 	      
-	    }
+	    }*/
 	
 	  
 	
@@ -162,6 +147,22 @@ public static String APP_ID = "521174844642024";
 			else if (mPrefs.get("role").equals(AppData.ROLE_SELLER)){
 				Intent i = new Intent(Main.this,SellerActivity.class);
 				startActivity(i);
+			}else if  (mPrefs.get("role") == null){
+			
+				
+				
+			///////////method add role to the user in db 
+			///////
+			///////
+				
+				
+				
+			
+				
+				 showPopup(Main.this) ;
+				AccountManager.setCurrentUser(getApplicationContext(), mPrefs.get("email").toString(), role);
+				
+				
 			}
 		}
 		
@@ -182,16 +183,9 @@ public static String APP_ID = "521174844642024";
 			
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				 chosen=false;
-            	 while(!chosen){
-            		 chosen=   showPopup(Main.this);
-             }	
+				
          	
-            	
-             
-           //  loginToFacebook();
-        	  
-        	
+        	        	
              FacebookUtil.login(Main.this,
                      new Session.StatusCallback() {
 
@@ -213,22 +207,11 @@ public static String APP_ID = "521174844642024";
                                     	 //
                                     	 
                                     	 
-                                         AccountManager.setCurrentUser(getApplicationContext(), email, role);
-                                   /*      Intent intent = null;
-
-                                         if (role.equals(AppData.ROLE_KG)) {
-                                             intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-                                         }
-
-                                         else if (role.equals(AppData.ROLE_SELLER)) {
-                                             intent = new Intent(getBaseContext(), SellerActivity.class);
-                                         }*/
-                                    	 
-                                    	 
-                                    	 
-                                    	 
-                                    	 
-                                    	 
+                                      AccountManager.setCurrentUser(getApplicationContext(), email, null);
+                                       
+                                    
+                                    	
+                                  	 
 
                                      }
 
@@ -420,6 +403,7 @@ public static String APP_ID = "521174844642024";
 	    protected void onStart() {
 	        super.onStart();
 	        mPlusClient.connect();
+	        
 	    }
 
 	    @Override
@@ -428,7 +412,11 @@ public static String APP_ID = "521174844642024";
 	        mPlusClient.disconnect();
 	    }
 	
-	
+	 public void onResume(){
+		 super.onResume();
+		
+				
+	 }
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
