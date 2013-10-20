@@ -184,8 +184,8 @@ public class AppDataProvider extends ContentProvider{
         }
 
         // Get the current system time in milliseconds
-        Long now = System.currentTimeMillis();
-        values.put(AppData.COLUMN_NAME_DATE_CREATED, now / 1000);
+        Long now = System.currentTimeMillis() / 1000;
+        values.put(AppData.COLUMN_NAME_DATE_CREATED, now);
 
         // Get a writable database (will create if it doesn't exist)
         db = mOpenHelper.getWritableDatabase();

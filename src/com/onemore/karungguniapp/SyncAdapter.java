@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.google.android.gms.internal.w;
 import org.json.JSONArray;
@@ -60,24 +61,30 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
      * up your own background processing.
      */
     @Override
-    public void onPerformSync(
-            Account account,
-            Bundle extras,
-            String authority,
-            ContentProviderClient provider,
-            SyncResult syncResult) {
-        /*
-         * Put the data transfer code here.
-         */
+    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         Log.w("SYNC_ADAPTER", "Syncing...");
-//        android.os.Debug.waitForDebugger();
 
         // there are a few general tasks your implementation should perform:
         // conencting to a server
         // downloading and uploading data
+        // handling data conflicts or determing how current the data is
+        // clean up (close connectiongs and clean up temp files and caches)
+
+        String ADVERTISEMENTS_SELECTION = null;
+        String[] ADVERTISEMENTS_SELECTION_ARGS = null;
+        Bundle lastSync = getLastSync(this.getContext());
+
+        // If lastSync is not empty, set the required selections
+        // TODO selection parameters don't actually work, the query method doesn't use them
+        if (lastSync.getLong(AppData.Advertisements.TABLE_NAME) != -1) {
+            ADVERTISEMENTS_SELECTION = "WHERE DATE_CREATED > ?";
+            ADVERTISEMENTS_SELECTION_ARGS = new String[] { String.valueOf(lastSync.getLong(AppData.Advertisements.TABLE_NAME)) };
+        }
+
+        // Get advertisement data from the server
         JSONArray advertisements;
-        Bundle result = RestClient.query(AppData.Advertisements.CONTENT_URI, null, null, null, null, null);
+        Bundle result = RestClient.query(AppData.Advertisements.CONTENT_URI, null, ADVERTISEMENTS_SELECTION, ADVERTISEMENTS_SELECTION_ARGS, null, null);
 
         if (result.getInt("status") != 200) {
             return;
@@ -107,6 +114,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             Log.w("SYNC_ADAPTER", "Inserted.");
+            // Save sync status
+            Long now = System.currentTimeMillis() / 1000;
+            setLastSync(getContext(), AppData.Advertisements.TABLE_NAME, now);
 
             Cursor mCursor = mContentResolver.query(AppData.Advertisements.CONTENT_URI, null, null, null, null);
             Log.w("SYNC_ADAPTER", "Count: " + mCursor.getCount());
@@ -121,7 +131,21 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
             return;
         }
-        // handling data conflicts or determing how current the data is
-        // clean up (close connectiongs and clean up temp files and caches)
+    }
+
+    public static Bundle getLastSync(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Bundle lastSync = new Bundle();
+        lastSync.putLong(AppData.Advertisements.TABLE_NAME, prefs.getLong("lastSync." + AppData.Advertisements.TABLE_NAME, -1));
+
+        return lastSync;
+    }
+
+    public static void setLastSync(Context context, String tableName, Long time) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putLong("lastSync." + tableName, time);
+        editor.commit();
     }
 }
