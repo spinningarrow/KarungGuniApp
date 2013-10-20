@@ -74,6 +74,8 @@ public class Main extends Activity implements OnClickListener,
     LoginButton btnfacebook;
     String role;
     Account mAccount;
+    Bundle syncSettingsBundle;
+
     public static final String ACCOUNT = "dummyaccount";
     public static final String ACCOUNT_TYPE = "com.onemore.karungguniapp";
 
@@ -117,6 +119,10 @@ public class Main extends Activity implements OnClickListener,
 
         // Set up dummy account for SyncAdapter
         mAccount = CreateSyncAccount(this);
+
+        // Set the SyncAdapter to sync periodically
+        syncSettingsBundle = new Bundle();
+        ContentResolver.addPeriodicSync(mAccount, AppData.AUTHORITY, syncSettingsBundle, 60);
 
         // Log the user in if login was performed earlier (the current user is stored in the shared preferences)
         // Get the role from the user the account exists but it hasn't been set (e.g. if a new account was created
@@ -594,7 +600,7 @@ public class Main extends Activity implements OnClickListener,
              */
         }
 
-        return null; // TODO return the right thing
+        return newAccount; // TODO return the right thing
     }
 }
 
