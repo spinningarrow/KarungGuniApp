@@ -40,8 +40,10 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
+
 import com.facebook.*;
 import com.facebook.android.*;
+import com.facebook.android.Facebook.DialogListener;
 import com.facebook.internal.*;
 import com.facebook.model.*;
 import com.facebook.widget.*;
@@ -49,15 +51,9 @@ import com.facebook.widget.*;
 
 
 
-public class Main extends Activity implements  OnClickListener,
-ConnectionCallbacks, OnConnectionFailedListener {
+public class Main extends Activity implements  View.OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
 	
 private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
-
-private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
-
-private static final int REQUEST_CODE_SIGN_IN = 1;
-private static final int REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES = 2;
 
 
 
@@ -66,12 +62,13 @@ private ProgressDialog signingIn;
 private ProgressDialog mConnectionProgressDialog;
 private PlusClient mPlusClient;
 private ConnectionResult mConnectionResult;
-
+private SharedPreferences fbPrefs;
 
 public static String APP_ID = "521174844642024";
 // Instance of Facebook Class
  private Facebook facebook = new Facebook(APP_ID);
 
+ 
  private Bundle mPrefs;
 
  private GraphUser user;
@@ -133,6 +130,7 @@ public static String APP_ID = "521174844642024";
         mConnectionProgressDialog.setMessage("Signing in...");
 		
 		setContentView(R.layout.main);
+
 		
 		login = (Button) findViewById(R.id.signin);
 		signup =(Button) findViewById(R.id.signup);
@@ -159,25 +157,27 @@ public static String APP_ID = "521174844642024";
 				
 			
 				
-				 showPopup(Main.this) ;
-				AccountManager.setCurrentUser(getApplicationContext(), mPrefs.get("email").toString(), role);
+			//	 showPopup(Main.this) ;
+				//AccountManager.setCurrentUser(getApplicationContext(), mPrefs.get("email").toString(), role);
 				
 				
 			}
 		}
-		
-		
+		 fbPrefs = getPreferences(MODE_PRIVATE);
+	      String access_token = fbPrefs.getString("access_token", null);
+	      long expires = fbPrefs.getLong("access_expires", 0);
+
+	      if (access_token != null) {
+	       facebook.setAccessToken(access_token);
+	       Intent i = new Intent();
+	        i.setClass(Main.this, SellerActivity.class);
+	        startActivity(i);
+	      }
 		btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
-	/*	btnfacebook.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
-            @Override
-            public void onUserInfoFetched(GraphUser user) {
-                Main.this.user = user;
-             
-                updateUI();
-                }
-                
-            
-        });*/
+
+		
+
+		
 
 		btnfacebook.setOnClickListener(new View.OnClickListener() {
 			
@@ -228,6 +228,7 @@ public static String APP_ID = "521174844642024";
           
            });
 		
+	
 		
 		findViewById(R.id.google).setOnClickListener(this);
 
@@ -260,123 +261,6 @@ public static String APP_ID = "521174844642024";
 		
 		
 	}
-	  /**
-     * Function to login into facebook
-     * */
-  /*  @SuppressWarnings("deprecation")
-    public void loginToFacebook() {
-        mPrefs = AccountManager.getCurrentUser(getApplicationContext());
-        String access_token = mPrefs.getString("access_token", null);
-        long expires = mPrefs.getLong("access_expires", 0);
-     
-        if (access_token != null) {
-            facebook.setAccessToken(access_token);
-            
-            Intent i = new Intent();
-            if (role.equals(AppData.ROLE_SELLER)){
-				i = new Intent(getApplicationContext(), SellerActivity.class);
-			}
-			else if (role.equals(AppData.ROLE_KG)){
-				i = new Intent(getApplicationContext(), KarungGuniActivity.class);
-			}
-			
-            startActivity(i);
-            
-        }
-     
-        if (expires != 0) {
-            facebook.setAccessExpires(expires);
-        }
-     
-        if (!facebook.isSessionValid()) {
-            facebook.authorize(this,
-                    new String[] { "email", "publish_stream" },
-                    new DialogListener() {
-     
-                        @Override
-                        public void onCancel() {
-                            // Function to handle cancel event
-                        }
-     
-                        @Override
-                        public void onComplete(Bundle values) {
-                            // Function to handle complete event
-                            // Edit Preferences and update facebook acess_token
-                        	// TODO: Insert code for retrieving user email
-//                        	AccountManager.setCurrentUser(getApplicationContext(), facebook.getAccessToken(),
-//                        			facebook.getAccessExpires(), email, role);
-                        }
-     
-                        @Override
-                        public void onError(DialogError error) {
-                            // Function to handle error
-     
-                        }
-     
-                        @Override
-                        public void onFacebookError(FacebookError fberror) {
-                            // Function to handle Facebook errors
-     
-                        }
-     
-                    });
-        }
-    }
-    
-  
-    
-    @SuppressWarnings("deprecation")
-	public void getProfileInformation() {
-        mAsyncRunner.request("me", new RequestListener() {
-            @Override
-            public void onComplete(String response, Object state) {
-                Log.d("Profile", response);
-                String json = response;
-                try {
-                    JSONObject profile = new JSONObject(json);
-                    // getting name of the user
-                    final String name = profile.getString("name");
-                    // getting email of the user
-                    final String email = profile.getString("email");
-     
-                    runOnUiThread(new Runnable() {
-     
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), "Name: " + name + "\nEmail: " + email, Toast.LENGTH_LONG).show();
-                        }
-     
-                    });
-     
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-     
-            @Override
-            public void onIOException(IOException e, Object state) {
-            }
-     
-            @Override
-            public void onFileNotFoundException(FileNotFoundException e,
-                    Object state) {
-            }
-     
-            @Override
-            public void onMalformedURLException(MalformedURLException e,
-                    Object state) {
-            }
-     
-            @Override
-            public void onFacebookError(FacebookError e, Object state) {
-            }
-        });
-    }
-    
-    
-    */
-    
-
 	
 	@Override
 	 public void onClick(View view) {
@@ -614,6 +498,5 @@ Button seller = (Button)layout.findViewById(R.id.seller);
     }});
            return chosen;
            }
-	
 }
 

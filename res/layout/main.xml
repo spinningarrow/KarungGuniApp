@@ -46,14 +46,14 @@
         <Button
             android:id="@+id/signin"
             android:layout_width="wrap_content"
-            android:layout_height="31dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="Sign In" />
 
         <Button
             android:id="@+id/signup"
             android:layout_width="wrap_content"
-            android:layout_height="33dp"
+            android:layout_height="wrap_content"
              android:layout_marginLeft="50dp"
             android:text="Create account" />
     </LinearLayout>
