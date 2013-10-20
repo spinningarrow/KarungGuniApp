@@ -196,7 +196,7 @@ public class AppData {
 
         // Create table SQL
         public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
-            + _ID + " INTEGER PRIMARY KEY,"
+            + _ID + " TEXT PRIMARY KEY,"
             + COLUMN_NAME_OWNER + " TEXT,"
             + COLUMN_NAME_TITLE + " TEXT,"
             + COLUMN_NAME_DESCRIPTION + " TEXT,"

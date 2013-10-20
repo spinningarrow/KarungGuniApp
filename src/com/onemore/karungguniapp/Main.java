@@ -1,7 +1,9 @@
 package com.onemore.karungguniapp;
 
+import android.accounts.Account;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
@@ -71,6 +73,9 @@ public class Main extends Activity implements OnClickListener,
     SignInButton google;
     LoginButton btnfacebook;
     String role;
+    Account mAccount;
+    public static final String ACCOUNT = "dummyaccount";
+    public static final String ACCOUNT_TYPE = "com.onemore.karungguniapp";
 
     static boolean chosen = false;
 
@@ -110,6 +115,9 @@ public class Main extends Activity implements OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Set up dummy account for SyncAdapter
+        mAccount = CreateSyncAccount(this);
+
         // Log the user in if login was performed earlier (the current user is stored in the shared preferences)
         // Get the role from the user the account exists but it hasn't been set (e.g. if a new account was created
         // using Facebook or Google login
@@ -146,6 +154,7 @@ public class Main extends Activity implements OnClickListener,
 
         login = (Button) findViewById(R.id.signin);
         signup = (Button) findViewById(R.id.signup);
+//        Button syncdata =(Button) findViewById(R.id.syncdata);
 
         // Setup the 'Login with Facebook' button
         btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
@@ -206,6 +215,18 @@ public class Main extends Activity implements OnClickListener,
                 startActivity(i);
             }
         });
+
+        /*syncdata.setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+                Log.w("MAIN", "Sync clicked");
+//                mAccount = CreateSyncAccount(getApplicationContext());
+                ContentResolver contentResolver = getContentResolver();
+                Bundle settingsBundle = new Bundle();
+                settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_MANUAL, true);
+                settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_EXPEDITED, true);
+                contentResolver.requestSync(mAccount, AppData.AUTHORITY, settingsBundle);
+            }
+        });*/
     }
 
     /**
@@ -540,6 +561,40 @@ public class Main extends Activity implements OnClickListener,
             }
         });
         return chosen;
+    }
+
+    /**
+     * Create a new dummy account for the sync adapter
+     *
+     * @param context The application context
+     */
+    public static Account CreateSyncAccount(Context context) {
+        // Create the account type and default account
+        Account newAccount = new Account(
+                ACCOUNT, ACCOUNT_TYPE);
+        // Get an instance of the Android account manager
+        android.accounts.AccountManager accountManager =
+                (android.accounts.AccountManager) context.getSystemService(
+                        ACCOUNT_SERVICE);
+        /*
+         * Add the account and account type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         */
+        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+            /*
+             * If you don't set android:syncable="true" in
+             * in your <provider> element in the manifest,
+             * then call context.setIsSyncable(account, AUTHORITY, 1)
+             * here.
+             */
+        } else {
+            /*
+             * The account exists or some other error occurred. Log this, report it,
+             * or handle it internally.
+             */
+        }
+
+        return null; // TODO return the right thing
     }
 }
 
