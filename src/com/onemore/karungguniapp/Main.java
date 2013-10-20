@@ -182,7 +182,7 @@ public class Main extends Activity implements OnClickListener,
 
                     @Override
                     public void call(Session _session, SessionState _state, Exception _exception) {
-//                        if (_session.isOpened()) {
+                        if (_session.isOpened()) {
                             FacebookUtil.askMe(new Request.GraphUserCallback() {
                                 public void onCompleted(GraphUser user, Response response) {
                                     if (user != null) {
@@ -200,7 +200,7 @@ public class Main extends Activity implements OnClickListener,
                                     }
                                 }
                             });
-//                        }
+                        }
                     }
                 });
             }
