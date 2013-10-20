@@ -162,7 +162,7 @@ public class LoginActivity extends Activity {
                         // Show the appropriate activity
                         Intent intent = null;
 
-                        if (role.equals("KARUNG_GUNI")) {
+                        if (role.equals("KARUNGGUNI")) {
                             intent = new Intent(getBaseContext(), KarungGuniActivity.class);
                         } else if (role.equals("SELLER")) {
                             intent = new Intent(getBaseContext(), SellerActivity.class);

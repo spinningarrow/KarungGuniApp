@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 
+import android.content.ContentResolver;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,6 +76,8 @@ public static String APP_ID = "**************";
 
 	Button signup;
 
+    Button syncdata;
+
 	SignInButton google;
 	Button btnfacebook;
 	String PREFS_NAME = "com.onemore.karungguniapp";
@@ -83,7 +86,7 @@ public static String APP_ID = "**************";
 
     Account mAccount;
     public static final String ACCOUNT = "dummyaccount";
-    public static final String ACCOUNT_TYPE = "com.onemore.karungguni";
+    public static final String ACCOUNT_TYPE = "com.onemore.karungguniapp";
 
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -102,6 +105,7 @@ public static String APP_ID = "**************";
 
 		login = (Button) findViewById(R.id.signin);
 		signup =(Button) findViewById(R.id.signup);
+		syncdata =(Button) findViewById(R.id.syncdata);
 
 		mPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 	//	if (preferences.getString("logged", "").toString().equals("logged"))
@@ -193,7 +197,17 @@ public static String APP_ID = "**************";
 		}
 	});
 
-
+        syncdata.setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+                Log.w("MAIN", "Sync clicked");
+//                mAccount = CreateSyncAccount(getApplicationContext());
+                ContentResolver contentResolver = getContentResolver();
+                Bundle settingsBundle = new Bundle();
+                settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_MANUAL, true);
+                settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_EXPEDITED, true);
+                contentResolver.requestSync(mAccount, AppData.AUTHORITY, settingsBundle);
+            }
+        });
 	}
 
     /**
