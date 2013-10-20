@@ -122,6 +122,7 @@ public class Main extends Activity implements OnClickListener,
 
         // Set the SyncAdapter to sync periodically
         syncSettingsBundle = new Bundle();
+        ContentResolver.setSyncAutomatically(mAccount, AppData.AUTHORITY, true);
         ContentResolver.addPeriodicSync(mAccount, AppData.AUTHORITY, syncSettingsBundle, 60);
 
         // Log the user in if login was performed earlier (the current user is stored in the shared preferences)

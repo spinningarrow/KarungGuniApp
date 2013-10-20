@@ -101,6 +101,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 advertisement = advertisements.getJSONObject(i);
 
                 values = new ContentValues();
+                values.put(AppData.Advertisements._ID, advertisement.getString(AppData.Advertisements._ID));
                 values.put(AppData.Advertisements.COLUMN_NAME_OWNER, advertisement.getString(AppData.Advertisements.COLUMN_NAME_OWNER));
                 values.put(AppData.Advertisements.COLUMN_NAME_TITLE, advertisement.getString(AppData.Advertisements.COLUMN_NAME_TITLE));
                 values.put(AppData.Advertisements.COLUMN_NAME_DESCRIPTION, advertisement.getString(AppData.Advertisements.COLUMN_NAME_DESCRIPTION));
