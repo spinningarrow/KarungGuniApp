@@ -1,26 +1,21 @@
 package com.onemore.karungguniapp;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.onemore.karungguniapp.model.Item;
 import com.onemore.karungguniapp.LBS.LocationHelper;
+import com.onemore.karungguniapp.model.Item;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -60,7 +55,7 @@ public class AdDetailActivity extends Activity {
         latitude = longitude = -1;
         testAddr = "274a jurong west ave 3 #07-61, 641274\n";
 
-        progressBar = (ProgressBar) findViewById(R.id.progress);
+//        progressBar = (ProgressBar) findViewById(R.id.progress);
 //        progressBar.setIndeterminate(true);
 
         Item item = app.getCurrentItem();

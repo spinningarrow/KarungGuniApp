@@ -36,7 +36,4 @@
         android:gravity="center_vertical"
         android:text="Example application"
         android:textSize="16sp" />
-    <ProgressBar android:id="@+id/progress" android:layout_width="125dp"
-                 android:layout_height="125dp" />
-
 </RelativeLayout> 

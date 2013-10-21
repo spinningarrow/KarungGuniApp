@@ -9,10 +9,10 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract.Contacts;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -71,16 +71,18 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION},
 				new int[] { R.id.title, R.id.distance }, 0);
 		setListAdapter(mAdapter);
-        mListView.setOnClickListener(new View.OnClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(this,);
-//                intent.putExtra();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Intent intent = new Intent(getActivity(),AdDetailActivity.class);
+                startActivity(intent);
+                mContext = getActivity();
             }
         });
-		mContext = getActivity();
+
 		// Start out with a progress indicator.
-		setListShown(false);
+//		setListShown(false);
 
 		// Prepare the loader.  Either re-connect with an existing one,
 		// or start a new one.
