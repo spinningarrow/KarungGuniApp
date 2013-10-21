@@ -9,6 +9,9 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS"  />
@@ -22,13 +25,35 @@
         <provider
             android:name="com.onemore.karungguniapp.AppDataProvider"
             android:authorities="com.onemore.karungguniapp.provider"
-            android:exported="false" >
+            android:exported="false"
+            android:syncable="true">
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
 
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/app_id" />
+
+        <service android:name=".AccountService">
+            <!-- Required filter used by the system to launch our account service. -->
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <!-- This points to an XMLf ile which describes our account service. -->
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                       android:resource="@xml/authenticator" />
+        </service>
+
+        <service
+                android:name=".SyncService"
+                android:exported="true"
+                android:process=":sync">
+            <intent-filter>com.onemore.karungguniapp.provider
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                       android:resource="@xml/syncadapter" />
+        </service>
 
         <activity
             android:name="com.onemore.karungguniapp.Main"

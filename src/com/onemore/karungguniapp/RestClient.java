@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import com.turbomanage.httpclient.AsyncCallback;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.ParameterMap;
@@ -119,12 +120,24 @@ public class RestClient {
 
     // Query the server database for single objects or an array of objects
     // Call the callback when the query is complete
-    public static void query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
+    public static Bundle query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
+        Log.w("REST_CLIENT", uri.toString());
 
+        // If callback is null, GET the response synchronously (used in SyncAdapter)
+        if (callback == null) {
+            Bundle result = new Bundle();
+
+            HttpResponse httpResponse = httpClient.get(API_PATH + getRequestEndpoint(uri), null);
+            result.putInt("status", httpResponse.getStatus());
+            result.putString("response", httpResponse.getBodyAsString());
+
+            return result;
+        }
+
+        // GET the result asynchronously
         final Handler handler = new Handler(callback);
         final Message message = Message.obtain();
 
-        // GET the result asynchronously
         httpClient.get(API_PATH + getRequestEndpoint(uri), null, new AsyncCallback() {
 
             // Store the result in a bundle which will then be passed as a message to the query callback
@@ -153,6 +166,8 @@ public class RestClient {
                 e.printStackTrace();
             }
         });
+
+        return null;
     }
 
     // Insert into the database
