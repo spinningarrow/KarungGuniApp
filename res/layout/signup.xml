@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollView1" 
-        android:layout_width="match_parent" 
-        android:layout_height="wrap_content">
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+          android:background="@drawable/background_pattern_fill">
         
-        <LinearLayout 
-            
-            android:id="@+id/linearLayout1" 
-            android:layout_width="match_parent" 
-            android:layout_height="match_parent"
-             android:layout_marginTop="20dp"
-            android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="376dp"
+            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textView1"
@@ -22,97 +22,118 @@
                 android:text="Sign Up" 
                 android:layout_gravity="center_horizontal"
                 android:textSize="45sp" />
+            
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent" 
+            android:orientation="vertical" >
+  
+  <TableLayout
+         android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        >
 
+        <TableRow>
+            
     <TextView
         android:id="@+id/runame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:gravity="left"
         android:text="User Name"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="25sp" 
-         android:layout_marginTop="20dp"/>
+       />
 
     <EditText
         android:id="@+id/reuname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_width="0dp"
+                android:layout_weight="0.75"
+                android:singleLine="true"/>
 
+   </TableRow>
 
+        <TableRow>
+    
     <TextView
         android:id="@+id/rpass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:gravity="left"
         android:text="Password"
-         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:textSize="25sp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        />
 
 
     <EditText
         android:id="@+id/repass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+       
         android:inputType="textPassword" 
-         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+         android:layout_width="0dp"
+                android:layout_weight="0.75"
+                android:singleLine="true"/>
 
+   </TableRow>
 
+        <TableRow>
+    
     <TextView
         android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:gravity="left"
         android:text="Email"
-         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:textSize="25sp"
+         
         />
 
 
     <EditText
         android:id="@+id/eemail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+      
         android:inputType="textEmailAddress" 
-         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_width="0dp"
+                android:layout_weight="0.75"
+                android:singleLine="true"/>
+   </TableRow>
 
+        <TableRow>
+    
     <TextView
         android:id="@+id/rgender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+       android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:gravity="left"
         android:text="Role"
-        android:textSize="25sp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        />
 
     <Spinner
         android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+       android:layout_width="0dp"
+                android:layout_weight="0.75"
+                android:singleLine="true"
         android:drawSelectorOnTop="true" />
+</TableRow>
 
+        
+        
+</TableLayout>
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
         
          <Button
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit" 
-         android:layout_marginLeft="220dp"
-        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        
          />
     
     </RelativeLayout>
+    </LinearLayout>  
 </LinearLayout>
    </ScrollView>

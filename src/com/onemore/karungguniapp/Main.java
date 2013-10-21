@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -77,8 +78,8 @@ public static String APP_ID = "521174844642024";
 
 	Button signup;
 
-	SignInButton google;
-	LoginButton btnfacebook;
+	ImageButton google;
+	ImageButton btnfacebook;
 	String role;
 	
 	static boolean chosen=false;
@@ -163,17 +164,9 @@ public static String APP_ID = "521174844642024";
 				
 			}
 		}
-		 fbPrefs = getPreferences(MODE_PRIVATE);
-	      String access_token = fbPrefs.getString("access_token", null);
-	      long expires = fbPrefs.getLong("access_expires", 0);
-
-	      if (access_token != null) {
-	       facebook.setAccessToken(access_token);
-	       Intent i = new Intent();
-	        i.setClass(Main.this, SellerActivity.class);
-	        startActivity(i);
-	      }
-		btnfacebook = (LoginButton) findViewById(R.id.fbbtn);
+		 google = (ImageButton) findViewById(R.id.google);
+	        google.setOnClickListener(this);
+		btnfacebook = (ImageButton) findViewById(R.id.fbbtn);
 
 		
 
