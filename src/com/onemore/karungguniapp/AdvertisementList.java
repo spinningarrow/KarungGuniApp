@@ -16,6 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import com.onemore.karungguniapp.model.Advertisement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdvertisementList extends ListFragment
 implements LoaderManager.LoaderCallbacks<Cursor> 
@@ -33,7 +37,9 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	// If non-null, this is the current filter the user has provided.
 	String mCurFilter;
 	Context mContext;
-	@Override 
+    List<Advertisement> ads;
+
+        @Override
 	public void onActivityCreated(Bundle savedInstanceState) 
 	{
 		super.onActivityCreated(savedInstanceState);
@@ -45,8 +51,10 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		// We have a menu item to show in action bar.
 		setHasOptionsMenu(true);
 		mListView = getListView();
+
 		LayoutInflater inflator = getActivity().getLayoutInflater();
 		View header = inflator.inflate(R.layout.list_header, null);
+        ads = new ArrayList<Advertisement>();
 //		header.setOnClickListener(new OnClickListener()
 //		{
 //			   @Override
@@ -72,6 +80,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 				R.layout.advertisement, null,
 				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION},
 				new int[] { R.id.title, R.id.distance }, 0);
+
 		setListAdapter(mAdapter);
 //        if (app.getSectionList().isEmpty()) {
 ////            if (app.connectionPresent()) {
