@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.onemore.karungguniapp.LBS.LocationHelper;
-import com.onemore.karungguniapp.model.Item;
+import com.onemore.karungguniapp.model.Advertisement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -58,11 +58,11 @@ public class AdDetailActivity extends Activity {
 //        progressBar = (ProgressBar) findViewById(R.id.progress);
 //        progressBar.setIndeterminate(true);
 
-        Item item = app.getCurrentItem();
+        Advertisement advertisement = app.getCurrentItem();
 
-        if (item != null) {
+        if (advertisement != null) {
             ImageView icon = (ImageView) findViewById(R.id.item_img);
-            new RetrieveImageTask(icon).execute(item.getPicUrl());
+            new RetrieveImageTask(icon).execute(advertisement.getPhotoPath());
 
             TextView category = (TextView) findViewById(R.id.category);
             //category.setText(item.getCategory());
@@ -153,10 +153,10 @@ public class AdDetailActivity extends Activity {
 
     }
     private String createDealMessage() {
-        Item item = app.getCurrentItem();
+        Advertisement item = app.getCurrentItem();
         StringBuffer sb = new StringBuffer();
         sb.append("Check out this deal:\n");
-        sb.append("\nTitle:" + item.getCategory());
+        sb.append("\nCatagory:" + item.getType());
         sb.append("\nLocation:" + item.getLocation());
         return sb.toString();
     }

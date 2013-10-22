@@ -1,20 +1,19 @@
 package com.onemore.karungguniapp;
 
 
-import java.util.ArrayDeque;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import com.onemore.karungguniapp.model.Advertisement;
+
+import java.util.ArrayDeque;
 
 public class MongoAdapter extends SimpleCursorAdapter {
 

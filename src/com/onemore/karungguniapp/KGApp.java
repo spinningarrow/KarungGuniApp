@@ -7,6 +7,7 @@ package com.onemore.karungguniapp;
  * Time: 2:24 AM
  * To change this template use File | Settings | File Templates.
  */
+
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,24 +16,26 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.util.Log;
-import com.onemore.karungguniapp.model.Item;
-
-
+import com.onemore.karungguniapp.model.Advertisement;
+import com.onemore.karungguniapp.model.Section;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class KGApp extends Application {
 
     private ConnectivityManager cMgr;
     //private DailyDealsFeedParser parser;
-    //private List<Section> sectionList;
+
+    private List<Section> sectionList;
     private Map<Long, Bitmap> imageCache;
-    private Item currentItem;
+    private Advertisement currentItem;
 
     //
     // getters/setters
@@ -41,19 +44,19 @@ public class KGApp extends Application {
 //        return this.parser;
 //    }
 //
-//    public List<Section> getSectionList() {
-//        return this.sectionList;
-//    }
+    public List<Section> getSectionList() {
+        return this.sectionList;
+    }
 
     public Map<Long, Bitmap> getImageCache() {
         return this.imageCache;
     }
 
-    public Item getCurrentItem() {
+    public Advertisement getCurrentItem() {
         return this.currentItem;
     }
 
-    public void setCurrentItem(Item currentItem) {
+    public void setCurrentItem(Advertisement currentItem) {
         this.currentItem = currentItem;
     }
 
@@ -65,7 +68,7 @@ public class KGApp extends Application {
         super.onCreate();
         this.cMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 //        this.parser = new DailyDealsXmlPullFeedParser();
-//        this.sectionList = new ArrayList<Section>(6);
+        this.sectionList = new ArrayList<Section>(6);
         this.imageCache = new HashMap<Long, Bitmap>();
     }
 

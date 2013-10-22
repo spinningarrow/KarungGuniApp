@@ -23,7 +23,9 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 	// This is the Adapter being used to display the list's data.
 	SimpleCursorAdapter mAdapter;
+    private KGApp app;
 //	MongoAdapter mAdapter;
+
 
 	// The SearchView for doing filtering.
 	SearchView mSearchView;
@@ -38,7 +40,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 		// Give some text to display if there is no data. 
 		setEmptyText(getResources().getString(R.string.noData));
-
+        app = (KGApp)getActivity().getApplication();
 //		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		// We have a menu item to show in action bar.
 		setHasOptionsMenu(true);
@@ -71,7 +73,18 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION},
 				new int[] { R.id.title, R.id.distance }, 0);
 		setListAdapter(mAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        if (app.getSectionList().isEmpty()) {
+////            if (app.connectionPresent()) {
+////                new ParseFeedTask().execute();
+////            } else {
+//                Toast.makeText(getActivity(), getString(R.string.deal_list_network_unavailable), Toast.LENGTH_LONG).show();
+//            //}
+//        } else {
+//            //onLoaderReset(app.getSectionList().get(0).getItems());
+//        }
+
+        mListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -209,4 +222,10 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		// longer using it.
 		mAdapter.swapCursor(null);
 	}
+
+//    private void resetListItems(List<Advertisement> newItems) {
+//        .clear();
+//        items.addAll(newItems);
+//        mAdapter.notifyDataSetChanged();
+//    }
 }

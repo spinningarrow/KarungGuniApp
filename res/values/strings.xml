@@ -12,5 +12,6 @@
     <string name="header">Load new Advertisements</string>
     <string name="footer">Load more...</string>
     <string name="retrieve_KG_position">my location</string>
+    <string name="deal_list_network_unavailable">\"Nerwork unavailable\"</string>
 
 </resources>
