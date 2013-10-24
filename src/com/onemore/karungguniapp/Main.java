@@ -17,22 +17,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.Toast;
+import android.widget.*;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.android.Facebook;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.turbomanage.httpclient.ParameterMap;
@@ -41,7 +35,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -49,57 +42,39 @@ public class Main extends Activity implements OnClickListener,
         ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
-
     private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
-
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final int REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES = 2;
 
-
     private ProgressDialog signingIn;
-
     private ProgressDialog mConnectionProgressDialog;
+
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
 
-
     public static String APP_ID = "521174844642024";
-    // Instance of Facebook Class
-    private Facebook facebook = new Facebook(APP_ID);
-
-    private Bundle currentUser;
-
-    private GraphUser user;
 
     Button login;
-
     Button signup;
 
     String displayName;
     String role;
     Account mAccount;
     Bundle syncSettingsBundle;
+    private Bundle currentUser;
 
     public static final String ACCOUNT = "dummyaccount";
     public static final String ACCOUNT_TYPE = "com.onemore.karungguniapp";
 
-    
-
-
-	ImageButton google;
-	ImageButton btnfacebook;
-
-	
-	static boolean chosen=false;
+    ImageButton google;
+    ImageButton btnfacebook;
 
     private static HashMap<String, String> roles = new HashMap<String, String>();
+
     static {
         roles.put("Karung Guni", AppData.ROLE_KG);
         roles.put("Seller", AppData.ROLE_SELLER);
     }
-
-	
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,12 +129,9 @@ public class Main extends Activity implements OnClickListener,
 
         login = (Button) findViewById(R.id.signin);
         signup = (Button) findViewById(R.id.signup);
-//        Button syncdata =(Button) findViewById(R.id.syncdata);
         google = (ImageButton) findViewById(R.id.google);
         google.setOnClickListener(this);
-        // Setup the 'Login with Facebook' button
         btnfacebook = (ImageButton) findViewById(R.id.fbbtn);
-
 
         btnfacebook.setOnClickListener(new View.OnClickListener() {
 
@@ -169,6 +141,8 @@ public class Main extends Activity implements OnClickListener,
                     @Override
                     public void call(Session _session, SessionState _state, Exception _exception) {
                         if (_session.isOpened()) {
+                            signingIn = ProgressDialog.show(self, getString(R.string.login_progress_signing_in), getString(R.string.login_progress_message), true);
+
                             FacebookUtil.askMe(new Request.GraphUserCallback() {
                                 public void onCompleted(GraphUser user, Response response) {
                                     if (user != null) {
@@ -182,6 +156,7 @@ public class Main extends Activity implements OnClickListener,
                                             @Override
                                             public boolean handleMessage(Message message) {
                                                 result = message.getData();
+                                                signingIn.dismiss();
 
                                                 // Restart the main activity
                                                 Intent intent = getIntent();
@@ -218,28 +193,12 @@ public class Main extends Activity implements OnClickListener,
                 startActivity(i);
             }
         });
-
-        /*syncdata.setOnClickListener(new OnClickListener() {
-            public void onClick(View arg0) {
-                Log.w("MAIN", "Sync clicked");
-//                mAccount = CreateSyncAccount(getApplicationContext());
-                ContentResolver contentResolver = getContentResolver();
-                Bundle settingsBundle = new Bundle();
-                settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_MANUAL, true);
-                settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_EXPEDITED, true);
-                contentResolver.requestSync(mAccount, AppData.AUTHORITY, settingsBundle);
-            }
-        });*/
     }
 
-    
-    
     @Override
     public void onClick(View view) {
 
-
-        showPopup(Main.this);
-
+//        showPopup(Main.this);
 
         if (view.getId() == R.id.google && !mPlusClient.isConnected()) {
             if (mConnectionResult == null) {
@@ -362,11 +321,7 @@ public class Main extends Activity implements OnClickListener,
 
             // Create a new user with the supplied details
             AccountManager.createWithEmail(email, "", role, displayName, createWithEmailCallback);
-
-
         }
-
-
     }
 
     @Override
@@ -374,7 +329,7 @@ public class Main extends Activity implements OnClickListener,
         // TODO Auto-generated method stub
 
     }
-	
+
 	/*
 	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
 	    if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
@@ -391,66 +346,6 @@ public class Main extends Activity implements OnClickListener,
     protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
         super.onActivityResult(_requestCode, _resultCode, _data);
         FacebookUtil.onActivityResult(this, _requestCode, _resultCode, _data);
-
-
-    }
-
-    private boolean showPopup(final Activity context) {
-        int popupWidth = 400;
-        int popupHeight = 350;
-
-
-        // Inflate the popup_layout.xml
-        LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
-        LayoutInflater layoutInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.role, viewGroup);
-
-        // Creating the PopupWindow
-        final PopupWindow popup = new PopupWindow(context);
-        popup.setContentView(layout);
-        popup.setWidth(popupWidth);
-        popup.setHeight(popupHeight);
-        popup.setFocusable(true);
-
-        // Some offset to align the popup a bit to the right, and a bit down, relative to button's position.
-        int OFFSET_X = 50;
-        int OFFSET_Y = 150;
-
-        // Clear the default translucent background
-        popup.setBackgroundDrawable(new BitmapDrawable());
-
-        // Displaying the popup at the specified location, + offsets.
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY, OFFSET_X, OFFSET_Y);
-
-        Button kg = (Button) layout.findViewById(R.id.kg);
-        kg.setOnClickListener(
-                new Button.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        role = AppData.ROLE_KG;
-                        chosen = true;
-                        // TODO Auto-generated method stub
-                        popup.dismiss();
-
-                    }
-                }
-
-        );
-
-        Button seller = (Button) layout.findViewById(R.id.seller);
-        seller.setOnClickListener(new Button.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                role = AppData.ROLE_SELLER;
-                chosen = true;
-                popup.dismiss();
-            }
-        });
-        return chosen;
     }
 
     /**

@@ -33,7 +33,6 @@ public class AccountManager {
         // depending on the user's role and notifies the callback provided the createWithEmail method
         Handler.Callback insertUserCallback = new Handler.Callback() {
             Bundle result;
-            JSONObject user;
             Uri uri;
 
             @Override
@@ -81,23 +80,9 @@ public class AccountManager {
                 if (result.getInt("status") != 201) {
                     Log.w("ACCOUNT_MANAGER", "Insert user error occurred");
 
-//                                // If insertion returned a 409 Conflict error (i.e., user already exists),
-//                                // pass this message on to the callback
-//                                if (result.getInt("status") == 409) {
-//                                    Handler handler = new Handler(callback);
-//                                    handler.sendMessage(Message.obtain(message));
-//                                }
                     return false;
                 }
 
-//                            // If insert was successful, also insert into the karung_gunis or sellers table
-//                            if (role.equals(AppData.ROLE_KG)) {
-//                                uri = AppData.KarungGunis.CONTENT_ID_URI_BASE;
-//                            } else {
-//                                uri = AppData.Sellers.CONTENT_ID_URI_BASE;
-//                            }
-//
-//                            RestClient.insert(uri, params, callback);
                 // If insert was successful, log the user in
                 AccountManager.setCurrentUser(context, email, null);
                 handler.sendMessage(Message.obtain(message));
@@ -129,50 +114,26 @@ public class AccountManager {
                 else if (result.getInt("status") != 200) {
                     Log.w("ACCOUNT_MANAGER", "Login error occurred");
 
-//                    loggingIn.dismiss();
-//                    Toast.makeText(getApplicationContext(), R.string.login_incorrect, Toast.LENGTH_LONG).show();
                     return false;
                 }
 
                 // Try to log the user in
-                AccountManager.setCurrentUser(context, email, null);
-                handler.sendMessage(Message.obtain(message));
-//                try {
-//                    user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
-//
-//                    // Get the user's email
-//                    String email = user.getString(AppData.Users.COLUMN_NAME_EMAIL);
-//
-//                    // Log the user in
-//                    Log.w("ACCOUNT_MANAGER", "User logged in.");
-//                    AccountManager.setCurrentUser(context, email, null);
-//
-//                    // Invoke the callback which goes back to the main activity
-//                    handler.sendMessage(message);
-//
-////                    // Show the appropriate activity
-////                    Intent intent = null;
-////
-////                    if (role.equals(AppData.ROLE_KG)) {
-////                        intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-////                    } else if (role.equals(AppData.ROLE_SELLER)) {
-////                        intent = new Intent(getBaseContext(), SellerActivity.class);
-////                    }
-//
-////                    // Dismiss the progress dialog and start the new activity
-////                    loggingIn.dismiss();
-////                    startActivity(intent);
-//
-//                    return true;
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    return false;
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    return false;
-//                }
+                try {
+                    user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
 
-                return true;
+                    String role = user.getString(AppData.Users.COLUMN_NAME_ROLE);
+
+                    AccountManager.setCurrentUser(context, email, role);
+                    handler.sendMessage(Message.obtain(message));
+
+                    return true;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
             }
         };
 
