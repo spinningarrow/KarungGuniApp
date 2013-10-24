@@ -1,13 +1,14 @@
 package com.onemore.karungguniapp;
 
 import android.accounts.Account;
-import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,11 +35,14 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
+import com.turbomanage.httpclient.ParameterMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Main extends Activity implements OnClickListener,
@@ -71,7 +75,7 @@ public class Main extends Activity implements OnClickListener,
 
     Button signup;
 
-
+    String displayName;
     String role;
     Account mAccount;
     Bundle syncSettingsBundle;
@@ -88,11 +92,19 @@ public class Main extends Activity implements OnClickListener,
 	
 	static boolean chosen=false;
 
+    private static HashMap<String, String> roles = new HashMap<String, String>();
+    static {
+        roles.put("Karung Guni", AppData.ROLE_KG);
+        roles.put("Seller", AppData.ROLE_SELLER);
+    }
+
 	
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final Activity self = this;
 
         // Set up dummy account for SyncAdapter
         mAccount = CreateSyncAccount(this);
@@ -108,22 +120,26 @@ public class Main extends Activity implements OnClickListener,
         currentUser = AccountManager.getCurrentUser(getApplicationContext());
 
         if (currentUser != null) {
-            if (currentUser.get("role").equals(AppData.ROLE_KG)) {
-                Intent i = new Intent(Main.this, KarungGuniActivity.class);
+
+            String currentUserRole = currentUser.getString("role");
+
+            if (currentUserRole == null) {
+
+                // Prompt the user to choose a role
+                DialogFragment selectRoleDialog = new SelectRoleDialogFragment();
+                selectRoleDialog.show(self.getFragmentManager(), "roles");
+
+                AccountManager.setCurrentUser(getApplicationContext(), currentUser.getString("email"), role);
+            }
+
+            else if (currentUserRole.equals(AppData.ROLE_KG)) {
+                Intent i = new Intent(self, KarungGuniActivity.class);
                 startActivity(i);
-            } else if (currentUser.get("role").equals(AppData.ROLE_SELLER)) {
-                Intent i = new Intent(Main.this, SellerActivity.class);
+            }
+
+            else if (currentUserRole.equals(AppData.ROLE_SELLER)) {
+                Intent i = new Intent(self, SellerActivity.class);
                 startActivity(i);
-            } else if (currentUser.get("role") == null) {
-
-
-                ///////////method add role to the user in db
-                ///////
-                ///////
-
-
-                showPopup(this);
-                AccountManager.setCurrentUser(getApplicationContext(), currentUser.get("email").toString(), role);
             }
         }
 
@@ -147,7 +163,7 @@ public class Main extends Activity implements OnClickListener,
 
         btnfacebook.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View arg0) {
+            public void onClick(final View arg0) {
                 FacebookUtil.login(Main.this, new Session.StatusCallback() {
 
                     @Override
@@ -157,16 +173,27 @@ public class Main extends Activity implements OnClickListener,
                                 public void onCompleted(GraphUser user, Response response) {
                                     if (user != null) {
 
-                                        String displayName = user.getUsername();
-                                        String email = displayName + "@facebook.com";
+                                        displayName = user.getName();
+                                        String email = user.getUsername() + "@facebook.com";
 
-//                                        Handler.Callback callback = new Handler.Callback() {
-//                                            intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-//                                        };
+                                        Handler.Callback callback = new Handler.Callback() {
+                                            Bundle result;
+
+                                            @Override
+                                            public boolean handleMessage(Message message) {
+                                                result = message.getData();
+
+                                                // Restart the main activity
+                                                Intent intent = getIntent();
+                                                finish();
+                                                startActivity(intent);
+
+                                                return true;
+                                            }
+                                        };
 
                                         // Create a new user with the supplied details
-                                        AccountManager.createWithFacebook(getApplicationContext(), email, null);
-                                        AccountManager.setCurrentUser(getApplicationContext(), email, null);
+                                        AccountManager.createWithFacebook(getApplicationContext(), email, callback);
                                     }
                                 }
                             });
@@ -458,6 +485,55 @@ public class Main extends Activity implements OnClickListener,
         }
 
         return newAccount; // TODO return the right thing
+    }
+
+    // Create an AlertDialog that prompts the user to choose a role
+    public class SelectRoleDialogFragment extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle(getString(R.string.signup_choose_role));
+
+            builder.setItems(roles.keySet().toArray(new String[0]), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Uri uri;
+
+                    final ParameterMap params = new ParameterMap();
+                    params.put("email", currentUser.getString("email"));
+                    params.put("password", "");
+                    params.put("display_name", displayName);
+
+                    // The 'which' argument contains the index position
+                    // of the selected item
+                    role = roles.get(roles.keySet().toArray(new String[0])[which]);
+
+                    // Set the role for the current user
+                    // The current user's email must be set before this is called
+                    AccountManager.setCurrentUser(getApplicationContext(), currentUser.getString("email"), role);
+
+                    // Create a Karung Guni or a Seller
+                    if (role.equals(AppData.ROLE_KG)) {
+                        uri = AppData.KarungGunis.CONTENT_ID_URI_BASE;
+                    } else {
+                        uri = AppData.Sellers.CONTENT_ID_URI_BASE;
+                    }
+
+                    RestClient.insert(uri, params, null);
+
+                    // Restart the main activity
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
     }
 }
 

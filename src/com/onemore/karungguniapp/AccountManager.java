@@ -70,7 +70,6 @@ public class AccountManager {
     public static void createWithFacebook(final Context context, final String email, Handler.Callback callback) {
 
         final Handler handler = new Handler(callback);
-        Message message = Message.obtain();
 
         final Handler.Callback insertUserCallback = new Handler.Callback() {
             Bundle result;
@@ -101,6 +100,7 @@ public class AccountManager {
 //                            RestClient.insert(uri, params, callback);
                 // If insert was successful, log the user in
                 AccountManager.setCurrentUser(context, email, null);
+                handler.sendMessage(Message.obtain(message));
                 return true;
             }
         };
@@ -118,7 +118,8 @@ public class AccountManager {
                 if (result.getInt("status") == 404) {
 
                     ParameterMap params = new ParameterMap();
-                    params.put("email", email);
+                    params.put(AppData.Users.COLUMN_NAME_EMAIL, email);
+                    params.put(AppData.Users.COLUMN_NAME_PASSWORD, "");
 
                     RestClient.insert(AppData.Users.CONTENT_ID_URI_BASE, params, insertUserCallback);
                     return true;
@@ -133,7 +134,9 @@ public class AccountManager {
                     return false;
                 }
 
-//                // Try to log the user in
+                // Try to log the user in
+                AccountManager.setCurrentUser(context, email, null);
+                handler.sendMessage(Message.obtain(message));
 //                try {
 //                    user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
 //
