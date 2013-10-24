@@ -206,6 +206,13 @@ public class AccountManager {
 
         editor.commit();
     }
+    
+    public static void clearCurrentUser(Context context){
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        
+        editor.clear().commit();
+    }
 
     // Helper method for password hashing
     public static String hashPassword(String password) {
