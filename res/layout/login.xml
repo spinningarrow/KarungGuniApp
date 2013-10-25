@@ -38,7 +38,8 @@
                 android:id="@+id/Leditemail"
                 android:layout_width="0dp"
                 android:layout_weight="0.75"
-                android:singleLine="true" >
+                android:singleLine="true"
+                android:inputType="textEmailAddress"  >
 
                 <requestFocus />
             </EditText>

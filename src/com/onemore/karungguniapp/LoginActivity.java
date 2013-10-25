@@ -144,23 +144,23 @@ public class LoginActivity extends Activity {
                         Log.w("ACCOUNT_MANAGER", "User logged in.");
                         AccountManager.setCurrentUser(getApplicationContext(), email, role);
 
-//                        // Show the appropriate activity
-//                        Intent intent = null;
-//
-//                        if (role.equals(AppData.ROLE_KG)) {
-//                            intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-//                        } else if (role.equals(AppData.ROLE_SELLER)) {
-//                            intent = new Intent(getBaseContext(), SellerActivity.class);
-//                        }
+                        // Show the appropriate activity
+                        Intent intent = null;
 
-                        // Go back to the main activity, which shows the appropriate activity depending on whether the
-                        // user is a seller or a karung guni
-                        Intent intent = new Intent(getBaseContext(), Main.class);
+                        if (role.equals(AppData.ROLE_KG)) {
+                            intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+                        } else if (role.equals(AppData.ROLE_SELLER)) {
+                            intent = new Intent(getBaseContext(), SellerActivity.class);
+                        }
 
-                        // Dismiss the progress dialog and start the new activity
+                        // Dismiss the progress dialog
                         loggingIn.dismiss();
-                        startActivity(intent);
 
+                        // Use setResult to go back to main activity, which shows the appropriate
+                        // activity depending on whether the user is a seller or a karung guni
+                        setResult(RESULT_OK,intent);
+                        finish();
+                        
                         return true;
                     } catch (JSONException e) {
                         e.printStackTrace();

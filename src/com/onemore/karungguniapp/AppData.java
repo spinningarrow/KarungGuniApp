@@ -1,5 +1,6 @@
 package com.onemore.karungguniapp;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -8,6 +9,9 @@ public class AppData {
 
     private AppData() {}
     private static final String SCHEME = "content://";
+    
+    // Constants for activity lifecycle management
+    public static final int REQUEST_EXIT = Activity.RESULT_FIRST_USER;
     
     // SharedPreferences names
     public static final String ROLE_KG = "KARUNGGUNI";

@@ -116,6 +116,7 @@ public class Main extends Activity implements OnClickListener,
                 Intent i = new Intent(self, SellerActivity.class);
                 startActivity(i);
             }
+            finish();
         }
 
         mPlusClient = new PlusClient.Builder(this, this, this)
@@ -183,18 +184,19 @@ public class Main extends Activity implements OnClickListener,
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent i = new Intent(Main.this, LoginActivity.class);
-                startActivity(i);
+                startActivityForResult(i,AppData.REQUEST_EXIT);
             }
         });
 
         signup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent i = new Intent(Main.this, SignupActivity.class);
-                startActivity(i);
+                startActivityForResult(i,AppData.REQUEST_EXIT);
             }
         });
     }
-
+    
+    
     @Override
     public void onClick(View view) {
 
@@ -303,6 +305,7 @@ public class Main extends Activity implements OnClickListener,
                         // Dismiss the progress dialog and start the new activity
                         signingIn.dismiss();
                         startActivity(intent);
+                        finish();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -345,7 +348,16 @@ public class Main extends Activity implements OnClickListener,
     @Override
     protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
         super.onActivityResult(_requestCode, _resultCode, _data);
-        FacebookUtil.onActivityResult(this, _requestCode, _resultCode, _data);
+        
+        // If LoginActivity or SignupActivity is successful
+        if (_requestCode == AppData.REQUEST_EXIT) {
+            if (_resultCode == RESULT_OK) {
+            	startActivity(_data);
+            	this.finish();
+            }
+        }
+        else
+        	FacebookUtil.onActivityResult(this, _requestCode, _resultCode, _data);
     }
 
     /**

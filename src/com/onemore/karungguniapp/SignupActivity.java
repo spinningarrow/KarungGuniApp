@@ -112,22 +112,23 @@ public class SignupActivity extends Activity implements OnClickListener {
 
                             // Set the current user in the Shared Preferences so it can be used by other activities
                             AccountManager.setCurrentUser(getApplicationContext(), user.getString("email"), role);
-//                            Intent intent = null;
-//
-//                            if (role.equals(AppData.ROLE_KG)) {
-//                                intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-//                            }
-//
-//                            else if (role.equals(AppData.ROLE_SELLER)) {
-//                                intent = new Intent(getBaseContext(), SellerActivity.class);
-//                            }
+                            Intent intent = null;
 
-                            Intent intent = new Intent(getBaseContext(), Main.class);
+                            if (role.equals(AppData.ROLE_KG)) {
+                                intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+                            }
+
+                            else if (role.equals(AppData.ROLE_SELLER)) {
+                                intent = new Intent(getBaseContext(), SellerActivity.class);
+                            }
+
+//                            Intent intent = new Intent(getBaseContext(), Main.class);
 
                             // Dismiss the progress dialog and start the new activity
                             signingIn.dismiss();
-                            startActivity(intent);
-
+                            setResult(RESULT_OK, intent);
+                            finish();
+                            
                         }
 
                         catch (JSONException e) {
