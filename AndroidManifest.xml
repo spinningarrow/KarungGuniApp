@@ -39,7 +39,7 @@
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
-            <!-- This points to an XMLf ile which describes our account service. -->
+            <!-- This points to an XMLf file which describes our account service. -->
             <meta-data android:name="android.accounts.AccountAuthenticator"
                        android:resource="@xml/authenticator" />
         </service>
@@ -57,7 +57,8 @@
 
         <activity
             android:name="com.onemore.karungguniapp.Main"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/noActionBarLight">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,10 +67,12 @@
         </activity>
         <activity
             android:name="com.onemore.karungguniapp.LoginActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/noActionBarLight" />
         <activity
             android:name="com.onemore.karungguniapp.SignupActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/noActionBarLight" />
         <activity
             android:name="com.onemore.karungguniapp.welcome"
             android:label="@string/app_name" />
