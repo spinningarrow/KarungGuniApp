@@ -8,9 +8,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".SellerActivity" >
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:id="@+id/btn_new"
+        android:text="Create a new advertisement" />
 
 </RelativeLayout>

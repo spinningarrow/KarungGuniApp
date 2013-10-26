@@ -94,6 +94,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
         //pickDate.setOnClickListener();
         btn_setTime_to = (Button)findViewById(R.id.set_time_to);
         btn_post =(Button)findViewById(R.id.ad_post);
+        btn_post.setOnClickListener(this);
         imageview = (ImageView)findViewById(R.id.new_ad_img_view);
 
         edit_title = (EditText) findViewById(R.id.new_ad_title);
@@ -120,9 +121,12 @@ public class NewAdActivity extends Activity implements OnClickListener{
             mAlbumStorageDirFactory = new BaseAlbumDirFactory();
         }
 
+
         setCurrentDateOnView();
         setCurrentTimeOnView();
+
         addListenerOnButton();
+
 
     }
     @Override
@@ -244,22 +248,6 @@ public class NewAdActivity extends Activity implements OnClickListener{
             }
 
         });
-//        btn_uploadPhoto.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(takePicture, 0);
-//                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(pickPhoto, 1);
-//
-//            }
-//
-//        });
-
-
 
 
     }
@@ -614,110 +602,5 @@ public class NewAdActivity extends Activity implements OnClickListener{
         startActivityForResult(takePictureIntent, actionCode);
     }
 
-
-//    public void onClick(View view){
-//        if(view.getId() == R.id.set_date){
-//            String t_title = edit_title.getText().toString();
-//            String t_des = edit_desc.getText().toString();
-//
-//        }
-//
-//    }
-
-//    public void onClick(View v) {
-//
-//        if (v.getId() == R.id.set_date) {
-//
-//            String displayName = mDisplayName.getText().toString();
-//            String password = mPassword.getText().toString();
-//            String email = mEmail.getText().toString();
-//            final String role = roles.get(mRole.getSelectedItem());
-//
-//            boolean invalid = false;
-//
-//            if (displayName.equals("")) {
-//                invalid = true;
-//                Toast.makeText(getApplicationContext(), "Please enter your name", Toast.LENGTH_SHORT).show();
-//            } else if (password.equals("")) {
-//                invalid = true;
-//                Toast.makeText(getApplicationContext(), "Please enter your Password", Toast.LENGTH_SHORT).show();
-//            } else if (email.equals("")) {
-//                invalid = true;
-//                Toast.makeText(getApplicationContext(), "Please enter your Email ID", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            if (invalid == false) {
-//
-//                // Callback for  when a new user is inserted to karung_gunis or sellers table
-//                // If the insertion is successful, show the appropriate activity
-//                // Also add the user state to the SharedPrefs
-//                Handler.Callback createWithEmailCallback = new Handler.Callback() {
-//                    Bundle result;
-//                    JSONObject user;
-////                    Uri uri;
-//
-//                    @Override
-//                    public boolean handleMessage(Message message) {
-//                        result = message.getData();
-//
-//                        if (result.getInt("success") != 1 || result.getInt("status") != 201) {
-//                            // Dismiss the progress dialog
-//                            signingIn.dismiss();
-//                            Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
-//
-//                            // Show an error to the user if a user with that email address already exists
-//                            if (result.getInt("status") == 409) {
-//                                Toast toast = Toast.makeText(getApplicationContext(), R.string.signup_user_exists, Toast.LENGTH_LONG);
-//                                toast.show();
-//                            }
-//                            return false;
-//                        }
-//
-//                        try {
-//                            user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
-//
-//                            // Set the current user in the Shared Preferences so it can be used by other activities
-//                            AccountManager.setCurrentUser(getApplicationContext(), user.getString("email"), role);
-//                            Intent intent = null;
-//
-//                            if (role.equals(AppData.ROLE_KG)) {
-//                                intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-//                            }
-//
-//                            else if (role.equals(AppData.ROLE_SELLER)) {
-//                                intent = new Intent(getBaseContext(), SellerActivity.class);
-//                            }
-//
-////                            Intent intent = new Intent(getBaseContext(), Main.class);
-//
-//                            // Dismiss the progress dialog and start the new activity
-//                            signingIn.dismiss();
-//                            setResult(RESULT_OK, intent);
-//                            finish();
-//
-//                        }
-//
-//                        catch (JSONException e) {
-//                            e.printStackTrace();
-//                            return false;
-//                        }
-//
-//                        catch (IOException e) {
-//                            e.printStackTrace();
-//                            return false;
-//                        }
-//
-//                        return true;
-//                    }
-//                };
-//
-//                // Show a progress dialog to the user
-//                signingIn = ProgressDialog.show(this, getString(R.string.signup_progress_title), getString(R.string.signup_progress_message), true);
-//
-//                // Create a new user with the supplied details
-//                AccountManager.createWithEmail(email, password, role, displayName, createWithEmailCallback);
-//            }
-//        }
-//    }
 
 }
