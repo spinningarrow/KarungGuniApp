@@ -29,4 +29,14 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="logout">Logout</string>
 
+    <!-- KGlist -->
+    <string name="current">Current</string>
+    <string name="nearby">Nearby</string>
+    <string name="noData">No advertisements found.</string>
+    <string name="header">Load new Advertisements</string>
+    <string name="footer">Load more...</string>
+    <string name="retrieve_KG_position">my location</string>
+    <string name="deal_list_network_unavailable">\"Nerwork unavailable\"</string>
+    <string name="action_search">search</string>
+
 </resources>
