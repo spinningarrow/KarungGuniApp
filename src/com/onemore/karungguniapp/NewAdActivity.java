@@ -1,15 +1,32 @@
 package com.onemore.karungguniapp;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.os.Bundle;
+import android.app.*;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.*;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import com.onemore.karungguniapp.PhotoService.AlbumStorageDirFactory;
+import com.onemore.karungguniapp.PhotoService.BaseAlbumDirFactory;
+import com.onemore.karungguniapp.PhotoService.FroyoAlbumDirFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,11 +35,14 @@ import java.util.Calendar;
  * Time: 5:52 PM
  * To change this template use File | Settings | File Templates.
  */
-public class NewAdActivity extends Activity {
+public class NewAdActivity extends Activity implements OnClickListener{
     private Button btn_setDate_from;
     private Button btn_setTime_from;
     private Button btn_setDate_to;
     private Button btn_setTime_to;
+    private Button btn_post;
+    private Button btn_uploadPhoto;
+    private ImageView imageview;
     private EditText edit_title;
     private EditText edit_desc;
     private TextView tvDisplayDate_from;
@@ -31,16 +51,35 @@ public class NewAdActivity extends Activity {
     private TextView tvDisplayTime_to;
     private DatePicker datePicker;
     private TimePicker timePicker;
+    private Spinner type;
+
+    private static HashMap<String, String> types = new HashMap<String, String>();
+    static {
+        types.put("Newspaper", AdType.NEWSPAPER.toString());
+        types.put("Books", AdType.BOOKS.toString());
+        types.put("Clothes", AdType.CLOTHES.toString());
+        types.put("Magazines", AdType.MAGAZINES.toString());
+        types.put("Shoes", AdType.SHOES.toString());
+        types.put("Others", AdType.OTHER.toString());
+
+
+    }
+    private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
+    private String mCurrentPhotoPath;
+    private ProgressDialog postingAd;
     private int year;
     private int month;
     private int day;
     private int hour;
     private int min;
 
-    static final int DATE_DIALOG_ID1 = 999;
-    static final int DATE_DIALOG_ID2 = 989;
-    static final int TIME_DIALOG_ID1 = 998;
-    static final int TIME_DIALOG_ID2 = 988;
+    private static final int DATE_DIALOG_ID1 = 999;
+    private static final int DATE_DIALOG_ID2 = 989;
+    private static final int TIME_DIALOG_ID1 = 998;
+    private static final int TIME_DIALOG_ID2 = 988;
+    private static final int CHOOSE_PHOTO_DIALOG  = 899;
+    private static final String JPEG_FILE_PREFIX = "IMG_";
+    private static final String JPEG_FILE_SUFFIX = ".jpg";
 
 
     @Override
@@ -54,6 +93,8 @@ public class NewAdActivity extends Activity {
         btn_setDate_to = (Button) findViewById(R.id.set_date_to);
         //pickDate.setOnClickListener();
         btn_setTime_to = (Button)findViewById(R.id.set_time_to);
+        btn_post =(Button)findViewById(R.id.ad_post);
+        imageview = (ImageView)findViewById(R.id.new_ad_img_view);
 
         edit_title = (EditText) findViewById(R.id.new_ad_title);
         edit_desc = (EditText) findViewById(R.id.new_add_description);
@@ -65,11 +106,47 @@ public class NewAdActivity extends Activity {
         tvDisplayDate_to = (TextView) findViewById(R.id.tvDate_to);
 
         tvDisplayTime_to = (TextView) findViewById(R.id.tvTime_to);
+        type = (Spinner) findViewById(R.id.new_ad_type);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item,
+                new ArrayList<String>(types.keySet()));
+
+        type.setAdapter(spinnerArrayAdapter);
+        btn_uploadPhoto = (Button)findViewById(R.id.new_ad_photo);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+            mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
+        } else {
+            mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+        }
 
         setCurrentDateOnView();
         setCurrentTimeOnView();
         addListenerOnButton();
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch(requestCode) {
+            case 0:
+                if(resultCode == RESULT_OK){
+                    if ( resultCode == RESULT_OK) {
+//                        Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
+//                        imageview.setImageBitmap(photo);
+
+                        handleCameraPhoto();
+                    }
+                }
+
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    imageview.setImageURI(selectedImage);
+                }
+                break;
+        }
     }
     public void setCurrentDateOnView() {
 
@@ -133,7 +210,8 @@ public class NewAdActivity extends Activity {
 
             }
 
-        });
+        }
+        );
 
         btn_setTime_from.setOnClickListener(new OnClickListener() {
 
@@ -155,6 +233,34 @@ public class NewAdActivity extends Activity {
             }
 
         });
+        btn_uploadPhoto.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                showDialog(CHOOSE_PHOTO_DIALOG);
+
+
+            }
+
+        });
+//        btn_uploadPhoto.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(takePicture, 0);
+//                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(pickPhoto, 1);
+//
+//            }
+//
+//        });
+
+
+
 
     }
     @Override
@@ -178,6 +284,27 @@ public class NewAdActivity extends Activity {
                 // set time picker as current time
                 return new TimePickerDialog(this,
                         timePickerListener_to, hour, min,false);
+            case CHOOSE_PHOTO_DIALOG:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.choose_method_to_upload_photo).setItems(R.array.cam_choose_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if(which==0)   {
+
+                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            dispatchTakePictureIntent(0, takePicture);
+                            //startActivityForResult(takePicture, 0);
+
+                        }
+                        if(which==1){
+
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, 1);
+                        }
+                    }
+                });
+                return builder.create();
 
 
         }
@@ -269,6 +396,224 @@ public class NewAdActivity extends Activity {
         else
             return "0" + String.valueOf(c);
     }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.ad_post) {
+            String current_user = AdManager.getCurrentUser(this).getString("email");
+            String title = edit_title.getText().toString();
+            String desc = edit_desc.getText().toString();
+            String time_from = tvDisplayDate_from.getText().toString() + tvDisplayTime_from.getText().toString();
+            String time_to = tvDisplayDate_to.getText().toString() +      tvDisplayTime_to.getText().toString();
+            String timing = time_from+time_to;
+            final String catagory = types.get(type.getSelectedItem());
+            String img_url = "drawable/kg_launcher";
+            //final String role = roles.get(mRole.getSelectedItem());
+
+            boolean invalid = false;
+
+            if (title.equals("")) {
+                invalid = true;
+                Toast.makeText(getApplicationContext(), "Please enter the title for the new post", Toast.LENGTH_SHORT).show();
+
+            }
+
+            if (invalid == false) {
+
+                Handler.Callback createNewAdCallback = new Handler.Callback() {
+                    Bundle result;
+                    JSONObject ad;
+//                    Uri uri;
+
+                    @Override
+                    public boolean handleMessage(Message message) {
+                        result = message.getData();
+
+                        if (result.getInt("success") != 1 || result.getInt("status") != 201) {
+                            // Dismiss the progress dialog
+                            postingAd.dismiss();
+                            //Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
+
+                            // Show an error to the user if a ad with that email address already exists
+                            if (result.getInt("status") == 409) {
+                                Toast toast = Toast.makeText(getApplicationContext(), R.string.add_ad_exists, Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+
+                            return false;
+                        }
+
+
+                        try {
+                            ad = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
+
+                            // Set the current user in the Shared Preferences so it can be used by other activities
+                            //AdManager.setCurrentAd(getApplicationContext(), ad.getString("email"), role);
+                            Intent intent = new Intent(getBaseContext(), SellerActivity.class);
+
+//                            if (role.equals(AppData.ROLE_KG)) {
+//                                intent = new Intent(getBaseContext(), KarungGuniActivity.class);
+//                            }
+//
+//                            else if (role.equals(AppData.ROLE_SELLER)) {
+//                                intent = new Intent(getBaseContext(), SellerActivity.class);
+//                            }
+
+                            //Intent intent = new Intent(getBaseContext(), Main.class);
+
+                            // Dismiss the progress dialog and start the new activity
+                            postingAd.dismiss();
+                            setResult(RESULT_OK, intent);
+                            finish();
+
+                        }
+
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+
+                        catch (IOException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+
+                        return true;
+                    }
+                };
+
+                // Show a progress dialog to the user
+                postingAd = ProgressDialog.show(this, getString(R.string.posting_new_ad), getString(R.string.posting_new_ad_msg), true);
+
+                // Create a new user with the supplied details
+
+                AdManager.createNewAd(current_user,title, desc, timing,catagory, img_url,createNewAdCallback);
+
+            }
+
+        }
+
+
+    }
+    private void handleCameraPhoto() {
+
+        if (mCurrentPhotoPath != null) {
+            setPic();
+            galleryAddPic();
+            mCurrentPhotoPath = null;
+        }
+
+    }
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+
+    }
+    private void setPic() {
+
+		/* There isn't enough memory to open up more than a couple camera photos */
+		/* So pre-scale the target bitmap into which the file is decoded */
+
+		/* Get the size of the ImageView */
+        int targetW = imageview.getWidth();
+        int targetH = imageview.getHeight();
+
+		/* Get the size of the image */
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+		/* Figure out which way needs to be reduced less */
+        int scaleFactor = 1;
+        if ((targetW > 0) || (targetH > 0)) {
+            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        }
+
+		/* Set bitmap options to scale the image decode target */
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+		/* Decode the JPEG file into a Bitmap */
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+		/* Associate the Bitmap to the ImageView */
+        imageview.setImageBitmap(bitmap);
+
+        imageview.setVisibility(View.VISIBLE);
+
+    }
+    private File setUpPhotoFile() throws IOException {
+
+        File f = createImageFile();
+        mCurrentPhotoPath = f.getAbsolutePath();
+
+        return f;
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+        File albumF = getAlbumDir();
+        File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
+        return imageF;
+    }
+    private String getAlbumName() {
+        return getString(R.string.album_name);
+    }
+    private File getAlbumDir() {
+        File storageDir = null;
+
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+
+            storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
+
+            if (storageDir != null) {
+                if (! storageDir.mkdirs()) {
+                    if (! storageDir.exists()){
+                        Log.d("CameraSample", "failed to create directory");
+                        return null;
+                    }
+                }
+            }
+
+        } else {
+            Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
+        }
+
+        return storageDir;
+    }
+    private void dispatchTakePictureIntent(int actionCode, Intent takePictureIntent) {
+
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        switch(actionCode) {
+            case 0:
+                File f = null;
+
+                try {
+                    f = setUpPhotoFile();
+                    mCurrentPhotoPath = f.getAbsolutePath();
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    f = null;
+                    mCurrentPhotoPath = null;
+                }
+                break;
+
+            default:
+                break;
+        } // switch
+
+        startActivityForResult(takePictureIntent, actionCode);
+    }
+
 
 //    public void onClick(View view){
 //        if(view.getId() == R.id.set_date){
@@ -374,4 +719,5 @@ public class NewAdActivity extends Activity {
 //            }
 //        }
 //    }
+
 }

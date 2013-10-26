@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="cam_choose_array">
+        <item>Take a photo with the camera</item>
+        <item>Choose a photo from Photo Gallery</item>
+
+    </array>
+</resources>

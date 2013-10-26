@@ -40,5 +40,11 @@
     <string name="action_search">search</string>
     <!--new-post-->
     <string name="new_ad">new advertisement</string>
+    <string name="posting_new_ad">Posting a new advertisement</string>
+    <string name="posting_new_ad_msg">Posting a new advertisement, =)</string>
+    <string name="add_ad_exists">Ad Exist Err</string>
+    <string name = "choose_method_to_upload_photo">Upload a photo</string>
+    <string name="photo_desc">Uploaded Photo</string>
+    <string name="album_name">CameraSample</string>
 
 </resources>

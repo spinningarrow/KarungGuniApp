@@ -153,11 +153,28 @@
                             android:text="pick time"
                             />
                 </TableRow>
+            <TableRow>
+                <TextView
+                        android:id="@+id/lbl_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.30"
+                        android:gravity="left"
+                        android:text="Role"
+                        />
+
+                <Spinner
+                        android:id="@+id/new_ad_type"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.70"
+                        android:singleLine="true"
+                        android:drawSelectorOnTop="true" />
+            </TableRow>
 
                 <TableRow>
 
                     <TextView
-                            android:id="@+id/new_ad_photo"
+                            android:id="@+id/lbl_new_ad_photo"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.30"
@@ -165,16 +182,24 @@
                             android:text="upload a photo"
                             />
 
-                    <DatePicker
+                    <Button
+                            android:id="@+id/new_ad_photo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:id="@+id/datePicker" android:layout_column="10" android:visibility="gone"/>
-                    <TimePicker
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/timePicker" android:layout_column="29" android:visibility="gone"/>
+                            android:text="upload"
+                            android:layout_alignParentRight="true"/>
 
+                </TableRow>
+                <TableRow>
+                    <ImageView
+                            android:id="@+id/new_ad_img_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="200dp"
+                            android:maxWidth="200dp"
+                            android:text="Image View"
+                            android:contentDescription="@string/photo_desc"
+                            android:layout_gravity="center"/>
                 </TableRow>
 
 
@@ -185,11 +210,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
 
-                <Button
-                        android:id="@+id/submit"
+                <DatePicker
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Submit"
+                        android:layout_weight="0.7"
+                        android:id="@+id/datePicker" android:layout_column="10" android:visibility="gone"/>
+                <TimePicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/timePicker" android:layout_column="29" android:visibility="gone"/>
+
+                <Button
+                        android:id="@+id/ad_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Post"
                         android:layout_alignParentRight="true"
 
                         />
