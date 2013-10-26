@@ -21,7 +21,7 @@
         android:icon="@drawable/kg_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-            android:name=".KGApp">
+        android:name = ".KGApp">
 
         <provider
             android:name="com.onemore.karungguniapp.AppDataProvider"
@@ -57,14 +57,23 @@
         </service>
 
         <activity
-            android:name="com.onemore.karungguniapp.Main"
-            android:label="@string/app_name"
-            android:theme="@style/noActionBarLight">
+            android:name="com.onemore.karungguniapp.KarangGuniActivity"
+            android:label="@string/title_activity_karung_guni" >
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name="com.onemore.karungguniapp.Main"
+            android:label="@string/app_name"
+            android:theme="@style/noActionBarLight">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.onemore.karungguniapp.LoginActivity"
@@ -85,31 +94,12 @@
             android:label="@string/title_activity_karung_guni" >
         </activity>
         <activity
-        android:name="com.onemore.karungguniapp.KarangGuniActivity"
-        android:label="@string/title_activity_karung_guni" >
-        </activity>
-        <activity
-                android:name="com.onemore.karungguniapp.AdDetailActivity"
-                android:label="@string/title_activity_karung_guni" >
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            android:name="com.onemore.karungguniapp.SellerActivity"
+            android:label="@string/title_activity_seller" >
         </activity>
         <activity
                 android:name="com.onemore.karungguniapp.NewAdActivity"
-                android:label="@string/title_activity_karung_guni" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.onemore.karungguniapp.SellerActivity"
-            android:label="@string/title_activity_seller" >
+                android:label="@string/new_ad" >
         </activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
     </application>

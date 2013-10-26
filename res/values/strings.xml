@@ -38,5 +38,7 @@
     <string name="retrieve_KG_position">my location</string>
     <string name="deal_list_network_unavailable">\"Nerwork unavailable\"</string>
     <string name="action_search">search</string>
+    <!--new-post-->
+    <string name="new_ad">new advertisement</string>
 
 </resources>
