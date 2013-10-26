@@ -23,6 +23,7 @@
     <string name="signup_progress_message">Please wait while your brand new account is created.</string>
     <string name="signup_user_exists">An account associated with your email address already exists. Use the Sign In button to login.</string>
     <string name="signup_choose_role">Choose a role</string>
+    <string name="noData">No Data</string>
     
     <!-- menu-related -->
     <string name="edit_profile">Edit Profile</string>
