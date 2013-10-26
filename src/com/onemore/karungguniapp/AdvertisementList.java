@@ -8,10 +8,10 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract.Contacts;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -40,7 +40,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 //		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		// We have a menu item to show in action bar.
-		setHasOptionsMenu(true);
+//		setHasOptionsMenu(true);
 		mListView = getListView();
 		LayoutInflater inflator = getActivity().getLayoutInflater();
 		View header = inflator.inflate(R.layout.list_header, null);
@@ -80,10 +80,11 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		return super.onCreateView(inflater, container, savedInstanceState);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	    View v = super.onCreateView(inflater, container, savedInstanceState);
+	    ViewGroup parent = (ViewGroup) inflater.inflate(R.layout.ad_list, container, false);
+	    parent.addView(v, 0);
+	    return parent;
 	}
 //	public static class MySearchView extends SearchView {
 //		public MySearchView(Context context) {
