@@ -1,6 +1,7 @@
 package com.onemore.karungguniapp;
 
 import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -395,7 +396,8 @@ public class Main extends Activity implements OnClickListener,
     }
 
     // Create an AlertDialog that prompts the user to choose a role
-    public class SelectRoleDialogFragment extends DialogFragment {
+    @SuppressLint("ValidFragment")
+	public class SelectRoleDialogFragment extends DialogFragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {

@@ -56,14 +56,18 @@
         </service>
 
         <activity
-            android:name="com.onemore.karungguniapp.Main"
-            android:label="@string/app_name"
-            android:theme="@style/noActionBarLight">
+            android:name="com.onemore.karungguniapp.KarangGuniActivity"
+            android:label="@string/title_activity_karung_guni" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.onemore.karungguniapp.Main"
+            android:label="@string/app_name"
+            android:theme="@style/noActionBarLight">
         </activity>
         <activity
             android:name="com.onemore.karungguniapp.LoginActivity"
