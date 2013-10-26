@@ -9,7 +9,7 @@ import android.view.Menu;
 
 public class KarangGuniActivity extends Activity {
     public  static  String LOG_TAG="";
-    //private KGApp app;
+//    private KGApp app;
 //	private static TextView textView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,6 @@ public class KarangGuniActivity extends Activity {
 		ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	    actionBar.setDisplayShowTitleEnabled(false);
-	    doStupidStuff();
 
 	    Tab tab = actionBar.newTab()
 	                       .setText(R.string.current)

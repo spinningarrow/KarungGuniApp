@@ -42,6 +42,9 @@ public class AppDataProvider extends ContentProvider{
         sAdvertisementsProjectionMap = new HashMap<String, String>();
         sAdvertisementsProjectionMap.put(AppData.Advertisements._ID, AppData.Advertisements._ID);
         sAdvertisementsProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_TITLE);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_DESCRIPTION, AppData.Advertisements.COLUMN_NAME_DESCRIPTION);
+//        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_PHOTO, AppData.Advertisements.COLUMN_NAME_PHOTO);
 
     }
 
