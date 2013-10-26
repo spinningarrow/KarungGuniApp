@@ -188,7 +188,10 @@ public class AdDetailActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        if(locationMgr!=null)
+        {
         locationMgr.removeGpsStatusListener(gpsListener);
+        }
     }
 
     private class GpsListener implements GpsStatus.Listener {

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.TextView;
 
 public class KarangGuniActivity extends Activity {
     public  static  String LOG_TAG="";
@@ -17,6 +18,14 @@ public class KarangGuniActivity extends Activity {
 		setContentView(R.layout.activity_karang_guni);
 
         //app=(KGApp)getApplication();
+//      since the title is spelled wrong, I'm gonna merge KarangGuniActisity with KarungGuniActivity manually
+        //@TODO : gm, refine this
+        TextView tv = new TextView(this);
+        tv.setTextSize(40);
+        tv.setText(AccountManager.getCurrentUser(this).getString("email"));
+        getActionBar();
+        setContentView(tv);
+        //ending todo
 
 		ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -67,7 +76,8 @@ public class KarangGuniActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.karang_guni, menu);
+		//getMenuInflater().inflate(R.menu.karang_guni, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
 	

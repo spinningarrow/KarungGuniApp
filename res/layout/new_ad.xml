@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/new_ad"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/background_pattern_fill">
+
+    <LinearLayout
+            android:id="@+id/linearLayout_new_ad"
+            android:layout_width="match_parent"
+            android:layout_height="376dp"
+            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" >
+
+        <TextView
+                android:id="@+id/new_ad_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Advertisement"
+                android:layout_gravity="center_horizontal"
+                android:textSize="45sp" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+            <TableLayout
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/lbl_new_ad_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.30"
+                            android:gravity="left"
+                            android:text="title"
+                            />
+
+                    <EditText
+                            android:id="@+id/new_ad_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.70"
+                            android:singleLine="true"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/lbl_new_add_description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.30"
+                            android:gravity="left"
+                            android:text="description"
+                            />
+
+
+                    <EditText
+                            android:id="@+id/new_add_description"
+
+                            android:inputType="text"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.70"
+                            android:singleLine="true"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/timing_from"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.30"
+                            android:gravity="left"
+                            android:text="time available from:"
+
+                            />
+                    <TextView
+                            android:id="@+id/tvDate_from"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""/>
+                    <TextView
+                            android:id="@+id/tvTime_from"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""/>
+
+
+
+
+                    <!--<EditText-->
+                            <!--android:id="@+id/timing"-->
+
+                            <!--android:inputType="textEmailAddress"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_weight="0.70"-->
+                            <!--android:singleLine="true"/>-->
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/set_date_from"
+                            android:text="pick a day"/>
+
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/set_time_from"
+                            android:text="pick time"
+                            />
+
+                </TableRow>
+                <TableRow>
+                    <TextView
+                            android:id="@+id/timing_to"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.30"
+                            android:gravity="left"
+                            android:text="to:"
+
+                            />
+                    <TextView
+                            android:id="@+id/tvDate_to"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""/>
+                    <TextView
+                            android:id="@+id/tvTime_to"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""/>
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/set_date_to"
+                            android:text="pick a day"/>
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/set_time_to"
+                            android:text="pick time"
+                            />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/new_ad_photo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.30"
+                            android:gravity="left"
+                            android:text="upload a photo"
+                            />
+
+                    <DatePicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:id="@+id/datePicker" android:layout_column="10" android:visibility="gone"/>
+                    <TimePicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/timePicker" android:layout_column="29" android:visibility="gone"/>
+
+                </TableRow>
+
+
+
+            </TableLayout>
+            <RelativeLayout
+                    android:id="@+id/relativeLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                <Button
+                        android:id="@+id/submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Submit"
+                        android:layout_alignParentRight="true"
+
+                        />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

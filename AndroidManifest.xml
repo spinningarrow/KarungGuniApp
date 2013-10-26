@@ -20,7 +20,8 @@
         android:allowBackup="true"
         android:icon="@drawable/kg_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+            android:name=".KGApp">
 
         <provider
             android:name="com.onemore.karungguniapp.AppDataProvider"
@@ -59,11 +60,11 @@
             android:name="com.onemore.karungguniapp.Main"
             android:label="@string/app_name"
             android:theme="@style/noActionBarLight">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name="com.onemore.karungguniapp.LoginActivity"
@@ -83,6 +84,29 @@
             android:name="com.onemore.karungguniapp.KarungGuniActivity"
             android:label="@string/title_activity_karung_guni" >
         </activity>
+        <activity
+        android:name="com.onemore.karungguniapp.KarangGuniActivity"
+        android:label="@string/title_activity_karung_guni" >
+        </activity>
+        <activity
+                android:name="com.onemore.karungguniapp.AdDetailActivity"
+                android:label="@string/title_activity_karung_guni" >
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+                android:name="com.onemore.karungguniapp.NewAdActivity"
+                android:label="@string/title_activity_karung_guni" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.onemore.karungguniapp.SellerActivity"
             android:label="@string/title_activity_seller" >
