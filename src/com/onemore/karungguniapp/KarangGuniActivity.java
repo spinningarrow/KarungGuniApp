@@ -1,31 +1,28 @@
 package com.onemore.karungguniapp;
 
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Set;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.content.ContentValues;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.TextView;
-
-import com.mongodb.DB;
-import com.mongodb.MongoURI;
 
 public class KarangGuniActivity extends Activity {
+    public  static  String LOG_TAG="";
+    //private KGApp app;
 //	private static TextView textView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_karang_guni);
+
+        //app=(KGApp)getApplication();
+
 		ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	    actionBar.setDisplayShowTitleEnabled(false);
 	    doStupidStuff();
+
 	    Tab tab = actionBar.newTab()
 	                       .setText(R.string.current)
 	                       .setTabListener(new TabListener<AdvertisementList>(

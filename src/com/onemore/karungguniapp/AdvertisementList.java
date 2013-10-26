@@ -4,6 +4,7 @@ import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,10 +12,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import com.onemore.karungguniapp.model.Advertisement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdvertisementList extends ListFragment
 implements LoaderManager.LoaderCallbacks<Cursor> 
@@ -22,7 +28,9 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 	// This is the Adapter being used to display the list's data.
 	SimpleCursorAdapter mAdapter;
+    private KGApp app;
 //	MongoAdapter mAdapter;
+
 
 	// The SearchView for doing filtering.
 	SearchView mSearchView;
@@ -30,20 +38,24 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	// If non-null, this is the current filter the user has provided.
 	String mCurFilter;
 	Context mContext;
-	@Override 
+    List<Advertisement> ads;
+
+        @Override
 	public void onActivityCreated(Bundle savedInstanceState) 
 	{
 		super.onActivityCreated(savedInstanceState);
 
 		// Give some text to display if there is no data. 
 		setEmptyText(getResources().getString(R.string.noData));
-
+        app = (KGApp)getActivity().getApplication();
 //		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		// We have a menu item to show in action bar.
 //		setHasOptionsMenu(true);
 		mListView = getListView();
+
 		LayoutInflater inflator = getActivity().getLayoutInflater();
 		View header = inflator.inflate(R.layout.list_header, null);
+        ads = new ArrayList<Advertisement>();
 //		header.setOnClickListener(new OnClickListener()
 //		{
 //			   @Override
@@ -69,8 +81,29 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 				R.layout.advertisement, null,
 				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION},
 				new int[] { R.id.title, R.id.distance }, 0);
+
 		setListAdapter(mAdapter);
-		mContext = getActivity();
+//        if (app.getSectionList().isEmpty()) {
+////            if (app.connectionPresent()) {
+////                new ParseFeedTask().execute();
+////            } else {
+//                Toast.makeText(getActivity(), getString(R.string.deal_list_network_unavailable), Toast.LENGTH_LONG).show();
+//            //}
+//        } else {
+//            //onLoaderReset(app.getSectionList().get(0).getItems());
+//        }
+
+        mListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Intent intent = new Intent(getActivity(),AdDetailActivity.class);
+                startActivity(intent);
+                mContext = getActivity();
+            }
+        });
+
 		// Start out with a progress indicator.
 //		setListShown(false);
 
@@ -200,4 +233,10 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		// longer using it.
 		mAdapter.swapCursor(null);
 	}
+
+//    private void resetListItems(List<Advertisement> newItems) {
+//        .clear();
+//        items.addAll(newItems);
+//        mAdapter.notifyDataSetChanged();
+//    }
 }
