@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/details"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:orientation="vertical" >
+
+
+    <TextView
+            android:id="@+id/category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Newspapers" />
+
+    <TextView
+            android:id="@+id/seller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sahil" />
+    <TextView
+            android:id="@+id/addr_short"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Blk558a Ang Mo Kio St52" />
+    <TextView
+            android:id="@+id/distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="200m" />
+    <TextView
+            android:id="@+id/time_avail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sunday 2:00pm-3:00pm" />
+    <ImageView
+            android:id="@+id/item_img"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kg_launcher"  />
+
+</LinearLayout>
