@@ -31,7 +31,6 @@ public class AppDataProvider extends ContentProvider{
 
     // Static objects block
     static {
-
         // Create projection map that returns all columns
         sUsersProjectionMap = new HashMap<String, String>();
         sUsersProjectionMap.put(AppData.Users._ID, AppData.Users._ID);

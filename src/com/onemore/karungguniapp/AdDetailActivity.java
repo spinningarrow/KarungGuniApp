@@ -78,7 +78,7 @@ public class AdDetailActivity extends Activity {
         }
         handler = new Handler() {
             public void handleMessage(Message m) {
-                Log.d(KarangGuniActivity.LOG_TAG, "Handler returned with message: " + m.toString());
+                Log.d(KarungGuniActivity.LOG_TAG, "Handler returned with message: " + m.toString());
 
                 if (m.what == LocationHelper.MESSAGE_CODE_LOCATION_FOUND) {
 //                    detail.setText("HANDLER RETURNED\nlat:" + m.arg1 + "\nlon:" + m.arg2);

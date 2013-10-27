@@ -1,6 +1,8 @@
 package com.onemore.karungguniapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +10,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class KarungGuniActivity extends Activity {
+
+	public static final String LOG_TAG = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +23,21 @@ public class KarungGuniActivity extends Activity {
         tv.setText(AccountManager.getCurrentUser(this).getString("email"));
         getActionBar();
         setContentView(tv);
+    	ActionBar actionBar = getActionBar();
+	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	    actionBar.setDisplayShowTitleEnabled(false);
+
+	    Tab tab = actionBar.newTab()
+	                       .setText(R.string.current)
+	                       .setTabListener(new TabListener<AdvertisementList>(
+	                               this, "current", AdvertisementList.class));
+	    actionBar.addTab(tab);
+
+	    tab = actionBar.newTab()
+	                   .setText(R.string.nearby)
+	                   .setTabListener(new TabListener<AdvertisementList>(
+	                           this, "nearby", AdvertisementList.class));
+	    actionBar.addTab(tab);
 	}
 
 	@Override

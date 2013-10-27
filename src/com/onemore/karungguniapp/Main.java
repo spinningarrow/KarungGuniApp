@@ -87,7 +87,6 @@ public class Main extends Activity implements OnClickListener,
         syncSettingsBundle = new Bundle();
         ContentResolver.setSyncAutomatically(mAccount, AppData.AUTHORITY, true);
         ContentResolver.addPeriodicSync(mAccount, AppData.AUTHORITY, syncSettingsBundle, 60);
-
         // Log the user in if login was performed earlier (the current user is stored in the shared preferences)
         // Get the role from the user the account exists but it hasn't been set (e.g. if a new account was created
         // using Facebook or Google login

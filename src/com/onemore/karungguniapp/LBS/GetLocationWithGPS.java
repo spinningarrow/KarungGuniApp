@@ -24,7 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.onemore.karungguniapp.KarangGuniActivity;
+import com.onemore.karungguniapp.KarungGuniActivity;
 import com.onemore.karungguniapp.R;
 import java.util.Locale;
 
@@ -130,7 +130,7 @@ public class GetLocationWithGPS extends Activity {
             AlertDialog alert = builder.create();
             alert.show();
         } else {
-            LocationHelper locationHelper = new LocationHelper(locationMgr, handler, KarangGuniActivity.LOG_TAG);
+            LocationHelper locationHelper = new LocationHelper(locationMgr, handler, KarungGuniActivity.LOG_TAG);
             locationHelper.getCurrentLocation(30);
         }
 
