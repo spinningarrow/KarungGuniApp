@@ -119,35 +119,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		parent.addView(v, 0);
 		return parent;
 	}
-	//	public static class MySearchView extends SearchView {
-	//		public MySearchView(Context context) {
-	//			super(context);
-	//		}
-	//
-	//		// The normal SearchView doesn't clear its search text when
-	//		// collapsed, so we will do this for it.
-	//		@Override
-	//		public void onActionViewCollapsed() {
-	//			setQuery("", false);
-	//			super.onActionViewCollapsed();
-	//		}
-	//	}
-
-	//	@Override 
-	//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
-	//	{
-	//		// Place an action bar item for searching.
-	////		MenuItem item = menu.add("Search");
-	////		item.setIcon(android.R.drawable.ic_menu_search);
-	////		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
-	////				| MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-	////		mSearchView = (SearchView) getActivity().findViewById(R.id.action_search);
-	//////		mSearchView.setOnQueryTextListener(this);
-	//////		mSearchView.setOnCloseListener(this);
-	//////		mSearchView.setIconifiedByDefault(true);
-	////		item.setActionView(mSearchView);
-	//	}
-	////
+	
 	//	public boolean onQueryTextChange(String newText) {
 	//		// Called when the action bar search text has changed.  Update
 	//		// the search filter, and restart the loader to do a new query
@@ -166,20 +138,6 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	//		return true;
 	//	}
 	////
-	//	@Override 
-	//	public boolean onQueryTextSubmit(String query)
-	//	{
-	//		// Don't care about this.
-	//		return true;
-	//	}
-	//
-	//	@Override
-	//	public boolean onClose() {
-	//		if (!TextUtils.isEmpty(mSearchView.getQuery())) {
-	//			mSearchView.setQuery(null, true);
-	//		}
-	//		return true;
-	//	}
 	//
 	//	@Override 
 	//	public void onListItemClick(ListView l, View v, int position, long id)
@@ -188,15 +146,6 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	//		Log.i("FragmentComplexList", "Item clicked: " + id);
 	//	}
 	//
-	// These are the Contacts rows that we will retrieve.
-	//	static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
-	//		Contacts._ID,
-	//		Contacts.DISPLAY_NAME,
-	//		Contacts.CONTACT_STATUS,
-	//		Contacts.CONTACT_PRESENCE,
-	//		Contacts.PHOTO_ID,
-	//		Contacts.LOOKUP_KEY,
-	//	};
 
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		// This is called when a new Loader needs to be created.  This

@@ -22,7 +22,7 @@ public class KarangGuniActivity extends Activity {
         //@TODO : gm, refine this
         TextView tv = new TextView(this);
         tv.setTextSize(40);
-        tv.setText(AccountManager.getCurrentUser(this).getString("email"));
+//        tv.setText(AccountManager.getCurrentUser(this).getString("email"));
         getActionBar();
         setContentView(tv);
         //ending todo
