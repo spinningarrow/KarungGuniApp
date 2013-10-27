@@ -61,15 +61,6 @@
         </service>
 
         <activity
-            android:name="com.onemore.karungguniapp.KarangGuniActivity"
-            android:label="@string/title_activity_karung_guni" >
-<!--             <intent-filter> -->
-<!--                 <action android:name="android.intent.action.MAIN" /> -->
-
-<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
-<!--             </intent-filter> -->
-        </activity>
-        <activity
             android:name="com.onemore.karungguniapp.Main"
             android:label="@string/app_name"
             android:theme="@style/noActionBarLight">
@@ -87,9 +78,6 @@
             android:name="com.onemore.karungguniapp.SignupActivity"
             android:label="@string/app_name"
             android:theme="@style/noActionBarLight" />
-        <activity
-            android:name="com.onemore.karungguniapp.welcome"
-            android:label="@string/app_name" />
          <activity
             android:name="com.facebook.LoginActivity"
            />
