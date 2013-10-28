@@ -107,6 +107,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 values.put(AppData.Advertisements.COLUMN_NAME_PHOTO, advertisement.getString(AppData.Advertisements.COLUMN_NAME_PHOTO));
                 values.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, advertisement.getString(AppData.Advertisements.COLUMN_NAME_CATEGORY));
                 values.put(AppData.Advertisements.COLUMN_NAME_STATUS, advertisement.getString(AppData.Advertisements.COLUMN_NAME_STATUS));
+                values.put(AppData.Advertisements.COLUMN_NAME_TIMING, advertisement.getString(AppData.Advertisements.COLUMN_NAME_TIMING));
                 values.put(AppData.COLUMN_NAME_DATE_CREATED, advertisement.getString(AppData.COLUMN_NAME_DATE_CREATED));
 
                 // Insert to local DB

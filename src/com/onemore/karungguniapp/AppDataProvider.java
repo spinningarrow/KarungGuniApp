@@ -185,9 +185,13 @@ public class AppDataProvider extends ContentProvider{
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        // Get the current system time in milliseconds
-        Long now = System.currentTimeMillis() / 1000;
-        values.put(AppData.COLUMN_NAME_DATE_CREATED, now);
+        // If no creation date is specified, use the current time
+        if (values.containsKey(AppData.COLUMN_NAME_DATE_CREATED)) {
+
+            // Get the current system time in milliseconds
+            Long now = System.currentTimeMillis() / 1000;
+            values.put(AppData.COLUMN_NAME_DATE_CREATED, now);
+        }
 
         // Get a writable database (will create if it doesn't exist)
         db = mOpenHelper.getWritableDatabase();
