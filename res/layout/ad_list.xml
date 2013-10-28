@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:background="@android:color/white" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:cacheColorHint="@android:color/transparent"
-        android:drawSelectorOnTop="false" />
+        android:layout_height="wrap_content"
+        android:listSelector="@drawable/list_selector" 
+        android:divider="#b5b5b5"
+        android:dividerHeight="1dp"/>
 
     <TextView
         android:id="@id/android:empty"
@@ -22,5 +19,4 @@
         android:text="@string/noData"
         android:gravity="center"
         android:textSize="25sp" />
-
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.onemore.karungguniapp;
+package com.omemore.karungguniapp.listview;
 
 
 import android.app.Activity;
@@ -11,6 +11,11 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import com.onemore.karungguniapp.R;
+import com.onemore.karungguniapp.R.drawable;
+import com.onemore.karungguniapp.R.id;
+import com.onemore.karungguniapp.R.layout;
 import com.onemore.karungguniapp.model.Advertisement;
 
 import java.util.ArrayDeque;
@@ -46,7 +51,7 @@ public class MongoAdapter extends SimpleCursorAdapter {
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 			holder.distance = (TextView) convertView.findViewById(R.id.distance);
-			holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+			holder.icon = (ImageView) convertView.findViewById(R.id.thumbnail);
 
 			convertView.setTag(holder);
 		} else {
