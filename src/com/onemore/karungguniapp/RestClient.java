@@ -138,7 +138,7 @@ public class RestClient {
         final Handler handler = new Handler(callback);
         final Message message = Message.obtain();
 
-        httpClient.get(API_PATH + getRequestEndpoint(uri), null, new AsyncCallback() {
+        httpClient.get(API_PATH + getRequestEndpoint(uri) + (selection != null ? selection : ""), null, new AsyncCallback() {
 
             // Store the result in a bundle which will then be passed as a message to the query callback
             // result schema:

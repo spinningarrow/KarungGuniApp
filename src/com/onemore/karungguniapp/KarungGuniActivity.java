@@ -1,9 +1,12 @@
 package com.onemore.karungguniapp;
 
+import android.accounts.Account;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActionBar.Tab;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +41,18 @@ public class KarungGuniActivity extends Activity {
 	                   .setTabListener(new TabListener<AdvertisementList>(
 	                           this, "nearby", AdvertisementList.class));
 	    actionBar.addTab(tab);
+
+        // Explicitly request a sync if there are no advertisements
+        ContentResolver contentResolver = getContentResolver();
+        Cursor mCursor = contentResolver.query(AppData.Advertisements.CONTENT_URI, null, null, null, null);
+
+        if (mCursor == null || mCursor.getCount() < 1) {
+            Account mAccount = Main.CreateSyncAccount(this);
+            Bundle settingsBundle = new Bundle();
+            settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_MANUAL, true);
+            settingsBundle.putBoolean(contentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            contentResolver.requestSync(mAccount, AppData.AUTHORITY, settingsBundle);
+        }
 	}
 
 	@Override

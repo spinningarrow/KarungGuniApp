@@ -78,8 +78,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         // If lastSync is not empty, set the required selections
         // TODO selection parameters don't actually work, the query method doesn't use them
         if (lastSync.getLong(AppData.Advertisements.TABLE_NAME) != -1) {
-            ADVERTISEMENTS_SELECTION = "WHERE DATE_CREATED > ?";
-            ADVERTISEMENTS_SELECTION_ARGS = new String[] { String.valueOf(lastSync.getLong(AppData.Advertisements.TABLE_NAME)) };
+            ADVERTISEMENTS_SELECTION = "/latest/" + lastSync.getLong(AppData.Advertisements.TABLE_NAME);
         }
 
         // Get advertisement data from the server
