@@ -1,6 +1,7 @@
 package com.onemore.karungguniapp;
 
 import android.app.*;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,10 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 
 /**
@@ -388,13 +386,12 @@ public class NewAdActivity extends Activity implements OnClickListener{
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.ad_post) {
-            String current_user = AdManager.getCurrentUser(this).getString("email");
             String title = edit_title.getText().toString();
             String desc = edit_desc.getText().toString();
             String time_from = tvDisplayDate_from.getText().toString() + tvDisplayTime_from.getText().toString();
             String time_to = tvDisplayDate_to.getText().toString() +      tvDisplayTime_to.getText().toString();
             String timing = time_from+time_to;
-            final String catagory = types.get(type.getSelectedItem());
+            final String category = types.get(type.getSelectedItem());
             String img_url = "drawable/kg_launcher";
             //final String role = roles.get(mRole.getSelectedItem());
 
@@ -408,81 +405,33 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
             if (invalid == false) {
 
-                Handler.Callback createNewAdCallback = new Handler.Callback() {
-                    Bundle result;
-                    JSONObject ad;
-//                    Uri uri;
-
-                    @Override
-                    public boolean handleMessage(Message message) {
-                        result = message.getData();
-
-                        if (result.getInt("success") != 1 || result.getInt("status") != 201) {
-                            // Dismiss the progress dialog
-                            postingAd.dismiss();
-                            //Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
-
-                            // Show an error to the user if a ad with that email address already exists
-                            if (result.getInt("status") == 409) {
-                                Toast toast = Toast.makeText(getApplicationContext(), R.string.add_ad_exists, Toast.LENGTH_LONG);
-                                toast.show();
-                            }
-
-                            return false;
-                        }
-
-
-                        try {
-                            ad = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
-
-                            // Set the current user in the Shared Preferences so it can be used by other activities
-                            //AdManager.setCurrentAd(getApplicationContext(), ad.getString("email"), role);
-                            Intent intent = new Intent(getBaseContext(), SellerActivity.class);
-
-//                            if (role.equals(AppData.ROLE_KG)) {
-//                                intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-//                            }
-//
-//                            else if (role.equals(AppData.ROLE_SELLER)) {
-//                                intent = new Intent(getBaseContext(), SellerActivity.class);
-//                            }
-
-                            //Intent intent = new Intent(getBaseContext(), Main.class);
-
-                            // Dismiss the progress dialog and start the new activity
-                            postingAd.dismiss();
-                            setResult(RESULT_OK, intent);
-                            finish();
-
-                        }
-
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-
-                        catch (IOException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-
-                        return true;
-                    }
-                };
-
-                // Show a progress dialog to the user
-                postingAd = ProgressDialog.show(this, getString(R.string.posting_new_ad), getString(R.string.posting_new_ad_msg), true);
-
-                // Create a new user with the supplied details
-
-                AdManager.createNewAd(current_user,title, desc, timing,catagory, img_url,createNewAdCallback);
-
+                // Create a new advertisement and post it
+                createAdvertisement(title, desc, img_url, category, timing);
             }
 
         }
 
 
     }
+
+    private void createAdvertisement(String title, String description, String photoUrl, String category, String timing) {
+        String id = "unsynced_" + UUID.randomUUID();
+        String ownerEmail = AccountManager.getCurrentUser(this).getString("email");
+        String status = "OPEN";
+
+        ContentValues values = new ContentValues();
+        values.put(AppData.Advertisements._ID, id);
+        values.put(AppData.Advertisements.COLUMN_NAME_OWNER, ownerEmail);
+        values.put(AppData.Advertisements.COLUMN_NAME_TITLE, title);
+        values.put(AppData.Advertisements.COLUMN_NAME_DESCRIPTION, description);
+        values.put(AppData.Advertisements.COLUMN_NAME_PHOTO, photoUrl);
+        values.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, category);
+        values.put(AppData.Advertisements.COLUMN_NAME_STATUS, status);
+        values.put(AppData.Advertisements.COLUMN_NAME_TIMING, timing);
+
+        getContentResolver().insert(AppData.Advertisements.CONTENT_ID_URI_BASE, values);
+    }
+
     private void handleCameraPhoto() {
 
         if (mCurrentPhotoPath != null) {
