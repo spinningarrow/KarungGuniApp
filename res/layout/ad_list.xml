@@ -22,5 +22,12 @@
         android:text="@string/noData"
         android:gravity="center"
         android:textSize="25sp" />
+    <!--<Button-->
+            <!--android:id="@+id/btn_getloc"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="get location"-->
+
+            <!--android:textSize="25sp" />-->
 
 </LinearLayout>
