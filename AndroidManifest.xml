@@ -116,10 +116,7 @@
             android:name="com.onemore.karungguniapp.AdDetailActivity"
             android:label="@string/app_name">
         </activity>
-        <activity
-                android:name="com.onemore.karungguniapp.LBS.GetLocationWithGPS"
-                android:label="@string/app_name">
-        </activity>
+
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
     </application>
 

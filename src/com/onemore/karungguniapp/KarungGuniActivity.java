@@ -1,5 +1,7 @@
 package com.onemore.karungguniapp;
 
+import com.omemore.karungguniapp.listview.AdvertisementList;
+
 import android.accounts.Account;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;

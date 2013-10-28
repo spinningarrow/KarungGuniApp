@@ -100,7 +100,70 @@ public class GetLocationWithGPS extends Service {
         locationMgr.addGpsStatusListener(gpsListener);
 
 
-}
+//        openGMap = (Button) findViewById(R.id.openGMap_button);
+//        openGMap.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v){
+////                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+////                startActivity(new Intent(KarangGuniActivity.this, android.net.Uri.parse(uri) ));
+//                if (latitude !=-1&& longitude!=-1){
+////                    latitude =  1.351909;
+////                    longitude = 103.703675;
+//                        int zoom=16;
+//                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f", latitude*1e-6, longitude*1e-6,zoom,latitude*1e-6,longitude*1e-6); /*,latitude/1000000,longitude/1000000,zoom);*/
+//                    Uri parsedURI = Uri.parse(uri);
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, parsedURI);
+//                    openGMap.setText(parsedURI.toString());
+//                    startActivity(intent);
+//                 }else{
+//                    openGMap.setText("Location not Available");
+////                    latitude =  1351909.0;
+////                    longitude = 103703675.0;
+////                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f", latitude*1e-6, longitude*1e-6,20,latitude*1e-6,longitude*1e-6);
+////                    Uri parsedURI = Uri.parse(uri);
+////                    openGMap.setText(parsedURI.toString());
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    startActivity(intent);
+//                }
+//            }
+//        });
+
+
+    }
+
+//    @Override
+//    protected void onResume() {
+//        //super.onResume();
+//
+//        // determine if GPS is enabled or not, if not prompt user to enable it
+//        if (!locationMgr.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("GPS is not enabled")
+//                    .setMessage("Would you like to go the location settings and enable GPS?").setCancelable(true)
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
+//                        }
+//                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int id) {
+//                    dialog.cancel();
+//                    finish();
+//                }
+//            });
+//            AlertDialog alert = builder.create();
+//            alert.show();
+//        } else {
+//            LocationHelper locationHelper = new LocationHelper(locationMgr, handler, KarungGuniActivity.LOG_TAG);
+//            locationHelper.getCurrentLocation(30);
+//        }
+//
+//        locationMgr.addGpsStatusListener(gpsListener);
+//    }
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        locationMgr.removeGpsStatusListener(gpsListener);
+//    }
 
     @Override
     public IBinder onBind(Intent intent) {

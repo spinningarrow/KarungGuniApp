@@ -1,4 +1,10 @@
-package com.onemore.karungguniapp;
+package com.omemore.karungguniapp.listview;
+
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.ListFragment;
 import android.app.LoaderManager;
@@ -7,19 +13,28 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
-import com.onemore.karungguniapp.model.Advertisement;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.onemore.karungguniapp.AdDetailActivity;
+import com.onemore.karungguniapp.AppData;
+import com.onemore.karungguniapp.R;
+import com.onemore.karungguniapp.AppData.Advertisements;
+import com.onemore.karungguniapp.R.id;
+import com.onemore.karungguniapp.R.layout;
+import com.onemore.karungguniapp.R.string;
+import com.onemore.karungguniapp.model.Advertisement;
 
 public class AdvertisementList extends ListFragment
 implements LoaderManager.LoaderCallbacks<Cursor> 
@@ -27,7 +42,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 	// This is the Adapter being used to display the list's data.
 	SimpleCursorAdapter mAdapter;
-//	private KGApp app;
+	//	private KGApp app;
 	//	MongoAdapter mAdapter;
 
 
@@ -38,6 +53,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	String mCurFilter;
 	Context mContext;
 	List<Advertisement> ads;
+	ImageLoader imageLoader;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) 
@@ -46,7 +62,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 		// Give some text to display if there is no data. 
 		setEmptyText(getResources().getString(R.string.noData));
-//		app = (KGApp)getActivity().getApplication();
+		//		app = (KGApp)getActivity().getApplication();
 		//		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		// We have a menu item to show in action bar.
 		setHasOptionsMenu(true);
@@ -76,11 +92,36 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		//			});
 		//		mListView.addFooterView(footer);
 		// Create an empty adapter we will use to display the loaded data.
+		//		ImageView iv = (ImageView) getActivity().findViewById(R.id.icon);
+		//		String url = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/1075913_67400590475_1168305305_q.jpg";		
+		//		iv.setImageDrawable(LoadImageFromWebOperations(url));
 		mAdapter = new SimpleCursorAdapter(getActivity(),
 				R.layout.advertisement, null,
-				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION},
-				new int[] { R.id.title, R.id.distance }, 0);
+				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION, AppData.Advertisements.COLUMN_NAME_PHOTO},
+				new int[] { R.id.title, R.id.distance, R.id.list_image }, 0);
+		imageLoader=new ImageLoader(getActivity().getApplicationContext());
+		mAdapter.setViewBinder(new ViewBinder() {
 
+			@Override
+			public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+				if (view.getId() == R.id.list_image) {
+					ImageView image = (ImageView) view;
+					String url;
+					try {
+						url = new String(cursor.getBlob(columnIndex), "UTF-8");
+						url = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/1075913_67400590475_1168305305_q.jpg";
+						imageLoader.DisplayImage(url, image);
+						//	                     int resID = getResources().getIdentifier(cursor.getString(columnIndex), "drawable",  getApplicationContext().getPackageName());
+						//	                     IV.setImageDrawable(getApplicationContext().getResources().getDrawable(resID));
+						return true;
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				return false;
+			}
+		});
 		setListAdapter(mAdapter);
 		//        if (app.getSectionList().isEmpty()) {
 		////            if (app.connectionPresent()) {
@@ -104,13 +145,22 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 				});
 
 		// Start out with a progress indicator.
-		//		setListShown(false);
+		setListShown(false);
 
 		// Prepare the loader.  Either re-connect with an existing one,
 		// or start a new one.
 		getLoaderManager().initLoader(0, null, this);
 	}
 
+	public static Drawable LoadImageFromWebOperations(String url) {
+		try {
+			InputStream is = (InputStream) new URL(url).getContent();
+			Drawable d = Drawable.createFromStream(is, "src name");
+			return d;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,7 +169,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		parent.addView(v, 0);
 		return parent;
 	}
-	
+
 	//	public boolean onQueryTextChange(String newText) {
 	//		// Called when the action bar search text has changed.  Update
 	//		// the search filter, and restart the loader to do a new query
@@ -155,9 +205,6 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		Uri baseUri = AppData.Advertisements.CONTENT_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
-		//		String select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
-		//				+ Contacts.HAS_PHONE_NUMBER + "=1) AND ("
-		//				+ Contacts.DISPLAY_NAME + " != '' ))";
 		return new CursorLoader(getActivity(), baseUri,
 				null, null, null,
 				null);
