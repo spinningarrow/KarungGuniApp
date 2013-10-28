@@ -41,9 +41,13 @@ public class AppDataProvider extends ContentProvider{
         sAdvertisementsProjectionMap = new HashMap<String, String>();
         sAdvertisementsProjectionMap.put(AppData.Advertisements._ID, AppData.Advertisements._ID);
         sAdvertisementsProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_OWNER, AppData.Advertisements.COLUMN_NAME_OWNER);
         sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_TITLE);
         sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_DESCRIPTION, AppData.Advertisements.COLUMN_NAME_DESCRIPTION);
-//        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_PHOTO, AppData.Advertisements.COLUMN_NAME_PHOTO);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_PHOTO, AppData.Advertisements.COLUMN_NAME_PHOTO);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, AppData.Advertisements.COLUMN_NAME_CATEGORY);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_STATUS, AppData.Advertisements.COLUMN_NAME_STATUS);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_TIMING, AppData.Advertisements.COLUMN_NAME_TIMING);
 
     }
 
@@ -223,8 +227,34 @@ public class AppDataProvider extends ContentProvider{
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        int rowsUpdated = 0;
+
+        // Get a writable database (will create if it doesn't exist)
+        db = mOpenHelper.getWritableDatabase();
+
+        // Match the incoming URI to a table name
+        switch (AppDataUriMatcher.sUriMatcher.match(uri)) {
+            case AppDataUriMatcher.ADVERTISEMENTS:
+            case AppDataUriMatcher.ADVERTISEMENT_ID:
+                try {
+                    rowsUpdated = db.update(AppData.Advertisements.TABLE_NAME, contentValues, selection, selectionArgs);
+
+                    // Notify observers registered against this provider that the data changed.
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+
+        return rowsUpdated;
     }
 
     // Helper class to connect to the SQLite database

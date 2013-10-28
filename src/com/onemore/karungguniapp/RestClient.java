@@ -122,12 +122,13 @@ public class RestClient {
     // Call the callback when the query is complete
     public static Bundle query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, Handler.Callback callback) {
         Log.w("REST_CLIENT", uri.toString());
+        String url = API_PATH + getRequestEndpoint(uri) + (selection != null ? selection : "");
 
         // If callback is null, GET the response synchronously (used in SyncAdapter)
         if (callback == null) {
             Bundle result = new Bundle();
 
-            HttpResponse httpResponse = httpClient.get(API_PATH + getRequestEndpoint(uri), null);
+            HttpResponse httpResponse = httpClient.get(url, null);
             result.putInt("status", httpResponse.getStatus());
             result.putString("response", httpResponse.getBodyAsString());
 
@@ -138,7 +139,7 @@ public class RestClient {
         final Handler handler = new Handler(callback);
         final Message message = Message.obtain();
 
-        httpClient.get(API_PATH + getRequestEndpoint(uri) + (selection != null ? selection : ""), null, new AsyncCallback() {
+        httpClient.get(url, null, new AsyncCallback() {
 
             // Store the result in a bundle which will then be passed as a message to the query callback
             // result schema:
@@ -171,13 +172,25 @@ public class RestClient {
     }
 
     // Insert into the database
-    public static void insert(Uri uri, ParameterMap params, Handler.Callback callback) {
+    public static Bundle insert(Uri uri, ParameterMap params, Handler.Callback callback) {
+        String url = API_PATH + getRequestEndpoint(uri);
 
+        // If callback is null, GET the response synchronously (used in SyncAdapter)
+        if (callback == null) {
+            Bundle result = new Bundle();
+
+            HttpResponse httpResponse = httpClient.post(url, params);
+            result.putInt("status", httpResponse.getStatus());
+            result.putString("response", httpResponse.getBodyAsString());
+
+            return result;
+        }
+
+        // POST params to the API request endpoint asynchronously
         final Handler handler = new Handler(callback);
         final Message message = Message.obtain();
 
-        // POST params to the API request endpoint asynchronously
-        httpClient.post(API_PATH + getRequestEndpoint(uri), params, new AsyncCallback() {
+        httpClient.post(url, params, new AsyncCallback() {
 
             // Store the result in a bundle which will then be passed as a message to the query callback
             // result schema:
@@ -205,5 +218,7 @@ public class RestClient {
                 e.printStackTrace();
             }
         });
+
+        return null;
     }
 }
