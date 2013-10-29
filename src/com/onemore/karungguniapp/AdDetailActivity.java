@@ -89,42 +89,27 @@ public class AdDetailActivity extends Activity
         String  owner ;
         String  timing ;
 
+        Bundle extras = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
 
+        if (extras == null) {
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-
-                category     = null;
-                title        = null;
-                id           = null;
-                status       = null;
-                photo_url    = null;
-                description  = null;
-                owner        = null;
-                timing       = null;
-            } else {
-                category      = extras.getString("CATEGORY");
-                title         = extras.getString("TITLE");
-                id            = extras.getString("ID");
-                status        = extras.getString("STATUS");
-                photo_url     = extras.getString("PHOTO_URL");
-                description   = extras.getString("DESCRIPTION");
-                owner         = extras.getString("OWNER");
-                timing        = extras.getString("TIMING");
-
-
-            }
+            category     = null;
+            title        = null;
+            id           = null;
+            status       = null;
+            photo_url    = null;
+            description  = null;
+            owner        = null;
+            timing       = null;
         } else {
-            //id = (String) savedInstanceState.getSerializable("ID");
-            category      = (String) savedInstanceState.getSerializable("CATEGORY");
-            title         = (String) savedInstanceState.getSerializable("TITLE");
-            id            = (String) savedInstanceState.getSerializable("ID");
-            status        = (String) savedInstanceState.getSerializable("STATUS");
-            photo_url     = (String) savedInstanceState.getSerializable("PHOTO_URL");
-            description   = (String) savedInstanceState.getSerializable("DESCRIPTION");
-            owner         = (String) savedInstanceState.getSerializable("OWNER");
-            timing        = (String) savedInstanceState.getSerializable("TIMING");
+            category      = extras.getString(AppData.Advertisements.COLUMN_NAME_CATEGORY);
+            title         = extras.getString(AppData.Advertisements.COLUMN_NAME_TITLE);
+            id            = extras.getString(AppData.Advertisements._ID);
+            status        = extras.getString(AppData.Advertisements.COLUMN_NAME_STATUS);
+            photo_url     = extras.getString(AppData.Advertisements.COLUMN_NAME_PHOTO);
+            description   = extras.getString(AppData.Advertisements.COLUMN_NAME_DESCRIPTION);
+            owner         = extras.getString(AppData.Advertisements.COLUMN_NAME_OWNER);
+            timing        = extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING);
         }
 
 

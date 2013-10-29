@@ -26,7 +26,7 @@ public class AppData {
     // date_modified [Integer]
     // NOTE: _id is always unique, but the users table gets individual records
     // by email since that is easier
-    public static final String COLUMN_NAME_DATE_CREATED = "date_created";
+    public static final String COLUMN_NAME_DATE_CREATED = "created";
     public static final String COLUMN_NAME_DATE_MODIFIED = "date_modified";
 
     // Contract for the Users table:
