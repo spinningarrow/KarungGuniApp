@@ -45,5 +45,6 @@
     <string name = "choose_method_to_upload_photo">Upload a photo</string>
     <string name="photo_desc">Uploaded Photo</string>
     <string name="album_name">CameraSample</string>
+    <string name="new_ad">New Advertisement</string>
 
 </resources>
