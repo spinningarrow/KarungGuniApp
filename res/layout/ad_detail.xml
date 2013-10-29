@@ -151,6 +151,11 @@
                        android:scaleType="fitStart" android:visibility="gone"/>
             <ProgressBar android:id="@+id/progress2" android:layout_width="125dp"
                          android:layout_height="125dp" />
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Find the location"
+                    android:id="@+id/btn_gmap" android:layout_gravity="left|center_vertical"/>
             <TextView  android:id="@+id/dt_dist"
                        android:layout_width="500dp" android:layout_height="500dp"
                        android:visibility="gone"/>

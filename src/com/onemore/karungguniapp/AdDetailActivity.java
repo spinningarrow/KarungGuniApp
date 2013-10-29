@@ -1,10 +1,13 @@
 package com.onemore.karungguniapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ public class AdDetailActivity extends Activity
     private TextView tv_timing       ;
     private ImageView photo;
     private  TextView tv_addr;
+    private  Button btn_gmap;
 
     private double latitude,longitude;
     private String testAddr;
@@ -46,6 +50,8 @@ public class AdDetailActivity extends Activity
         return addr.replace(" ","+");
 
     }
+
+
 
 
     @Override
@@ -63,6 +69,7 @@ public class AdDetailActivity extends Activity
         tv_owner      =(TextView)findViewById(R.id.dt_owner) ;
         tv_timing     =(TextView)findViewById(R.id.dt_timing) ;
         tv_addr =(TextView)findViewById(R.id.dt_addr);
+        btn_gmap = (Button) findViewById(R.id.btn_gmap);
 
         app = (KGApp) getApplication();
 //        if(latitude !=-1 && longitude != -1 &&latitude !=0 && longitude != 0 )
@@ -137,66 +144,26 @@ public class AdDetailActivity extends Activity
 
 
 
+        btn_gmap.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if (latitude !=-1&& longitude!=-1){
+                    String mockAddr = "block274A jurong west Avenue 3, Singapore";
+//                    latitude =  1.351909;
+//                    longitude = 103.703675;
+//                    int zoom=16;
+                    String uri = "https://maps.google.com/maps?saddr=&daddr="+parseAddress(mockAddr);
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    startActivity(i);
 
-//        Advertisement advertisement = app.getCurrentItem();
+                }else{
+                    btn_gmap.setText("Location not Available");
 
-        //getLoaderManager().initLoader(0, savedInstanceState, this);
-
-//        if (advertisement != null) {
-//            ImageView icon = (ImageView) findViewById(R.id.item_img);
-//            new RetrieveImageTask(icon).execute(advertisement.getPhotoPath());
-//
-//            TextView category = (TextView) findViewById(R.id.category);
-//            //category.setText(item.getCategory());
-//            category.setText("Newspaper");
-//
-//
-//            TextView addr_short = (TextView) findViewById(R.id.addr_short);
-//            //addr_short.setText(item.getLocation());
-//            addr_short.setText("addr");
-//
-//        } else {
-//            Toast.makeText(this, "Error, no current item selected, nothing to see here", Toast.LENGTH_LONG).show();
-//        }
-//
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    startActivity(intent);
+                }
+            }
+        });
     }
-
-
-
-
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-//        Uri baseUri = AppData.Advertisements.CONTENT_URI;
-//        // Now create and return a CursorLoader that will take care of
-//        // creating a Cursor for the data being displayed.
-//        String id;
-//
-//        if (bundle == null) {
-//            Bundle extras = getIntent().getExtras();
-//            if(extras == null) {
-//                id= null;
-//            } else {
-//                id= extras.getString("ID");
-//            }
-//        } else {
-//            id= (String) bundle.getSerializable("ID");
-//        }
-//
-//
-////        return new CursorLoader(this, baseUri,
-////                null, null, null,
-////                null);
-//}
-
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-//        int x = 1;
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-//        //To change body of implemented methods use File | Settings | File Templates.
-//    }
 public class RetrieveSellerLocAndCalculateDistance extends AsyncTask<String, Void, Double> {
     private TextView textView;
 
@@ -209,7 +176,7 @@ public class RetrieveSellerLocAndCalculateDistance extends AsyncTask<String, Voi
     protected Double doInBackground(String... args) {
         Double dist = new Double(0);
         String testAddr = "======================";
-        testAddr = "block274a Jurong west avenue 3 Singapore";
+        testAddr = "block271a Jurong west avenue 5 Singapore";
         String parsed_addr = parseAddress(testAddr);
         double[] seller_location =  GeoUtil.getLatLongFromAddress(parsed_addr);
         testAddr =String.valueOf(seller_location[0] )+"  "+ String.valueOf(seller_location[1]);
