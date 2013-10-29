@@ -102,10 +102,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 					String url;
 					try {
 						url = new String(cursor.getBlob(columnIndex), "UTF-8");
-						url = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/1075913_67400590475_1168305305_q.jpg";
 						imageLoader.DisplayImage(url, image);
-						//	                     int resID = getResources().getIdentifier(cursor.getString(columnIndex), "drawable",  getApplicationContext().getPackageName());
-						//	                     IV.setImageDrawable(getApplicationContext().getResources().getDrawable(resID));
 						return true;
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
@@ -116,15 +113,6 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 			}
 		});
 		setListAdapter(mAdapter);
-		//        if (app.getSectionList().isEmpty()) {
-		////            if (app.connectionPresent()) {
-		////                new ParseFeedTask().execute();
-		////            } else {
-		//                Toast.makeText(getActivity(), getString(R.string.deal_list_network_unavailable), Toast.LENGTH_LONG).show();
-		//            //}
-		//        } else {
-		//            //onLoaderReset(app.getSectionList().get(0).getItems());
-		//        }
 
 		mListView.setOnItemClickListener(new AdListClickListerner(mListView, mContext, app));
 
