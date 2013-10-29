@@ -24,9 +24,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -40,7 +38,7 @@ import java.util.*;
  * Time: 5:52 PM
  * To change this template use File | Settings | File Templates.
  */
-public class NewAdActivity extends Activity implements OnClickListener{
+public class NewAdActivity extends Activity implements OnClickListener {
     private Button btn_setDate_from;
     private Button btn_setTime_from;
     private Button btn_setDate_to;
@@ -63,6 +61,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
     private static File file;
 
     private static HashMap<String, String> types = new HashMap<String, String>();
+
     static {
         types.put("Newspaper", AdType.NEWSPAPER.toString());
         types.put("Books", AdType.BOOKS.toString());
@@ -73,6 +72,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
 
     }
+
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
     private String mCurrentPhotoPath;
     private ProgressDialog postingAd;
@@ -86,7 +86,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
     private static final int DATE_DIALOG_ID2 = 989;
     private static final int TIME_DIALOG_ID1 = 998;
     private static final int TIME_DIALOG_ID2 = 988;
-    private static final int CHOOSE_PHOTO_DIALOG  = 899;
+    private static final int CHOOSE_PHOTO_DIALOG = 899;
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
 
@@ -100,13 +100,13 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
         btn_setDate_from = (Button) findViewById(R.id.set_date_from);
         //pickDate.setOnClickListener();
-        btn_setTime_from = (Button)findViewById(R.id.set_time_from);
+        btn_setTime_from = (Button) findViewById(R.id.set_time_from);
         btn_setDate_to = (Button) findViewById(R.id.set_date_to);
         //pickDate.setOnClickListener();
-        btn_setTime_to = (Button)findViewById(R.id.set_time_to);
-        btn_post =(Button)findViewById(R.id.ad_post);
+        btn_setTime_to = (Button) findViewById(R.id.set_time_to);
+        btn_post = (Button) findViewById(R.id.ad_post);
         btn_post.setOnClickListener(this);
-        imageview = (ImageView)findViewById(R.id.new_ad_img_view);
+        imageview = (ImageView) findViewById(R.id.new_ad_img_view);
 
         edit_title = (EditText) findViewById(R.id.new_ad_title);
         edit_desc = (EditText) findViewById(R.id.new_add_description);
@@ -125,7 +125,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
                 new ArrayList<String>(types.keySet()));
 
         type.setAdapter(spinnerArrayAdapter);
-        btn_uploadPhoto = (Button)findViewById(R.id.new_ad_photo);
+        btn_uploadPhoto = (Button) findViewById(R.id.new_ad_photo);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
         } else {
@@ -139,28 +139,30 @@ public class NewAdActivity extends Activity implements OnClickListener{
         addListenerOnButton();
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch(requestCode) {
+        switch (requestCode) {
             case 0:
-                if(resultCode == RESULT_OK){
-                    if ( resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
+                    if (resultCode == RESULT_OK) {
 //                        Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
 //                        imageview.setImageBitmap(photo);
-                          handleCameraPhoto();
+                        handleCameraPhoto();
                     }
                 }
 
                 break;
             case 1:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
                     imageview.setImageURI(selectedImage);
                 }
                 break;
         }
     }
+
     public void setCurrentDateOnView() {
 
 
@@ -183,7 +185,8 @@ public class NewAdActivity extends Activity implements OnClickListener{
         datePicker.init(year, month, day, null);
 
     }
-    public void setCurrentTimeOnView(){
+
+    public void setCurrentTimeOnView() {
 
 
         final Calendar c = Calendar.getInstance();
@@ -202,6 +205,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
         timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(min);
     }
+
     public void addListenerOnButton() {
 
         btn_setDate_from.setOnClickListener(new OnClickListener() {
@@ -260,33 +264,34 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
 
     }
+
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DATE_DIALOG_ID1:
                 // set date picker as current date
                 return new DatePickerDialog(this, datePickerListener_from,
-                        year, month,day);
+                        year, month, day);
             case DATE_DIALOG_ID2:
                 // set date picker as current date
                 return new DatePickerDialog(this, datePickerListener_to,
-                        year, month,day);
+                        year, month, day);
 
 
             case TIME_DIALOG_ID1:
                 // set time picker as current time
                 return new TimePickerDialog(this,
-                        timePickerListener_from, hour, min,false);
+                        timePickerListener_from, hour, min, false);
             case TIME_DIALOG_ID2:
                 // set time picker as current time
                 return new TimePickerDialog(this,
-                        timePickerListener_to, hour, min,false);
+                        timePickerListener_to, hour, min, false);
             case CHOOSE_PHOTO_DIALOG:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.choose_method_to_upload_photo).setItems(R.array.cam_choose_array, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        if(which==0)   {
+                        if (which == 0) {
 
                             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -299,7 +304,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
 //                            cloudinaryTest(new File("/mnt/sdcard/DCIM/100MEDIA/IMAG0001.jpg"));
                         }
-                        if(which==1){
+                        if (which == 1) {
 
                             Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -313,6 +318,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
         }
         return null;
     }
+
     private DatePickerDialog.OnDateSetListener datePickerListener_from
             = new DatePickerDialog.OnDateSetListener() {
 
@@ -393,6 +399,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
                 }
             };
+
     private static String pad(int c) {
         if (c >= 10)
             return String.valueOf(c);
@@ -406,8 +413,8 @@ public class NewAdActivity extends Activity implements OnClickListener{
             String title = edit_title.getText().toString();
             String desc = edit_desc.getText().toString();
             String time_from = tvDisplayDate_from.getText().toString() + tvDisplayTime_from.getText().toString();
-            String time_to = tvDisplayDate_to.getText().toString() +      tvDisplayTime_to.getText().toString();
-            String timing = time_from+time_to;
+            String time_to = tvDisplayDate_to.getText().toString() + tvDisplayTime_to.getText().toString();
+            String timing = time_from + time_to;
             final String category = types.get(type.getSelectedItem());
             String img_url = "drawable/kg_launcher";
             //final String role = roles.get(mRole.getSelectedItem());
@@ -476,6 +483,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
         }
 
     }
+
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
         File f = new File(mCurrentPhotoPath);
@@ -484,10 +492,11 @@ public class NewAdActivity extends Activity implements OnClickListener{
         this.sendBroadcast(mediaScanIntent);
 
     }
+
     private void setPic() {
 
 		/* There isn't enough memory to open up more than a couple camera photos */
-		/* So pre-scale the target bitmap into which the file is decoded */
+        /* So pre-scale the target bitmap into which the file is decoded */
 
 		/* Get the size of the ImageView */
         int targetW = imageview.getWidth();
@@ -503,7 +512,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 		/* Figure out which way needs to be reduced less */
         int scaleFactor = 1;
         if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
         }
 
 		/* Set bitmap options to scale the image decode target */
@@ -520,6 +529,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
         imageview.setVisibility(View.VISIBLE);
 
     }
+
     private File setUpPhotoFile() throws IOException {
 
         File f = createImageFile();
@@ -527,6 +537,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
         return f;
     }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -535,9 +546,11 @@ public class NewAdActivity extends Activity implements OnClickListener{
         File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
         return imageF;
     }
+
     private String getAlbumName() {
         return getString(R.string.album_name);
     }
+
     private File getAlbumDir() {
         File storageDir = null;
 
@@ -546,8 +559,8 @@ public class NewAdActivity extends Activity implements OnClickListener{
             storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
 
             if (storageDir != null) {
-                if (! storageDir.mkdirs()) {
-                    if (! storageDir.exists()){
+                if (!storageDir.mkdirs()) {
+                    if (!storageDir.exists()) {
                         Log.d("CameraSample", "failed to create directory");
                         return null;
                     }
@@ -560,13 +573,13 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
         return storageDir;
     }
+
     private File dispatchTakePictureIntent(int actionCode, Intent takePictureIntent) {
 
         //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File f = null;
-        switch(actionCode) {
+        switch (actionCode) {
             case 0:
-
 
 
                 try {
@@ -584,7 +597,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
                 break;
         } // switch
 
-         startActivityForResult(takePictureIntent, actionCode);
+        startActivityForResult(takePictureIntent, actionCode);
         return f;
     }
 
