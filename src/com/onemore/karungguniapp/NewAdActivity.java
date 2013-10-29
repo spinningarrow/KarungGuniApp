@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import com.cloudinary.Cloudinary;
 import com.onemore.karungguniapp.PhotoService.AlbumStorageDirFactory;
 import com.onemore.karungguniapp.PhotoService.BaseAlbumDirFactory;
 import com.onemore.karungguniapp.PhotoService.FroyoAlbumDirFactory;
@@ -126,7 +127,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
         addListenerOnButton();
 
-
+        cloudinaryTest();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -412,6 +413,16 @@ public class NewAdActivity extends Activity implements OnClickListener{
         }
 
 
+    }
+
+    public void cloudinaryTest() {
+        Map config = new HashMap();
+        config.put("cloud_name", "hsl8yvyi0");
+        config.put("api_key", "638233174111431");
+        config.put("api_secret", "19YLRLY0ZkMunO7oOJDfmkCNDB0");
+        Cloudinary cloudinary = new Cloudinary(config);
+
+        Log.w("NEW AD CLOUDINARY", cloudinary.url().generate("sample.jpg"));
     }
 
     private void createAdvertisement(String title, String description, String photoUrl, String category, String timing) {

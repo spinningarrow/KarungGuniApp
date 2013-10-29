@@ -53,6 +53,8 @@
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/app_id" />
 
+        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://638233174111431:19YLRLY0ZkMunO7oOJDfmkCNDB0@hsl8yvyi0"/>
+
         <service android:name=".AccountService">
             <!-- Required filter used by the system to launch our account service. -->
             <intent-filter>
