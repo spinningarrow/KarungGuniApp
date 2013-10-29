@@ -164,7 +164,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         updatedId.put("_id", _id);
                         String[] selectionArgs = new String[] { mCursor.getString(mCursor.getColumnIndex(AppData.Advertisements._ID)) };
 
-                        int rowsUpdated = mContentResolver.update(AppData.Advertisements.CONTENT_ID_URI_BASE, updatedId, "WHERE _ID = ?", selectionArgs);
+                        int rowsUpdated = mContentResolver.update(AppData.Advertisements.CONTENT_ID_URI_BASE, updatedId, "_ID = ?", selectionArgs);
 
                         if (rowsUpdated == 0) {
                             Log.w("SYNC_ADAPTER", "Updating error occurred ;_;");
@@ -189,9 +189,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static Bundle getLastSync(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Bundle lastSync = new Bundle();
-        String lastSyncTableKey = "lastSync." + AppData.Advertisements.TABLE_NAME;
-        lastSync.putLong(lastSyncTableKey, prefs.getLong(lastSyncTableKey, -1));
-
+        lastSync.putLong(AppData.Advertisements.TABLE_NAME, prefs.getLong("lastSync." + AppData.Advertisements.TABLE_NAME, -1));
         return lastSync;
     }
 
