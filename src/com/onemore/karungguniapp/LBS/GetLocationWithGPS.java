@@ -30,7 +30,7 @@ public class GetLocationWithGPS extends Service {
     public static final String LOC_DATA = "LOC_DATA";
     private Context mContext;
 
-    private LocationManager locationMgr;
+    public LocationManager locationMgr;
     private GpsListener gpsListener;
     private GpsStatus gpsStatus;
     private Handler handler;
@@ -77,7 +77,7 @@ public class GetLocationWithGPS extends Service {
 
         latitude = longitude = -1;
         if (!locationMgr.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
             builder.setTitle("GPS is not enabled")
                     .setMessage("Would you like to go the location settings and enable GPS?").setCancelable(true)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

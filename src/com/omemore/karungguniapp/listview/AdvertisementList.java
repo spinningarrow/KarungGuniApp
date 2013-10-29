@@ -1,16 +1,9 @@
 package com.omemore.karungguniapp.listview;
 
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -19,22 +12,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
-
-import com.onemore.karungguniapp.AdDetailActivity;
 import com.onemore.karungguniapp.AppData;
+import com.onemore.karungguniapp.KGApp;
 import com.onemore.karungguniapp.R;
-import com.onemore.karungguniapp.AppData.Advertisements;
-import com.onemore.karungguniapp.R.id;
-import com.onemore.karungguniapp.R.layout;
-import com.onemore.karungguniapp.R.string;
 import com.onemore.karungguniapp.model.Advertisement;
+
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdvertisementList extends ListFragment
 implements LoaderManager.LoaderCallbacks<Cursor> 
@@ -42,7 +34,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 	// This is the Adapter being used to display the list's data.
 	SimpleCursorAdapter mAdapter;
-	//	private KGApp app;
+		private KGApp app;
 	//	MongoAdapter mAdapter;
 
 
@@ -62,7 +54,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 
 		// Give some text to display if there is no data. 
 		setEmptyText(getResources().getString(R.string.noData));
-		//		app = (KGApp)getActivity().getApplication();
+				app = (KGApp)getActivity().getApplication();
 		//		mAdapter = new MongoAdapter(getActivity(), R.layout.advertisement);
 		// We have a menu item to show in action bar.
 		setHasOptionsMenu(true);
@@ -95,6 +87,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		//		ImageView iv = (ImageView) getActivity().findViewById(R.id.icon);
 		//		String url = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/1075913_67400590475_1168305305_q.jpg";		
 		//		iv.setImageDrawable(LoadImageFromWebOperations(url));
+        mContext = getActivity();
 		mAdapter = new SimpleCursorAdapter(getActivity(),
 				R.layout.advertisement, null,
 				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION, AppData.Advertisements.COLUMN_NAME_PHOTO},
@@ -133,16 +126,8 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		//            //onLoaderReset(app.getSectionList().get(0).getItems());
 		//        }
 
-		mListView.setOnItemClickListener(
-				new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+		mListView.setOnItemClickListener(new AdListClickListerner(mListView, mContext, app));
 
-						Intent intent = new Intent(getActivity(),AdDetailActivity.class);
-						startActivity(intent);
-						mContext = getActivity();
-					}
-				});
 
 		// Start out with a progress indicator.
 		setListShown(false);
@@ -169,6 +154,13 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		parent.addView(v, 0);
 		return parent;
 	}
+//    @Override
+//    public void onListItemClick(ListView listView, View view, int position, long id) {
+//        view.setBackgroundColor(android.R.color.background_light);
+//        app.setCurrentItem(app.getItems().get(position));
+//        Intent dealDetails = new Intent(mContext, AdDetailActivity.class);
+//        startActivity(dealDetails);
+//    }
 
 	//	public boolean onQueryTextChange(String newText) {
 	//		// Called when the action bar search text has changed.  Update

@@ -19,15 +19,5 @@
         android:text="@string/noData"
         android:gravity="center"
         android:textSize="25sp" />
-<<<<<<< HEAD
-    <!--<Button-->
-            <!--android:id="@+id/btn_getloc"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="get location"-->
 
-            <!--android:textSize="25sp" />-->
-
-=======
->>>>>>> 43d533d947ea196251071d366e1637988e7c99a9
 </LinearLayout>

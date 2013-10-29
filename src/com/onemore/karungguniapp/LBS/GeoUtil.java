@@ -1,5 +1,10 @@
 package com.onemore.karungguniapp.LBS;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.provider.Settings;
+import com.onemore.karungguniapp.KarungGuniActivity;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -67,6 +72,7 @@ public class GeoUtil {
         }
 
     }
+
 
     public static double calculateDistance(double[] pointA, double[] pointB){
         return Math.sqrt(Math.pow(pointA[0]-pointB[0],2)+Math.pow(pointA[1]-pointB[1],2));

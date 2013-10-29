@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class KGApp extends Application {
@@ -33,7 +31,7 @@ public class KGApp extends Application {
     private ConnectivityManager cMgr;
     //private DailyDealsFeedParser parser;
 
-    private List<Section> sectionList;
+    private Section currentSection;
     private Map<Long, Bitmap> imageCache;
     private Advertisement currentItem;
 
@@ -44,8 +42,8 @@ public class KGApp extends Application {
 //        return this.parser;
 //    }
 //
-    public List<Section> getSectionList() {
-        return this.sectionList;
+    public Section getSection() {
+        return this.currentSection;
     }
 
     public Map<Long, Bitmap> getImageCache() {
@@ -68,7 +66,7 @@ public class KGApp extends Application {
         super.onCreate();
         this.cMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 //        this.parser = new DailyDealsXmlPullFeedParser();
-        this.sectionList = new ArrayList<Section>(6);
+        this.currentSection = new Section();
         this.imageCache = new HashMap<Long, Bitmap>();
     }
 

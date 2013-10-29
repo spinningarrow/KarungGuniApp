@@ -1,43 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/details"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:orientation="vertical" >
-
-
-    <TextView
-            android:id="@+id/category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Newspapers" />
-
-    <TextView
-            android:id="@+id/seller"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sahil" />
-    <TextView
-            android:id="@+id/addr_short"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Blk558a Ang Mo Kio St52" />
-    <TextView
-            android:id="@+id/distance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="200m" />
-    <TextView
-            android:id="@+id/time_avail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sunday 2:00pm-3:00pm" />
-    <ImageView
-            android:id="@+id/item_img"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/new_ad"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/kg_launcher"  />
+            android:layout_height="fill_parent"
+            android:background="@drawable/background_pattern_fill">
 
-</LinearLayout>
+    <LinearLayout
+            android:id="@+id/linearLayout_new_ad"
+            android:layout_width="match_parent"
+            android:layout_height="376dp"
+            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" >
+
+        <TextView
+                android:id="@+id/dt_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:layout_gravity="center_horizontal"
+                android:textSize="45sp" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+            <TableLayout
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                <TableRow>
+                    <TextView
+                            android:id="@+id/lbl_cate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:gravity="left"
+                            android:text="Category:"
+                            />
+
+                    <TextView
+                            android:id="@+id/dt_category"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:singleLine="true"
+                            android:gravity="left"
+                             />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/lbl_owner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:gravity="left"
+                            android:text="Seller:"
+                            />
+
+                    <TextView
+                            android:id="@+id/dt_owner"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:singleLine="true"
+                            android:gravity="left"
+                            />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/lbl_addr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:gravity="left"
+                            android:text="Address"
+                            />
+
+                    <TextView
+                            android:id="@+id/dt_addr"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:singleLine="true"
+                            android:gravity="left"
+                            />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/lbl_timing"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:gravity="left"
+                            android:text="Time Available:"
+                            />
+
+                    <TextView
+                            android:id="@+id/dt_timing"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:singleLine="true"
+                            android:gravity="left"
+                            />
+
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                            android:id="@+id/lbl_desc"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:gravity="left"
+                            android:text="DESC"
+                            />
+
+                    <TextView
+                            android:id="@+id/dt_description"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:singleLine="true"
+                            android:gravity="left"
+                            />
+
+
+                </TableRow>
+                <TableRow>
+                    <ImageView
+                            android:id="@+id/dt_img_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="200dp"
+                            android:maxWidth="200dp"
+                            android:contentDescription="@string/photo_desc"
+
+                            android:layout_gravity="center|right|top" android:src="@drawable/kg_launcher"/>
+                </TableRow>
+
+
+            </TableLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

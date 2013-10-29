@@ -1,7 +1,5 @@
 package com.onemore.karungguniapp;
 
-import com.omemore.karungguniapp.listview.AdvertisementList;
-
 import android.accounts.Account;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -15,6 +13,7 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import com.omemore.karungguniapp.listview.AdvertisementList;
 import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
 
 public class KarungGuniActivity extends Activity {
