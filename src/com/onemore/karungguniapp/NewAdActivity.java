@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,10 +20,13 @@ import com.cloudinary.Cloudinary;
 import com.onemore.karungguniapp.PhotoService.AlbumStorageDirFactory;
 import com.onemore.karungguniapp.PhotoService.BaseAlbumDirFactory;
 import com.onemore.karungguniapp.PhotoService.FroyoAlbumDirFactory;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -286,16 +290,14 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
                             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                            File testfile = new File("/storage/emulated/0/DCIM/Camera/IMG_20131029_221240.jpg");
+//                            File testfile = new File("/storage/emulated/0/DCIM/Camera/IMG_20131029_221240.jpg");
                             file = dispatchTakePictureIntent(0, takePicture);
                             //startActivityForResult(takePicture, 0);
-                            try {
 
-                                cloudinaryTest(testfile);
-                            } catch (IOException e) {
-                                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                            }
+                            File testUpload = new File("/mnt/sdcard/DCIM/100MEDIA/IMAG0001.jpg");
+                            new UploadPhotoTask().execute(testUpload);
 
+//                            cloudinaryTest(new File("/mnt/sdcard/DCIM/100MEDIA/IMAG0001.jpg"));
                         }
                         if(which==1){
 
@@ -429,7 +431,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
     }
 
-    public void cloudinaryTest(File file) throws IOException {
+    public void cloudinaryTest(File file) {
         Map config = new HashMap();
         config.put("cloud_name", "hsl8yvyi0");
         config.put("api_key", "638233174111431");
@@ -437,9 +439,14 @@ public class NewAdActivity extends Activity implements OnClickListener{
         Cloudinary cloudinary = new Cloudinary(config);
 
         Log.w("NEW AD CLOUDINARY", cloudinary.url().generate("sample.jpg"));
-        FileInputStream fileInputStream = new FileInputStream(file);
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            cloudinary.uploader().upload(fileInputStream, Cloudinary.emptyMap());
 
-        cloudinary.uploader().upload(fileInputStream, Cloudinary.emptyMap());
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     private void createAdvertisement(String title, String description, String photoUrl, String category, String timing) {
@@ -581,5 +588,39 @@ public class NewAdActivity extends Activity implements OnClickListener{
         return f;
     }
 
+    private class UploadPhotoTask extends AsyncTask<File, Integer, JSONObject> {
 
+        @Override
+        protected JSONObject doInBackground(File... files) {
+
+            // Initialize Cloudinary
+            Map config = new HashMap();
+            config.put("cloud_name", "hsl8yvyi0");
+            config.put("api_key", "638233174111431");
+            config.put("api_secret", "19YLRLY0ZkMunO7oOJDfmkCNDB0");
+            Cloudinary cloudinary = new Cloudinary(config);
+
+            Log.w("NEW AD CLOUDINARY", cloudinary.url().generate("sample.jpg"));
+            FileInputStream fileInputStream;
+            JSONObject uploadedImage = null;
+
+            try {
+                fileInputStream = new FileInputStream(files[0]);
+                uploadedImage = cloudinary.uploader().upload(fileInputStream, Cloudinary.emptyMap());
+
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+//            int count = urls.length;
+//            long totalSize = 0;
+//            for (int i = 0; i < count; i++) {
+//                totalSize += Downloader.downloadFile(urls[i]);
+//                publishProgress((int) ((i / (float) count) * 100));
+//                // Escape early if cancel() is called
+//                if (isCancelled()) break;
+//            }
+            return uploadedImage;
+        }
+    }
 }
