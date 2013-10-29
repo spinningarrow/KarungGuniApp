@@ -8,6 +8,8 @@ package com.onemore.karungguniapp;
  * To change this template use File | Settings | File Templates.
  */
 public class Constants {
-    public static final String LOG_TAG = "DealDroid";
+    public static final String LOG_TAG = "KGApp";
+    public static final String PARSE_SIGN_CLOUD_FUNCTION = "sign_upload_request";
+
 
 }

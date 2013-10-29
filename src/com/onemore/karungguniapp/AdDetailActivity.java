@@ -72,6 +72,7 @@ public class AdDetailActivity extends Activity
         btn_gmap = (Button) findViewById(R.id.btn_gmap);
 
         app = (KGApp) getApplication();
+
 //        if(latitude !=-1 && longitude != -1 &&latitude !=0 && longitude != 0 )
 //        {
 //           double[] seller_location =  GeoUtil.getLatLongFromAddress();
@@ -238,6 +239,7 @@ public class RetrieveSellerLocAndCalculateDistance extends AsyncTask<String, Voi
 //        locationMgr.removeGpsStatusListener(gpsListener);
 //        }
     }
+    //Pass the local dir for the photos
 
 
 

@@ -52,6 +52,10 @@ public class NewAdActivity extends Activity implements OnClickListener{
     private DatePicker datePicker;
     private TimePicker timePicker;
     private Spinner type;
+    private final Activity current = this;
+    private ProgressDialog dialog = null;
+    private KGApp app;
+    private static File file;
 
     private static HashMap<String, String> types = new HashMap<String, String>();
     static {
@@ -86,6 +90,8 @@ public class NewAdActivity extends Activity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_ad);
+
+        app = (KGApp) getApplication();
 
         btn_setDate_from = (Button) findViewById(R.id.set_date_from);
         //pickDate.setOnClickListener();
@@ -279,7 +285,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
                         if(which==0)   {
 
                             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            dispatchTakePictureIntent(0, takePicture);
+                            file = dispatchTakePictureIntent(0, takePicture);
                             //startActivityForResult(takePicture, 0);
 
                         }
@@ -536,13 +542,14 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
         return storageDir;
     }
-    private void dispatchTakePictureIntent(int actionCode, Intent takePictureIntent) {
+    private File dispatchTakePictureIntent(int actionCode, Intent takePictureIntent) {
 
         //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
+        File f = null;
         switch(actionCode) {
             case 0:
-                File f = null;
+
+
 
                 try {
                     f = setUpPhotoFile();
@@ -559,7 +566,8 @@ public class NewAdActivity extends Activity implements OnClickListener{
                 break;
         } // switch
 
-        startActivityForResult(takePictureIntent, actionCode);
+         startActivityForResult(takePictureIntent, actionCode);
+        return f;
     }
 
 
