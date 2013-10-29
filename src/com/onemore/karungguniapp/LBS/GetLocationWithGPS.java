@@ -26,8 +26,12 @@ import com.onemore.karungguniapp.KarungGuniActivity;
 public class GetLocationWithGPS extends Service {
 
     public static boolean DEBUG =true;
+    public static String gotMyLoc;
+    public static double[] myLoc= new double[2];
 
     public static final String LOC_DATA = "LOC_DATA";
+    public static final String UNABLE = "Unable to get current location";
+    public static final String GET_MY_LOC_SUCCESS="got current location successfully";
     private Context mContext;
 
     public LocationManager locationMgr;
@@ -51,6 +55,8 @@ public class GetLocationWithGPS extends Service {
         mContext = getApplicationContext();
         locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         gpsListener = new GpsListener();
+        myLoc = new double[2];
+
         handler = new Handler() {
             public void handleMessage(Message m) {
                 Log.d(KarungGuniActivity.LOG_TAG, "Handler returned with message: " + m.toString());
@@ -60,16 +66,22 @@ public class GetLocationWithGPS extends Service {
 
                     latitude = m.arg1;
                     longitude = m.arg2;
+                    myLoc =new double[]{latitude*1e-6,longitude*1e-6};
+                    gotMyLoc = GET_MY_LOC_SUCCESS ;
+
                 } else if (m.what == LocationHelper.MESSAGE_CODE_LOCATION_NULL) {
                     //detail.setText("HANDLER RETURNED\nunable to get location");
                     Toast.makeText(mContext,"HANDLER RETURNED\nunable to get location",Toast.LENGTH_LONG);
                     if (DEBUG) Log.v(LOC_DATA, "HANDLER RETURNED\nunable to get location");
+                    gotMyLoc= UNABLE;
                 } else if (m.what == LocationHelper.MESSAGE_CODE_PROVIDER_NOT_PRESENT) {
                     //detail.setText("HANDLER RETURNED\nprovider not present");
                     Toast.makeText(mContext,"HANDLER RETURNED\nprovider not present",Toast.LENGTH_LONG);
                     if (DEBUG) Log.v(LOC_DATA, "HANDLER RETURNED\nunable to get location");
+                    gotMyLoc = UNABLE;
 
                 }
+                //gotMyLoc = null;
             }
         };
 
@@ -170,6 +182,7 @@ public class GetLocationWithGPS extends Service {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+
     private class GpsListener implements GpsStatus.Listener {
         public void onGpsStatusChanged(int event) {
             Log.d("GpsListener", "Status changed to " + event);
@@ -197,4 +210,7 @@ public class GetLocationWithGPS extends Service {
             }
         }
     }
+
+
+
 }

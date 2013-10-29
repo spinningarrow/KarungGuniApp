@@ -149,6 +149,11 @@
             <ImageView android:id="@+id/dt_img_view"
                        android:layout_width="500dp" android:layout_height="500dp"
                        android:scaleType="fitStart" android:visibility="gone"/>
+            <ProgressBar android:id="@+id/progress2" android:layout_width="125dp"
+                         android:layout_height="125dp" />
+            <TextView  android:id="@+id/dt_dist"
+                       android:layout_width="500dp" android:layout_height="500dp"
+                       android:visibility="gone"/>
             <!--<ImageView-->
                     <!--android:id="@+id/dt_img_view"-->
                     <!--android:layout_width="wrap_content"-->

@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.onemore.karungguniapp.LBS.GeoUtil;
+import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
 
 
 /**
@@ -24,9 +26,11 @@ public class AdDetailActivity extends Activity
 //    private GpsListener gpsListener;
 //    private Handler handler;
     private ProgressBar progressBar;
+    private ProgressBar progressBar2;
+
     private TextView tv_category;
     private TextView tv_title        ;
-    //private TextView tv_id           ;
+    private TextView tv_dist           ;
     private TextView tv_status       ;
     private TextView tv_photo_url    ;
     private TextView tv_description  ;
@@ -37,6 +41,11 @@ public class AdDetailActivity extends Activity
 
     private double latitude,longitude;
     private String testAddr;
+    public String parseAddress(String addr)
+    {
+        return addr.replace(" ","+");
+
+    }
 
 
     @Override
@@ -46,6 +55,7 @@ public class AdDetailActivity extends Activity
 
         tv_category = (TextView)findViewById(R.id.dt_category);
         tv_title      =(TextView)findViewById(R.id.dt_title)   ;
+        tv_dist = (TextView)findViewById(R.id.dt_dist);
         //tv_id         =(TextView)findViewById(R.id)
         //tv_status     =(TextView)findViewById(R.id.dt_status)
         photo  =(ImageView)findViewById(R.id.dt_img_view)  ;
@@ -55,11 +65,13 @@ public class AdDetailActivity extends Activity
         tv_addr =(TextView)findViewById(R.id.dt_addr);
 
         app = (KGApp) getApplication();
-        if(latitude !=-1 && longitude != -1)
-        {
-
-        }
-        testAddr = "274a jurong west ave 3 #07-61, 641274\n";
+//        if(latitude !=-1 && longitude != -1 &&latitude !=0 && longitude != 0 )
+//        {
+//           double[] seller_location =  GeoUtil.getLatLongFromAddress();
+//           testAddr =String.valueOf(seller_location[0] )+"  "+ String.valueOf(seller_location[1]);
+//        }
+//        else
+//            testAddr = "274a jurong west ave 3 #07-61, 641274\n";
 
         String  category;
         String  title    ;
@@ -110,6 +122,7 @@ public class AdDetailActivity extends Activity
 
 
         progressBar = (ProgressBar) findViewById(R.id.progress);
+        progressBar2 = (ProgressBar) findViewById(R.id.progress2) ;
         progressBar.setIndeterminate(true);
         tv_category.setText(category);
         tv_description.setText(description);
@@ -120,7 +133,7 @@ public class AdDetailActivity extends Activity
         String img_url = "http://res.cloudinary.com/demo/image/upload/sample.jpg";
         //String img_url  = "http://1.bp.blogspot.com/_NNTkR1HgsXA/S-DHrJxSQYI/AAAAAAAAAAM/Cy4cwy-00Y4/S660/ePs_Newspaper+from+your+date+of+birth.jpg";
         new RetrieveImageTask(photo).execute(img_url);
-
+        new RetrieveSellerLocAndCalculateDistance(tv_dist).execute();
 
 
 
@@ -184,6 +197,47 @@ public class AdDetailActivity extends Activity
 //    public void onLoaderReset(Loader<Cursor> cursorLoader) {
 //        //To change body of implemented methods use File | Settings | File Templates.
 //    }
+public class RetrieveSellerLocAndCalculateDistance extends AsyncTask<String, Void, Double> {
+    private TextView textView;
+
+    public RetrieveSellerLocAndCalculateDistance(TextView textView) {
+        this.textView = textView;
+    }
+
+
+    @Override
+    protected Double doInBackground(String... args) {
+        Double dist = new Double(0);
+        String testAddr = "======================";
+        testAddr = "block274a Jurong west avenue 3 Singapore";
+        String parsed_addr = parseAddress(testAddr);
+        double[] seller_location =  GeoUtil.getLatLongFromAddress(parsed_addr);
+        testAddr =String.valueOf(seller_location[0] )+"  "+ String.valueOf(seller_location[1]);
+        while( GetLocationWithGPS.gotMyLoc==null);
+        if(GetLocationWithGPS.gotMyLoc==GetLocationWithGPS.GET_MY_LOC_SUCCESS) {
+            dist  =new Double(GeoUtil.calculateDistance(GetLocationWithGPS.myLoc,seller_location));
+        }
+        return dist;
+    }
+
+    @Override
+    protected void onPostExecute(Double dist) {
+        progressBar2.setVisibility(View.GONE);
+        if (dist != null && dist.doubleValue()!=0.0) {
+           String formatted_dist = String.format("%.2f",dist.doubleValue());
+            textView.setText(formatted_dist+"m");
+            textView.setVisibility(View.VISIBLE);
+        }
+        else{
+            textView.setText(GetLocationWithGPS.gotMyLoc);
+            textView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+
+}
+
 
     private class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
         private ImageView imageView;
@@ -234,4 +288,6 @@ public class AdDetailActivity extends Activity
     }
 
 
+
 }
+

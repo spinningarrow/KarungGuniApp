@@ -7,11 +7,15 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.omemore.karungguniapp.listview.AdvertisementList;
 import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
@@ -53,7 +57,7 @@ public class KarungGuniActivity extends Activity {
 
 	    actionBar.addTab(tab);
 
-        startService(new Intent(KarungGuniActivity.this,GetLocationWithGPS.class));
+        startService(new Intent(KarungGuniActivity.this, GetLocationWithGPS.class));
 
 
         // Explicitly request a sync if there are no advertisements
@@ -98,5 +102,6 @@ public class KarungGuniActivity extends Activity {
         super.onResume();
 
     }
+
 
 }
