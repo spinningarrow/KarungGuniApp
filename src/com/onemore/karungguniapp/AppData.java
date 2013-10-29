@@ -102,7 +102,7 @@ public class AppData {
 
         // Create table SQL
         public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
-            + _ID + " INTEGER PRIMARY KEY,"
+            + _ID + " TEXT PRIMARY KEY,"
             + COLUMN_NAME_EMAIL + " TEXT,"
             + COLUMN_NAME_ADDRESS + " TEXT,"
             + COLUMN_NAME_DISPLAY_NAME + " TEXT,"
@@ -147,7 +147,7 @@ public class AppData {
 
         // Create table SQL
         public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
-            + _ID + " INTEGER PRIMARY KEY,"
+            + _ID + " TEXT PRIMARY KEY,"
             + COLUMN_NAME_EMAIL + " TEXT,"
             + COLUMN_NAME_RATING + " INTEGER,"
             + COLUMN_NAME_DISPLAY_NAME + " TEXT,"
@@ -250,7 +250,7 @@ public class AppData {
 
         // Create table SQL
         public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + " ("
-            + _ID + " INTEGER PRIMARY KEY,"
+            + _ID + " TEXT PRIMARY KEY,"
             + COLUMN_NAME_ADVERTISEMENT + " TEXT,"
             + COLUMN_NAME_KARUNG_GUNI + " TEXT,"
             + COLUMN_NAME_STATUS + " TEXT,"

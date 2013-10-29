@@ -102,6 +102,32 @@ public class AppDataProvider extends ContentProvider{
                 defaultSortOrder = AppData.Users.DEFAULT_SORT_ORDER;
                 break;
 
+            case AppDataUriMatcher.SELLERS:
+                qb.setTables(AppData.Sellers.TABLE_NAME);
+                qb.setProjectionMap(sUsersProjectionMap);
+                defaultSortOrder = AppData.Sellers.DEFAULT_SORT_ORDER;
+                break;
+
+            case AppDataUriMatcher.SELLER_ID:
+                qb.setTables(AppData.Sellers.TABLE_NAME);
+                qb.setProjectionMap(sUsersProjectionMap);
+                qb.appendWhere(AppData.Sellers.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.Sellers.PATH_POSITION));
+                defaultSortOrder = AppData.Sellers.DEFAULT_SORT_ORDER;
+                break;
+
+            case AppDataUriMatcher.KARUNG_GUNIS:
+                qb.setTables(AppData.KarungGunis.TABLE_NAME);
+                qb.setProjectionMap(sUsersProjectionMap);
+                defaultSortOrder = AppData.KarungGunis.DEFAULT_SORT_ORDER;
+                break;
+
+            case AppDataUriMatcher.KARUNG_GUNI_ID:
+                qb.setTables(AppData.KarungGunis.TABLE_NAME);
+                qb.setProjectionMap(sUsersProjectionMap);
+                qb.appendWhere(AppData.KarungGunis.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.KarungGunis.PATH_POSITION));
+                defaultSortOrder = AppData.KarungGunis.DEFAULT_SORT_ORDER;
+                break;
+
             case AppDataUriMatcher.ADVERTISEMENTS:
                 qb.setTables(AppData.Advertisements.TABLE_NAME);
                 qb.setProjectionMap(sAdvertisementsProjectionMap);
@@ -113,6 +139,19 @@ public class AppDataProvider extends ContentProvider{
                 qb.setProjectionMap(sAdvertisementsProjectionMap);
                 qb.appendWhere(AppData.Advertisements._ID + "=" + uri.getPathSegments().get(AppData.Advertisements.PATH_POSITION));
                 defaultSortOrder = AppData.Advertisements.DEFAULT_SORT_ORDER;
+                break;
+
+            case AppDataUriMatcher.REQUESTS:
+                qb.setTables(AppData.Requests.TABLE_NAME);
+                qb.setProjectionMap(sAdvertisementsProjectionMap);
+                defaultSortOrder = AppData.Requests.DEFAULT_SORT_ORDER;
+                break;
+
+            case AppDataUriMatcher.REQUEST_ID:
+                qb.setTables(AppData.Requests.TABLE_NAME);
+                qb.setProjectionMap(sAdvertisementsProjectionMap);
+                qb.appendWhere(AppData.Requests._ID + "=" + uri.getPathSegments().get(AppData.Requests.PATH_POSITION));
+                defaultSortOrder = AppData.Requests.DEFAULT_SORT_ORDER;
                 break;
 
             default:
@@ -190,7 +229,7 @@ public class AppDataProvider extends ContentProvider{
         }
 
         // If no creation date is specified, use the current time
-        if (values.containsKey(AppData.COLUMN_NAME_DATE_CREATED)) {
+        if (!values.containsKey(AppData.COLUMN_NAME_DATE_CREATED)) {
 
             // Get the current system time in milliseconds
             Long now = System.currentTimeMillis() / 1000;

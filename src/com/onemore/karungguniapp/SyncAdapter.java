@@ -72,10 +72,104 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         // handling data conflicts or determing how current the data is
         // clean up (close connectiongs and clean up temp files and caches)
 
-        // Step 1: Get latest advertisement data from the server
+        // Step 1: Get latest advertisement, seller and kg data from the server
         String ADVERTISEMENTS_SELECTION = null;
         String[] ADVERTISEMENTS_SELECTION_ARGS = null;
         Bundle lastSync = getLastSync(this.getContext());
+
+        // If seller data hasn't been synced, get it now
+        if (lastSync.getLong(AppData.Sellers.TABLE_NAME) == -1) {
+            JSONArray sellers;
+            Bundle sellerResult = RestClient.query(AppData.Sellers.CONTENT_URI, null, null, null, null, null);
+
+            if (sellerResult.getInt("status") == 200) {
+                try {
+                    sellers = RestClient.parseJsonArray(new ByteArrayInputStream(sellerResult.getString("response").getBytes("UTF-8")));
+
+                    ContentValues values;
+                    JSONObject seller;
+
+                    // Loop through the advertisements
+                    for (int i = 0; i < sellers.length(); i++) {
+                        seller = sellers.getJSONObject(i);
+
+                        values = new ContentValues();
+                        values.put(AppData.Sellers._ID, seller.getString(AppData.Sellers._ID));
+                        values.put(AppData.Sellers.COLUMN_NAME_EMAIL, seller.getString(AppData.Sellers.COLUMN_NAME_EMAIL));
+                        values.put(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME, seller.getString(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME));
+                        values.put(AppData.Sellers.COLUMN_NAME_ADDRESS, seller.getString(AppData.Sellers.COLUMN_NAME_ADDRESS));
+
+                        // Insert to local DB
+                        mContentResolver.insert(AppData.Sellers.CONTENT_ID_URI_BASE, values);
+                    }
+
+                    Log.w("SYNC_ADAPTER", "Inserted into sellers.");
+                    // Save sync status
+                    Long now = System.currentTimeMillis() / 1000;
+                    setLastSync(getContext(), AppData.Sellers.TABLE_NAME, now);
+
+                    Cursor mCursor = mContentResolver.query(AppData.Sellers.CONTENT_URI, null, null, null, null);
+                    Log.w("SYNC_ADAPTER", "Count: " + mCursor.getCount());
+                }
+
+                catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                }
+
+                catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
+
+        // If KG data hasn't been synced, get it now
+        if (lastSync.getLong(AppData.Sellers.TABLE_NAME) == -1) {
+            JSONArray karunggunis;
+            Bundle karungguniResult = RestClient.query(AppData.KarungGunis.CONTENT_URI, null, null, null, null, null);
+
+            if (karungguniResult.getInt("status") == 200) {
+                try {
+                    karunggunis = RestClient.parseJsonArray(new ByteArrayInputStream(karungguniResult.getString("response").getBytes("UTF-8")));
+
+                    ContentValues values;
+                    JSONObject karungguni;
+
+                    // Loop through the advertisements
+                    for (int i = 0; i < karunggunis.length(); i++) {
+                        karungguni = karunggunis.getJSONObject(i);
+
+                        values = new ContentValues();
+                        values.put(AppData.KarungGunis._ID, karungguni.getString(AppData.KarungGunis._ID));
+                        values.put(AppData.KarungGunis.COLUMN_NAME_EMAIL, karungguni.getString(AppData.KarungGunis.COLUMN_NAME_EMAIL));
+                        values.put(AppData.KarungGunis.COLUMN_NAME_DISPLAY_NAME, karungguni.getString(AppData.KarungGunis.COLUMN_NAME_DISPLAY_NAME));
+                        values.put(AppData.KarungGunis.COLUMN_NAME_RATING, karungguni.getString(AppData.KarungGunis.COLUMN_NAME_RATING));
+
+                        // Insert to local DB
+                        mContentResolver.insert(AppData.KarungGunis.CONTENT_ID_URI_BASE, values);
+                    }
+
+                    Log.w("SYNC_ADAPTER", "Inserted into Karung Gunis.");
+                    // Save sync status
+                    Long now = System.currentTimeMillis() / 1000;
+                    setLastSync(getContext(), AppData.KarungGunis.TABLE_NAME, now);
+
+                    Cursor mCursor = mContentResolver.query(AppData.KarungGunis.CONTENT_URI, null, null, null, null);
+                    Log.w("SYNC_ADAPTER", "Count: " + mCursor.getCount());
+                }
+
+                catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                }
+
+                catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
 
         // If lastSync is not empty, set the required selections
         if (lastSync.getLong(AppData.Advertisements.TABLE_NAME) != -1) {
@@ -190,6 +284,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Bundle lastSync = new Bundle();
         lastSync.putLong(AppData.Advertisements.TABLE_NAME, prefs.getLong("lastSync." + AppData.Advertisements.TABLE_NAME, -1));
+        lastSync.putLong(AppData.Sellers.TABLE_NAME, prefs.getLong("lastSync." + AppData.Sellers.TABLE_NAME, -1));
+        lastSync.putLong(AppData.KarungGunis.TABLE_NAME, prefs.getLong("lastSync." + AppData.KarungGunis.TABLE_NAME, -1));
         return lastSync;
     }
 
