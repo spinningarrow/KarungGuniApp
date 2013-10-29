@@ -21,6 +21,7 @@ import com.onemore.karungguniapp.PhotoService.BaseAlbumDirFactory;
 import com.onemore.karungguniapp.PhotoService.FroyoAlbumDirFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -133,7 +134,6 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
         addListenerOnButton();
 
-        cloudinaryTest();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -285,8 +285,16 @@ public class NewAdActivity extends Activity implements OnClickListener{
                         if(which==0)   {
 
                             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                            File testfile = new File("/storage/emulated/0/DCIM/Camera/IMG_20131029_221240.jpg");
                             file = dispatchTakePictureIntent(0, takePicture);
                             //startActivityForResult(takePicture, 0);
+                            try {
+
+                                cloudinaryTest(testfile);
+                            } catch (IOException e) {
+                                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            }
 
                         }
                         if(which==1){
@@ -421,7 +429,7 @@ public class NewAdActivity extends Activity implements OnClickListener{
 
     }
 
-    public void cloudinaryTest() {
+    public void cloudinaryTest(File file) throws IOException {
         Map config = new HashMap();
         config.put("cloud_name", "hsl8yvyi0");
         config.put("api_key", "638233174111431");
@@ -429,6 +437,9 @@ public class NewAdActivity extends Activity implements OnClickListener{
         Cloudinary cloudinary = new Cloudinary(config);
 
         Log.w("NEW AD CLOUDINARY", cloudinary.url().generate("sample.jpg"));
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        cloudinary.uploader().upload(fileInputStream, Cloudinary.emptyMap());
     }
 
     private void createAdvertisement(String title, String description, String photoUrl, String category, String timing) {
