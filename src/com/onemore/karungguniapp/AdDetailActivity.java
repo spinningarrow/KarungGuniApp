@@ -2,17 +2,12 @@ package com.onemore.karungguniapp;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 
 /**
@@ -114,8 +109,8 @@ public class AdDetailActivity extends Activity
         }
 
 
-//        progressBar = (ProgressBar) findViewById(R.id.progress);
-//        progressBar.setIndeterminate(true);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
+        progressBar.setIndeterminate(true);
         tv_category.setText(category);
         tv_description.setText(description);
         tv_owner.setText(owner);
@@ -123,6 +118,7 @@ public class AdDetailActivity extends Activity
         tv_title.setText(title);
         tv_addr.setText(testAddr);
         String img_url = "http://res.cloudinary.com/demo/image/upload/sample.jpg";
+        //String img_url  = "http://1.bp.blogspot.com/_NNTkR1HgsXA/S-DHrJxSQYI/AAAAAAAAAAM/Cy4cwy-00Y4/S660/ePs_Newspaper+from+your+date+of+birth.jpg";
         new RetrieveImageTask(photo).execute(img_url);
 
 
@@ -199,29 +195,32 @@ public class AdDetailActivity extends Activity
         @Override
         protected Bitmap doInBackground(String... args) {
             //Bitmap bitmap = app.retrieveBitmap(args[0]);
-            try {
-                Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
-                photo.setImageBitmap(bitmap);
-                return bitmap;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            finally {
-                return null;
-            }
+//            try {
+//                Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
+//                Bitmap.createScaledBitmap(bitmap,600,600,false) ;
+//                photo.setImageBitmap(bitmap);
+//                return bitmap;
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            finally {
+//                return null;
+//            }
+            Bitmap bitmap = app.retrieveBitmap(args[0]);
+            return bitmap;
         }
 
-//        @Override
-//        protected void onPostExecute(Bitmap bitmap) {
-//            progressBar.setVisibility(View.GONE);
-//            if (bitmap != null) {
-//                imageView.setImageBitmap(bitmap);
-//                imageView.setVisibility(View.VISIBLE);
-//            }
-//        }
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            progressBar.setVisibility(View.GONE);
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+                imageView.setVisibility(View.VISIBLE);
+            }
+        }
 
 
 }

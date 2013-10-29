@@ -23,6 +23,8 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="45sp" />
 
+
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -137,20 +139,24 @@
 
 
                 </TableRow>
-                <TableRow>
-                    <ImageView
-                            android:id="@+id/dt_img_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxHeight="200dp"
-                            android:maxWidth="200dp"
-                            android:contentDescription="@string/photo_desc"
 
-                            android:layout_gravity="center|right|top" android:src="@drawable/kg_launcher"/>
-                </TableRow>
 
 
             </TableLayout>
+            <ProgressBar android:id="@+id/progress" android:layout_width="125dp"
+                         android:layout_height="125dp" />
+
+            <ImageView android:id="@+id/dt_img_view"
+                       android:layout_width="500dp" android:layout_height="500dp"
+                       android:scaleType="fitStart" android:visibility="gone"/>
+            <!--<ImageView-->
+                    <!--android:id="@+id/dt_img_view"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+
+                    <!--android:contentDescription="@string/photo_desc"-->
+
+                    <!--android:layout_gravity="center|right|top" android:src="@drawable/kg_launcher"/>-->
 
         </LinearLayout>
     </LinearLayout>
