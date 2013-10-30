@@ -31,7 +31,7 @@ public class KarungGuniActivity extends Activity {
 
 	    Bundle cArgs = new Bundle();
 	    cArgs.putString("selection", null);
-	    cArgs.putString("orderby", "timing_end");
+	    cArgs.putString("orderby", AppData.Advertisements.COLUMN_NAME_TIMING_END);
 	    cArgs.putString("column", AppData.Advertisements.COLUMN_NAME_TIMING_END);	    
 	    Tab tab = actionBar.newTab()
 	                       .setText(R.string.current)
@@ -41,7 +41,7 @@ public class KarungGuniActivity extends Activity {
 
 	    Bundle nArgs = new Bundle();
 	    nArgs.putString("selection", null);
-	    nArgs.putString("orderby", "distance");
+	    nArgs.putString("orderby", AppData.Advertisements.COLUMN_NAME_DISTANCE);
 	    nArgs.putString("column", AppData.Advertisements.COLUMN_NAME_DISTANCE);	  	    
 	    tab = actionBar.newTab()
 	                   .setText(R.string.nearby)

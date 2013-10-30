@@ -1,11 +1,8 @@
 package com.omemore.karungguniapp.listview;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.ListFragment;
 import android.app.LoaderManager;
@@ -137,6 +134,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		// Swap the new cursor in.  (The framework will take care of closing the
 		// old cursor once we return.)
+		data.setNotificationUri(getActivity().getContentResolver(), AppData.Advertisements.CONTENT_URI);
 		mAdapter.swapCursor(data);
 
 		// The list should now be shown.
