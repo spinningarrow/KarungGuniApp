@@ -200,6 +200,7 @@ public class AppData {
         public static final String COLUMN_NAME_STATUS = "status";
         public static final String COLUMN_NAME_TIMING_START = "timing_start";
         public static final String COLUMN_NAME_TIMING_END = "timing_end";
+        public static final String COLUMN_NAME_DISTANCE = "distance"; // local, for caching distance from current location
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
@@ -215,6 +216,7 @@ public class AppData {
             + COLUMN_NAME_STATUS + " TEXT,"
             + COLUMN_NAME_TIMING_START + " TEXT,"
             + COLUMN_NAME_TIMING_END + " TEXT,"
+            + COLUMN_NAME_DISTANCE + " TEXT,"
             + COLUMN_NAME_DATE_CREATED + " INTEGER"
             + ");";
     }
