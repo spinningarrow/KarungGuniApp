@@ -1,12 +1,12 @@
 package com.onemore.karungguniapp;
 
-import com.omemore.karungguniapp.listview.AdvertisementList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.omemore.karungguniapp.listview.AdvertisementList;
 
 public class SellerActivity extends Activity {
 
@@ -28,10 +28,14 @@ public class SellerActivity extends Activity {
 
             // Create a new Fragment to be placed in the activity layout
             AdvertisementList ads = new AdvertisementList();
-            
+            String email = AccountManager.getCurrentUser(getApplicationContext()).getString("email");
+            Bundle args = new Bundle();
+            args.putString("selection", "owner = \"" + email + "\"");
+            args.putString("orderby", null);
+            args.putString("column", AppData.Advertisements.COLUMN_NAME_DESCRIPTION);	  	 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
-            ads.setArguments(getIntent().getExtras());
+            ads.setArguments(args);
             
             // Add the fragment to the 'fragment_container' FrameLayout
             getFragmentManager().beginTransaction()
