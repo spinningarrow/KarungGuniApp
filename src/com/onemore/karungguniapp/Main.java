@@ -23,6 +23,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -37,7 +38,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 
-public class Main extends Activity implements OnClickListener,
+public class Main extends Activity implements
         ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
@@ -65,7 +66,7 @@ public class Main extends Activity implements OnClickListener,
     public static final String ACCOUNT = "dummyaccount";
     public static final String ACCOUNT_TYPE = "com.onemore.karungguniapp";
 
-    ImageButton google;
+    
     ImageButton btnfacebook;
 
     private static HashMap<String, String> roles = new HashMap<String, String>();
@@ -128,8 +129,8 @@ public class Main extends Activity implements OnClickListener,
 
         login = (Button) findViewById(R.id.signin);
         signup = (Button) findViewById(R.id.signup);
-        google = (ImageButton) findViewById(R.id.google);
-        google.setOnClickListener(this);
+     //   google = (ImageButton) findViewById(R.id.google);
+       // google.setOnClickListener(this);
         btnfacebook = (ImageButton) findViewById(R.id.fbbtn);
 
         btnfacebook.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +178,7 @@ public class Main extends Activity implements OnClickListener,
             }
         });
 
-        findViewById(R.id.google).setOnClickListener(this);
+     //   findViewById(R.id.google).setOnClickListener(this);
 
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
@@ -194,7 +195,7 @@ public class Main extends Activity implements OnClickListener,
         });
     }
     
-    
+    /*
     @Override
     public void onClick(View view) {
 
@@ -213,7 +214,7 @@ public class Main extends Activity implements OnClickListener,
                 }
             }
         }
-    }
+    }*/
 
     @Override
     protected void onStart() {
