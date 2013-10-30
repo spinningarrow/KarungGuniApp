@@ -7,18 +7,20 @@
     <string name="welcome">Welcome!</string>
 
     <!-- login-related -->
+    <string name="login">Log In</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_credentials">Invalid Login Credentials</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
     <string name="app_id" >521174844642024</string>
-    <string name="title_activity_karung_guni">KarungGuniActivity</string>
-    <string name="title_activity_seller">SellerActivity</string>
+    <string name="title_activity_karung_guni">Ads List</string>
+    <string name="title_activity_seller">Ads List</string>
     <string name="login_progress_title">Signing in&#8230;</string>
     <string name="login_progress_message">Please wait while your credentials are being checked.</string>
     <string name="login_incorrect">Incorrect username or password. Please try again or create a new account if you have not already done so.</string>
 
     <!-- signup-related -->
+    <string name="signup">Sing Up</string>
     <string name="signup_progress_title">Creating account&#8230;</string>
     <string name="signup_progress_message">Please wait while your brand new account is created.</string>
     <string name="signup_user_exists">An account associated with your email address already exists. Use the Sign In button to login.</string>
@@ -47,5 +49,8 @@
     <string name="new_ad">New Advertisement</string>
     <string name="new_ad_uploading_title">Uploading image&#8230;</string>
     <string name="new_ad_uploading_message">Please wait while the image is uploaded.</string>
+    <!--adDetail-->
+    <string name="ad_detail">Advertisement</string>
+
 
 </resources>

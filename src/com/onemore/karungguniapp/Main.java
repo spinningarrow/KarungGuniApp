@@ -1,19 +1,8 @@
 package com.onemore.karungguniapp;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.accounts.Account;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.ProgressDialog;
+import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -40,6 +28,12 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.turbomanage.httpclient.ParameterMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.HashMap;
 
 
 public class Main extends Activity implements
@@ -65,6 +59,7 @@ public class Main extends Activity implements
     String role;
     Account mAccount;
     Bundle syncSettingsBundle;
+
     private Bundle currentUser;
 
     public static final String ACCOUNT = "dummyaccount";
@@ -130,6 +125,7 @@ public class Main extends Activity implements
         mConnectionProgressDialog.setMessage("Signing in...");
 
         setContentView(R.layout.main);
+        //setTitleColor(Color.rgb(15,48,78));
 
         login = (Button) findViewById(R.id.signin);
         signup = (Button) findViewById(R.id.signup);

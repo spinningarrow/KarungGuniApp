@@ -3,8 +3,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/new_ad"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/background_pattern_fill">
+            android:layout_height="fill_parent">
+            <!--android:background="@drawable/background_pattern_fill">-->
 
     <LinearLayout
             android:id="@+id/linearLayout_new_ad"
@@ -15,34 +15,32 @@
             android:layout_marginTop="20dp"
             android:orientation="vertical" >
 
-        <TextView
-                android:id="@+id/new_ad_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Advertisement"
-                android:layout_gravity="center_horizontal"
-                android:textSize="45sp" />
+        <!--<TextView-->
+                <!--android:id="@+id/new_ad_header"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="New Advertisement"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:textSize="45sp" />-->
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
+        <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical" >-->
 
             <TableLayout
                     android:layout_marginTop="30dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+
+                    style="@style/TableBodyRow"
                     >
 
                 <TableRow>
 
                     <TextView
                             android:id="@+id/lbl_new_ad_title"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.30"
-                            android:gravity="left"
-                            android:text="title"
+
+                            android:text="Title"
+                            style="@style/TableBodyText"
                             />
 
                     <EditText
@@ -57,11 +55,9 @@
 
                     <TextView
                             android:id="@+id/lbl_new_add_description"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.30"
-                            android:gravity="left"
-                            android:text="description"
+                            style="@style/TableBodyText"
+
+                            android:text="Description"
                             />
 
 
@@ -74,28 +70,30 @@
                             android:singleLine="true"/>
 
                 </TableRow>
+                <TableRow>
+                    <TextView android:id="@+id/lbl_time_avail"
+                              style="@style/TableBodyText"
+                                android:text="Time Available: "/>
+                </TableRow>
 
                 <TableRow>
 
                     <TextView
                             android:id="@+id/timing_from"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.30"
-                            android:gravity="left"
-                            android:text="time available from:"
+                            style="@style/TableBodyText"
+                            android:text="From: "
 
                             />
-                    <TextView
-                            android:id="@+id/tvDate_from"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=""/>
-                    <TextView
-                            android:id="@+id/tvTime_from"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=""/>
+                    <!--<TextView-->
+                            <!--android:id="@+id/tvDate_from"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text=""/>-->
+                    <!--<TextView-->
+                            <!--android:id="@+id/tvTime_from"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text=""/>-->
 
 
 
@@ -108,14 +106,12 @@
                             <!--android:layout_weight="0.70"-->
                             <!--android:singleLine="true"/>-->
                     <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/NewAdButton"
                             android:id="@+id/set_date_from"
-                            android:text="pick a day"/>
+                            android:text="pick a day" android:focusable="false"/>
 
                     <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/NewAdButton"
                             android:id="@+id/set_time_from"
                             android:text="pick time"
                             />
@@ -124,31 +120,26 @@
                 <TableRow>
                     <TextView
                             android:id="@+id/timing_to"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.30"
-                            android:gravity="left"
-                            android:text="to:"
+                            style="@style/TableBodyText"
+                            android:text="To:"
 
                             />
-                    <TextView
-                            android:id="@+id/tvDate_to"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=""/>
-                    <TextView
-                            android:id="@+id/tvTime_to"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=""/>
+                    <!--<TextView-->
+                            <!--android:id="@+id/tvDate_to"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text=""/>-->
+                    <!--<TextView-->
+                            <!--android:id="@+id/tvTime_to"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text=""/>-->
                     <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/NewAdButton"
                             android:id="@+id/set_date_to"
                             android:text="pick a day"/>
                     <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/NewAdButton"
                             android:id="@+id/set_time_to"
                             android:text="pick time"
                             />
@@ -156,37 +147,28 @@
             <TableRow>
                 <TextView
                         android:id="@+id/lbl_type"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.30"
-                        android:gravity="left"
-                        android:text="Role"
+                        style="@style/TableBodyText"
+                        android:text="Type"
                         />
 
                 <Spinner
                         android:id="@+id/new_ad_type"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.70"
-                        android:singleLine="true"
-                        android:drawSelectorOnTop="true" />
+                        android:drawSelectorOnTop="true"
+                        style="@android:style/Widget.Holo.Light.Spinner"/>
             </TableRow>
 
                 <TableRow>
 
                     <TextView
                             android:id="@+id/lbl_new_ad_photo"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.30"
-                            android:gravity="left"
-                            android:text="upload a photo"
+                            style="@style/TableBodyText"
+                            android:text="Upload a Photo"
                             />
 
                     <Button
                             android:id="@+id/new_ad_photo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="upload"
+                            style="@style/NewAdButton"
+                            android:text="Upload"
                             android:layout_alignParentRight="true"/>
 
                 </TableRow>
@@ -222,8 +204,7 @@
 
                 <Button
                         android:id="@+id/ad_post"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/NewAdButton"
                         android:text="Post"
                         android:layout_alignParentRight="true"
 
@@ -231,5 +212,5 @@
 
             </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
+    <!--</LinearLayout>-->
 </ScrollView>

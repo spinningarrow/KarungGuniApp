@@ -2,19 +2,13 @@ package com.onemore.karungguniapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.omemore.karungguniapp.listview.ImageLoader;
-import com.onemore.karungguniapp.LBS.GeoUtil;
-import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
 
 
 /**
@@ -30,8 +24,8 @@ public class AdDetailActivity extends Activity
 	//    private LocationManager locationMgr;
 	//    private GpsListener gpsListener;
 	//    private Handler handler;
-	private ProgressBar progressBar;
-	private ProgressBar progressBar2;
+	//private ProgressBar progressBar;
+	//private ProgressBar progressBar2;
 
 	private TextView tv_category;
 	private TextView tv_title        ;
@@ -114,14 +108,14 @@ public class AdDetailActivity extends Activity
 			photo_url     = extras.getString(AppData.Advertisements.COLUMN_NAME_PHOTO);
 			description   = extras.getString(AppData.Advertisements.COLUMN_NAME_DESCRIPTION);
 			owner         = extras.getString(AppData.Advertisements.COLUMN_NAME_OWNER);
-			startTime     = Long.parseLong(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_START));
-			endTime     = Long.parseLong(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_END));
+			startTime     = (long) Float.parseFloat(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_START));
+			endTime     = (long) Float.parseFloat(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_END));
 		}
 
 
-		progressBar = (ProgressBar) findViewById(R.id.progress);
-		progressBar2 = (ProgressBar) findViewById(R.id.progress2) ;
-		progressBar.setIndeterminate(true);
+		//progressBar = (ProgressBar) findViewById(R.id.progress);
+		//progressBar2 = (ProgressBar) findViewById(R.id.progress2) ;
+		//progressBar.setIndeterminate(true);
 		tv_category.setText(category);
 		tv_description.setText(description);
 		tv_owner.setText(owner);

@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-     android:background="@drawable/radialback"
     android:padding="20dip" >
+     <!--android:background="@drawable/radialback"-->
+
 
     <ImageView
         android:id="@+id/imageView1"
@@ -32,17 +33,19 @@
             android:id="@+id/signin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            
-            android:background="@drawable/custom_button"
             android:text="Sign In" />
+            
+            <!--android:background="@drawable/"-->
+
 
         <Button
             android:id="@+id/signup"
              android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:background="@drawable/custom_button"
             android:text="Create account" />
+           <!--android:background="@drawable/custom_button"-->
+
 
       
    </LinearLayout>

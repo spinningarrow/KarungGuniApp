@@ -3,73 +3,75 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/new_ad"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/background_pattern_fill">
+            android:layout_height="fill_parent" >
+            <!--android:background="@drawable/background_pattern_fill">-->
 
-    <LinearLayout
-            android:id="@+id/linearLayout_new_ad"
-            android:layout_width="match_parent"
-            android:layout_height="376dp"
-            android:layout_margin="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical" >
+    <!--<LinearLayout-->
+            <!--android:id="@+id/linearLayout_new_ad"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="376dp"-->
+            <!--android:layout_margin="15dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:orientation="vertical" >-->
 
-        <TextView
-                android:id="@+id/dt_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:layout_gravity="center_horizontal"
-                android:textSize="45sp" />
+        <!--<TextView-->
+                <!--android:id="@+id/dt_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Title"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:textSize="45sp" />-->
 
 
 
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
 
             <TableLayout
-                    android:layout_marginTop="30dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                <TableRow>
+
+                    android:layout_margin="30dp"
+                    style="@style/TableBodyRow">
+                <TableRow >
+                    <TextView
+                            android:id="@+id/dt_lbl_title"
+                            style="@style/TableBodyText"
+                            android:text="Title"
+                            />
+
+                    <TextView
+                            android:id="@+id/dt_title"
+                            style="@style/TableBodyText_notB"
+                            android:gravity="left"
+                            />
+                </TableRow>
+                <TableRow >
                     <TextView
                             android:id="@+id/lbl_cate"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.2"
-                            android:gravity="left"
-                            android:text="Category:"
+                            style="@style/TableBodyText"
+                            android:text="Category"
                             />
 
                     <TextView
                             android:id="@+id/dt_category"
-                            android:layout_width="0dp"
-                            android:layout_weight="0.3"
-                            android:singleLine="true"
+                            style="@style/TableBodyText_notB"
                             android:gravity="left"
                              />
                 </TableRow>
 
-                <TableRow>
+                <TableRow android:layout_width="wrap_content">
 
                     <TextView
                             android:id="@+id/lbl_owner"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.2"
-                            android:gravity="left"
-                            android:text="Seller:"
+                            style="@style/TableBodyText"
+                            android:text="Seller"
                             />
 
                     <TextView
                             android:id="@+id/dt_owner"
-                            android:layout_width="0dp"
-                            android:layout_weight="0.3"
-                            android:singleLine="true"
+                            style="@style/TableBodyText_notB"
                             android:gravity="left"
                             />
 
@@ -79,18 +81,13 @@
 
                     <TextView
                             android:id="@+id/lbl_addr"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.2"
-                            android:gravity="left"
+                            style="@style/TableBodyText"
                             android:text="Address"
                             />
 
                     <TextView
                             android:id="@+id/dt_addr"
-                            android:layout_width="0dp"
-                            android:layout_weight="0.3"
-                            android:singleLine="true"
+                            style="@style/TableBodyText_notB"
                             android:gravity="left"
                             />
 
@@ -100,18 +97,13 @@
 
                     <TextView
                             android:id="@+id/lbl_timing"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.2"
-                            android:gravity="left"
-                            android:text="Time Available:"
+                            style="@style/TableBodyText"
+                            android:text="Time Available"
                             />
 
                     <TextView
                             android:id="@+id/dt_timing"
-                            android:layout_width="0dp"
-                            android:layout_weight="0.3"
-                            android:singleLine="true"
+                            style="@style/TableBodyText_notB"
                             android:gravity="left"
                             />
 
@@ -122,40 +114,38 @@
 
                     <TextView
                             android:id="@+id/lbl_desc"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.2"
-                            android:gravity="left"
+                            style="@style/TableBodyText"
                             android:text="DESC"
                             />
 
                     <TextView
                             android:id="@+id/dt_description"
-                            android:layout_width="0dp"
-                            android:layout_weight="0.3"
-                            android:singleLine="true"
+                            style="@style/TableBodyText_notB"
                             android:gravity="left"
                             />
 
 
                 </TableRow>
+                <TableRow>
+                    <Button
+                            style="@style/NewAdButton"
+                            android:text="Find the Location"
+                            android:id="@+id/btn_gmap" />
+                    <Button
+                            style="@style/NewAdButton"
+                            android:text="Request Detail Address"
+                            android:id="@+id/btn_request" />
+
+                </TableRow>
+
 
 
 
             </TableLayout>
-            <ProgressBar android:id="@+id/progress" android:layout_width="125dp"
-                         android:layout_height="125dp" />
 
             <ImageView android:id="@+id/dt_img_view"
                        android:layout_width="500dp" android:layout_height="500dp"
                        android:scaleType="fitStart" android:visibility="gone"/>
-            <ProgressBar android:id="@+id/progress2" android:layout_width="125dp"
-                         android:layout_height="125dp" />
-            <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Find the location"
-                    android:id="@+id/btn_gmap" android:layout_gravity="left|center_vertical"/>
             <TextView  android:id="@+id/dt_dist"
                        android:layout_width="500dp" android:layout_height="500dp"
                        android:visibility="gone"/>
@@ -168,6 +158,6 @@
 
                     <!--android:layout_gravity="center|right|top" android:src="@drawable/kg_launcher"/>-->
 
-        </LinearLayout>
-    </LinearLayout>
+        </RelativeLayout>
+    <!--</LinearLayout>-->
 </ScrollView>

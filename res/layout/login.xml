@@ -2,23 +2,24 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/background_pattern_fill"
     android:fillViewport="true">
+    <!--android:background="@drawable/background_pattern_fill"-->
 
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-     android:layout_marginTop="20dp"
-    android:padding="10dp" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Sign in"
-        android:textSize="45sp" />
+<!--<LinearLayout-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical"-->
+     <!--android:layout_marginTop="20dp"-->
+    <!--android:padding="10dp" >-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Sign in"-->
+        <!--android:textSize="45sp" />-->
 
     <TableLayout
          android:layout_marginTop="30dp"
@@ -28,10 +29,7 @@
         <TableRow>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.25"
-                android:gravity="left"
+                    style="@style/TableBodyText"
                 android:text="Email" />
 
             <EditText
@@ -49,10 +47,7 @@
 
             <TextView
                 android:id="@+id/Lpass"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.25"
-                android:gravity="left"
+                style="@style/TableBodyText"
                 android:text="Password" />
 
             <EditText
@@ -63,25 +58,33 @@
                 android:password="true"
                 android:singleLine="true" />
         </TableRow>
+        <TableRow>
+            <Button
+                    android:id="@+id/login"
+                    style="@style/NewAdButton"
+
+                    android:text="Login" />
+        </TableRow>
     </TableLayout>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/relativeLayout1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" >-->
 
-        <Button
-            android:id="@+id/login"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-             android:background="@drawable/button"
-               android:layout_marginTop="20dp"
-    
-            android:text="Login" />
-    </RelativeLayout>
+        <!--<Button-->
+            <!--android:id="@+id/login"-->
+            <!--android:layout_width="120dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="5dp"-->
+            <!--android:layout_marginTop="20dp"-->
 
-</LinearLayout>
+            <!--android:text="Login" />-->
+             <!--&lt;!&ndash;android:background="@drawable/button"&ndash;&gt;-->
+
+    <!--</RelativeLayout>-->
+
+<!--</LinearLayout>-->
 
 </ScrollView>

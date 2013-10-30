@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="AppTheme" parent="android:Theme.Light">
+
+        <item name="android:editTextStyle">@style/EditTextAppTheme</item>
+
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewAppTheme</item>
+
+        <item name="android:radioButtonStyle">@style/RadioButtonAppTheme</item>
+
+        <item name="android:buttonStyle">@style/MyCustomButton</item>
+
+        <item name="android:imageButtonStyle">@style/ImageButtonAppTheme</item>
+
+        <item name="android:buttonStyleToggle">@style/ToggleAppTheme</item>
+        <!---->
+        <item name="android:textColorPrimary">@color/White</item>
+        <item name="android:windowBackground">@color/C_darkblue</item>
+        <item name="android:colorBackgroundCacheHint">@color/WhiteSmoke</item>
+        <!---->
+
+    </style>
+</resources>

@@ -47,10 +47,10 @@ public class NewAdActivity extends Activity implements OnClickListener {
     private ImageView imageview;
     private EditText edit_title;
     private EditText edit_desc;
-    private TextView tvDisplayDate_from;
-    private TextView tvDisplayTime_from;
-    private TextView tvDisplayDate_to;
-    private TextView tvDisplayTime_to;
+//    private TextView tvDisplayDate_from;
+//    private TextView tvDisplayTime_from;
+//    private TextView tvDisplayDate_to;
+//    private TextView tvDisplayTime_to;
     private DatePicker datePicker;
     private TimePicker timePicker;
     private Long startTime;
@@ -121,12 +121,12 @@ public class NewAdActivity extends Activity implements OnClickListener {
         edit_desc = (EditText) findViewById(R.id.new_add_description);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         timePicker = (TimePicker) findViewById(R.id.timePicker);
-        tvDisplayDate_from = (TextView) findViewById(R.id.tvDate_from);
-
-        tvDisplayTime_from = (TextView) findViewById(R.id.tvTime_from);
-        tvDisplayDate_to = (TextView) findViewById(R.id.tvDate_to);
-
-        tvDisplayTime_to = (TextView) findViewById(R.id.tvTime_to);
+//        tvDisplayDate_from = (TextView) findViewById(R.id.tvDate_from);
+//
+//        tvDisplayTime_from = (TextView) findViewById(R.id.tvTime_from);
+//        tvDisplayDate_to = (TextView) findViewById(R.id.tvDate_to);
+//
+//        tvDisplayTime_to = (TextView) findViewById(R.id.tvTime_to);
         type = (Spinner) findViewById(R.id.new_ad_type);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this,
@@ -180,11 +180,11 @@ public class NewAdActivity extends Activity implements OnClickListener {
         day = c.get(Calendar.DAY_OF_MONTH);
 
         // set current date into textview
-        tvDisplayDate_from.setText(new StringBuilder()
+        btn_setDate_from.setText(new StringBuilder()
                 // Month is 0 based, just add 1
                 .append(month + 1).append("-").append(day).append("-")
                 .append(year).append(" "));
-        tvDisplayDate_to.setText(new StringBuilder()
+        btn_setDate_to.setText(new StringBuilder()
                 // Month is 0 based, just add 1
                 .append(month + 1).append("-").append(day).append("-")
                 .append(year).append(" "));
@@ -201,10 +201,10 @@ public class NewAdActivity extends Activity implements OnClickListener {
         min = c.get(Calendar.MINUTE);
 
         // set current time into textview
-        tvDisplayTime_from.setText(
+        btn_setTime_from.setText(
                 new StringBuilder().append(pad(hour))
                         .append(":").append(pad(min)));
-        tvDisplayTime_to.setText(
+        btn_setTime_to.setText(
                 new StringBuilder().append(pad(hour))
                         .append(":").append(pad(min)));
 
@@ -314,10 +314,10 @@ public class NewAdActivity extends Activity implements OnClickListener {
             day = selectedDay;
 
             // set selected date into textview
-            tvDisplayDate_from.setText(new StringBuilder().append(month + 1)
+            btn_setDate_from.setText(new StringBuilder().append(month + 1)
                     .append("-").append(day).append("-").append(year)
                     .append(" "));
-            tvDisplayDate_to.setText(new StringBuilder().append(month + 1)
+            btn_setDate_to.setText(new StringBuilder().append(month + 1)
                     .append("-").append(day).append("-").append(year)
                     .append(" "));
 
@@ -337,10 +337,10 @@ public class NewAdActivity extends Activity implements OnClickListener {
             day = selectedDay;
 
             // set selected date into textview
-            tvDisplayDate_from.setText(new StringBuilder().append(month + 1)
+            btn_setDate_from.setText(new StringBuilder().append(month + 1)
                     .append("-").append(day).append("-").append(year)
                     .append(" "));
-            tvDisplayDate_to.setText(new StringBuilder().append(month + 1)
+            btn_setDate_to.setText(new StringBuilder().append(month + 1)
                     .append("-").append(day).append("-").append(year)
                     .append(" "));
 
@@ -357,7 +357,7 @@ public class NewAdActivity extends Activity implements OnClickListener {
                     min = selectedMinute;
 
                     // set current time into textview
-                    tvDisplayTime_from.setText(new StringBuilder().append(pad(hour))
+                    btn_setTime_from.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(min)));
 
                     // set current time into timepicker
@@ -374,7 +374,7 @@ public class NewAdActivity extends Activity implements OnClickListener {
                     min = selectedMinute;
 
                     // set current time into textview
-                    tvDisplayTime_to.setText(new StringBuilder().append(pad(hour))
+                    btn_setTime_to.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(min)));
 
                     // set current time into timepicker
@@ -471,8 +471,8 @@ public class NewAdActivity extends Activity implements OnClickListener {
 
             String title = edit_title.getText().toString();
             String desc = edit_desc.getText().toString();
-            String time_from = tvDisplayDate_from.getText().toString() + tvDisplayTime_from.getText().toString();
-            String time_to = tvDisplayDate_to.getText().toString() + tvDisplayTime_to.getText().toString();
+            String time_from = btn_setDate_from.getText().toString() + btn_setTime_from.getText().toString();
+            String time_to = btn_setDate_to.getText().toString() + btn_setTime_to.getText().toString();
 
             // Parse dates and convert to timestamps
             DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm");
