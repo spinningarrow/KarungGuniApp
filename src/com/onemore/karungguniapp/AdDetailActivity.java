@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.omemore.karungguniapp.listview.ImageLoader;
 import com.onemore.karungguniapp.LBS.GeoUtil;
 import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
 
@@ -123,10 +125,8 @@ public class AdDetailActivity extends Activity
 		tv_timing.setText(timing);
 		tv_title.setText(title);
 		tv_addr.setText(testAddr);
-		String img_url = "http://res.cloudinary.com/demo/image/upload/sample.jpg";
-		//String img_url  = "http://1.bp.blogspot.com/_NNTkR1HgsXA/S-DHrJxSQYI/AAAAAAAAAAM/Cy4cwy-00Y4/S660/ePs_Newspaper+from+your+date+of+birth.jpg";
-		new RetrieveImageTask(photo).execute(img_url);
-		new RetrieveSellerLocAndCalculateDistance(tv_dist).execute();
+		ImageLoader imageLoader=new ImageLoader(this.getApplicationContext());
+		imageLoader.DisplayImage(photo_url, photo);
 
 
 
@@ -150,97 +150,6 @@ public class AdDetailActivity extends Activity
 			}
 		});
 	}
-	public class RetrieveSellerLocAndCalculateDistance extends AsyncTask<String, Void, Double> {
-		private TextView textView;
-
-		public RetrieveSellerLocAndCalculateDistance(TextView textView) {
-			this.textView = textView;
-		}
-
-
-		@Override
-		protected Double doInBackground(String... args) {
-			Double dist = new Double(0);
-			String testAddr = "======================";
-			testAddr = "block271a Jurong west avenue 5 Singapore";
-			String parsed_addr = parseAddress(testAddr);
-			double[] seller_location =  GeoUtil.getLatLongFromAddress(parsed_addr);
-			testAddr =String.valueOf(seller_location[0] )+"  "+ String.valueOf(seller_location[1]);
-			while( GetLocationWithGPS.gotMyLoc==null);
-			if(GetLocationWithGPS.gotMyLoc==GetLocationWithGPS.GET_MY_LOC_SUCCESS) {
-				dist  =new Double(GeoUtil.calculateDistance(GetLocationWithGPS.myLoc,seller_location));
-			}
-			return dist;
-		}
-
-		@Override
-		protected void onPostExecute(Double dist) {
-			progressBar2.setVisibility(View.GONE);
-			if (dist != null && dist.doubleValue()!=0.0) {
-				String formatted_dist = String.format("%.2f",dist.doubleValue());
-				textView.setText(formatted_dist+"m");
-				textView.setVisibility(View.VISIBLE);
-			}
-			else{
-				textView.setText(GetLocationWithGPS.gotMyLoc);
-				textView.setVisibility(View.VISIBLE);
-			}
-		}
-
-
-
-	}
-
-
-	private class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
-		private ImageView imageView;
-
-		public RetrieveImageTask(ImageView imageView) {
-			this.imageView = imageView;
-		}
-
-		@Override
-		protected Bitmap doInBackground(String... args) {
-			//Bitmap bitmap = app.retrieveBitmap(args[0]);
-			//            try {
-			//                Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
-			//                Bitmap.createScaledBitmap(bitmap,600,600,false) ;
-			//                photo.setImageBitmap(bitmap);
-			//                return bitmap;
-			//            } catch (MalformedURLException e) {
-			//                e.printStackTrace();
-			//
-			//            } catch (IOException e) {
-			//                e.printStackTrace();
-			//            }
-			//            finally {
-			//                return null;
-			//            }
-			Bitmap bitmap = app.retrieveBitmap(args[0]);
-			return bitmap;
-		}
-
-		@Override
-		protected void onPostExecute(Bitmap bitmap) {
-			progressBar.setVisibility(View.GONE);
-			if (bitmap != null) {
-				imageView.setImageBitmap(bitmap);
-				imageView.setVisibility(View.VISIBLE);
-			}
-		}
-
-
-	}
-	@Override
-	protected void onPause() {
-		super.onPause();
-		//        if(locationMgr!=null)
-		//        {
-		//        locationMgr.removeGpsStatusListener(gpsListener);
-		//        }
-	}
-	//Pass the local dir for the photos
-
 
 
 }
