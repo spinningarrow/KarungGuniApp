@@ -94,6 +94,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         values.put(AppData.Sellers.COLUMN_NAME_EMAIL, seller.getString(AppData.Sellers.COLUMN_NAME_EMAIL));
                         values.put(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME, seller.getString(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME));
                         values.put(AppData.Sellers.COLUMN_NAME_ADDRESS, seller.getString(AppData.Sellers.COLUMN_NAME_ADDRESS));
+                        values.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, seller.getString(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT));
+                        values.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG, seller.getString(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG));
 
                         // Insert to local DB
                         mContentResolver.insert(AppData.Sellers.CONTENT_ID_URI_BASE, values);
