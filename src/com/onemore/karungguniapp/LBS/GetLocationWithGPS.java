@@ -13,7 +13,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.GpsStatus;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -35,8 +35,8 @@ public class GetLocationWithGPS extends Service {
     private Context mContext;
 
     public LocationManager locationMgr;
-    private GpsListener gpsListener;
-    private GpsStatus gpsStatus;
+//    private GpsListener gpsListener;
+//    private GpsStatus gpsStatus;
     private Handler handler;
 
 //    private TextView title;
@@ -54,14 +54,14 @@ public class GetLocationWithGPS extends Service {
         super.onCreate();
         mContext = getApplicationContext();
         locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        gpsListener = new GpsListener();
+//        gpsListener = new GpsListener();
         myLoc = new double[2];
 
         handler = new Handler() {
             public void handleMessage(Message m) {
                 Log.d(KarungGuniActivity.LOG_TAG, "Handler returned with message: " + m.toString());
                 if (m.what == LocationHelper.MESSAGE_CODE_LOCATION_FOUND) {
-                    Toast.makeText(mContext,"HANDLER RETURNED\nlat:" + m.arg1 + "\nlon:" + m.arg2,Toast.LENGTH_LONG);
+                    Toast.makeText(mContext,"HANDLER RETURNED\nlat:" + m.arg1 + "\nlon:" + m.arg2, Toast.LENGTH_LONG);
                     if (DEBUG) Log.v(LOC_DATA, "HANDLER RETURNED\nlat:" + m.arg1 + "\nlon:" + m.arg2);
 
                     latitude = m.arg1;
@@ -73,12 +73,30 @@ public class GetLocationWithGPS extends Service {
                     //detail.setText("HANDLER RETURNED\nunable to get location");
                     Toast.makeText(mContext,"HANDLER RETURNED\nunable to get location",Toast.LENGTH_LONG);
                     if (DEBUG) Log.v(LOC_DATA, "HANDLER RETURNED\nunable to get location");
+                    Location lastLocation = locationMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (lastLocation != null){
+                    latitude = lastLocation.getLatitude();
+                    longitude = lastLocation.getLongitude();
+                        myLoc =new double[]{latitude,longitude};
+                    gotMyLoc= GET_MY_LOC_SUCCESS;
+                    }   else{
                     gotMyLoc= UNABLE;
+                    }
                 } else if (m.what == LocationHelper.MESSAGE_CODE_PROVIDER_NOT_PRESENT) {
                     //detail.setText("HANDLER RETURNED\nprovider not present");
                     Toast.makeText(mContext,"HANDLER RETURNED\nprovider not present",Toast.LENGTH_LONG);
                     if (DEBUG) Log.v(LOC_DATA, "HANDLER RETURNED\nunable to get location");
-                    gotMyLoc = UNABLE;
+                    Location lastLocation = locationMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (lastLocation != null){
+
+                        latitude = lastLocation.getLatitude();
+                    longitude = lastLocation.getLongitude();
+                        myLoc =new double[]{latitude,longitude};
+                    gotMyLoc = GET_MY_LOC_SUCCESS;
+                    }else{
+                        gotMyLoc = UNABLE;
+                    }
+
 
                 }
                 //gotMyLoc = null;
@@ -109,73 +127,9 @@ public class GetLocationWithGPS extends Service {
             locationHelper.getCurrentLocation(30);
         }
 
-        locationMgr.addGpsStatusListener(gpsListener);
 
 
-//        openGMap = (Button) findViewById(R.id.openGMap_button);
-//        openGMap.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v){
-////                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
-////                startActivity(new Intent(KarangGuniActivity.this, android.net.Uri.parse(uri) ));
-//                if (latitude !=-1&& longitude!=-1){
-////                    latitude =  1.351909;
-////                    longitude = 103.703675;
-//                        int zoom=16;
-//                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f", latitude*1e-6, longitude*1e-6,zoom,latitude*1e-6,longitude*1e-6); /*,latitude/1000000,longitude/1000000,zoom);*/
-//                    Uri parsedURI = Uri.parse(uri);
-//                    Intent intent = new Intent(Intent.ACTION_VIEW, parsedURI);
-//                    openGMap.setText(parsedURI.toString());
-//                    startActivity(intent);
-//                 }else{
-//                    openGMap.setText("Location not Available");
-////                    latitude =  1351909.0;
-////                    longitude = 103703675.0;
-////                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f", latitude*1e-6, longitude*1e-6,20,latitude*1e-6,longitude*1e-6);
-////                    Uri parsedURI = Uri.parse(uri);
-////                    openGMap.setText(parsedURI.toString());
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    startActivity(intent);
-//                }
-//            }
-//        });
-
-
-    }
-
-//    @Override
-//    protected void onResume() {
-//        //super.onResume();
-//
-//        // determine if GPS is enabled or not, if not prompt user to enable it
-//        if (!locationMgr.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("GPS is not enabled")
-//                    .setMessage("Would you like to go the location settings and enable GPS?").setCancelable(true)
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
-//                        }
-//                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int id) {
-//                    dialog.cancel();
-//                    finish();
-//                }
-//            });
-//            AlertDialog alert = builder.create();
-//            alert.show();
-//        } else {
-//            LocationHelper locationHelper = new LocationHelper(locationMgr, handler, KarungGuniActivity.LOG_TAG);
-//            locationHelper.getCurrentLocation(30);
-//        }
-//
-//        locationMgr.addGpsStatusListener(gpsListener);
-//    }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        locationMgr.removeGpsStatusListener(gpsListener);
-//    }
+}
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -183,33 +137,6 @@ public class GetLocationWithGPS extends Service {
     }
 
 
-    private class GpsListener implements GpsStatus.Listener {
-        public void onGpsStatusChanged(int event) {
-            Log.d("GpsListener", "Status changed to " + event);
-            switch (event) {
-                case GpsStatus.GPS_EVENT_STARTED:
-                   // gpsEvents.setText("GPS_EVENT_STARTED");
-                   // Toast.makeText(mContext,)
-                    break;
-                case GpsStatus.GPS_EVENT_STOPPED:
-//                    gpsEvents.setText("GPS_EVENT_STOPPED");
-                    break;
-
-                case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-//                    gpsStatus = locationMgr.getGpsStatus(gpsStatus);
-//                    StringBuilder sb = new StringBuilder();
-//                    for (GpsSatellite sat : gpsStatus.getSatellites()) {
-//                        sb.append("Satellite N:" + sat.getPrn() + " AZ:" + sat.getAzimuth() + " EL:" + sat.getElevation()
-//                                + " S/N:" + sat.getSnr() + "\n");
-//                    }
-//                    satelliteStatus.setText(sb.toString());
-                    break;
-                case GpsStatus.GPS_EVENT_FIRST_FIX:
-//                    gpsEvents.setText("GPS_EVENT_FIRST_FIX");
-                    break;
-            }
-        }
-    }
 
 
 
