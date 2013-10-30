@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 public class EditProfile extends Activity {
 	
-	private TextView view_currentPw, view_newPw, view_confirmNewPw, view_displayName, view_address;
+	private EditText view_currentPw, view_newPw, view_confirmNewPw, view_displayName, view_address;
 	private ProgressDialog progressDialog;
 	
 	private Bundle prefs;
@@ -37,11 +37,11 @@ public class EditProfile extends Activity {
 	    role = prefs.getString("role");
 	    
 	    setContentView(R.layout.edit_profile);
-    	view_currentPw = (TextView)findViewById(R.id.editprofile_currentpw);
-    	view_newPw = (TextView)findViewById(R.id.editprofile_newpw); 
-    	view_confirmNewPw = (TextView)findViewById(R.id.editprofile_confirmnewpw); 
-    	view_displayName = (TextView)findViewById(R.id.editprofile_displayname);
-    	view_address = (TextView)findViewById(R.id.editprofile_address);
+    	view_currentPw = (EditText)findViewById(R.id.editprofile_currentpw);
+    	view_newPw = (EditText)findViewById(R.id.editprofile_newpw); 
+    	view_confirmNewPw = (EditText)findViewById(R.id.editprofile_confirmnewpw); 
+    	view_displayName = (EditText)findViewById(R.id.editprofile_displayname);
+    	view_address = (EditText)findViewById(R.id.editprofile_address);
     	
 	    if (role.equals(AppData.ROLE_KG)){
 	    	view_address.setVisibility(View.GONE);

@@ -42,7 +42,7 @@
                 android:gravity="left"
                 android:inputType="textMultiLine"
 		        android:text="Current Password" />
-		    <TextView
+		    <EditText
 		        android:id="@+id/editprofile_currentpw"
 		        android:inputType="textPassword" 
 	         	android:layout_width="0dp"
@@ -70,7 +70,7 @@
                 android:layout_weight="0.35"
                 android:gravity="left"
 		        android:text="New Password" />
-		    <TextView
+		    <EditText
 		        android:id="@+id/editprofile_newpw"
 		        android:inputType="textPassword" 
 	         	android:layout_width="0dp"
@@ -88,7 +88,7 @@
                 android:layout_weight="0.35"
                 android:gravity="left"
 		        android:text="Confirm New Password" />
-		    <TextView
+		    <EditText
 		        android:id="@+id/editprofile_confirmnewpw"
 		        android:inputType="textPassword" 
 	         	android:layout_width="0dp"
@@ -106,7 +106,7 @@
                 android:layout_weight="0.35"
                 android:gravity="left"
 		        android:text="Display Name" />
-		    <TextView
+		    <EditText
 		        android:id="@+id/editprofile_displayname"
 		        android:layout_width="0dp"
                 android:layout_weight="0.65"
@@ -123,7 +123,7 @@
                 android:layout_weight="0.35"
                 android:gravity="left"
 		        android:text="Street Address" />
-		    <TextView 
+		    <EditText
 		        android:id="@+id/editprofile_address"
 		        android:layout_width="0dp"
                 android:layout_weight="0.65"
