@@ -38,7 +38,6 @@
     <string name="deal_list_network_unavailable">\"Nerwork unavailable\"</string>
     <string name="action_search">search</string>
     <!--new-post-->
-    <string name="new_ad">new advertisement</string>
     <string name="posting_new_ad">Posting a new advertisement</string>
     <string name="posting_new_ad_msg">Posting a new advertisement, =)</string>
     <string name="add_ad_exists">Ad Exist Err</string>

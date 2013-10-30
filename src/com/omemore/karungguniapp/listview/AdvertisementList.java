@@ -83,10 +83,6 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		//			   }
 		//			});
 		//		mListView.addFooterView(footer);
-		// Create an empty adapter we will use to display the loaded data.
-		//		ImageView iv = (ImageView) getActivity().findViewById(R.id.icon);
-		//		String url = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/1075913_67400590475_1168305305_q.jpg";		
-		//		iv.setImageDrawable(LoadImageFromWebOperations(url));
         mContext = getActivity();
 		mAdapter = new SimpleCursorAdapter(getActivity(),
 				R.layout.advertisement, null,
@@ -142,14 +138,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		parent.addView(v, 0);
 		return parent;
 	}
-//    @Override
-//    public void onListItemClick(ListView listView, View view, int position, long id) {
-//        view.setBackgroundColor(android.R.color.background_light);
-//        app.setCurrentItem(app.getItems().get(position));
-//        Intent dealDetails = new Intent(mContext, AdDetailActivity.class);
-//        startActivity(dealDetails);
-//    }
-
+	
 	//	public boolean onQueryTextChange(String newText) {
 	//		// Called when the action bar search text has changed.  Update
 	//		// the search filter, and restart the loader to do a new query
@@ -168,15 +157,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 	//		return true;
 	//	}
 	////
-	//
-	//	@Override 
-	//	public void onListItemClick(ListView l, View v, int position, long id)
-	//	{
-	//		// Insert desired behavior here.
-	//		Log.i("FragmentComplexList", "Item clicked: " + id);
-	//	}
-	//
-
+	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		// This is called when a new Loader needs to be created.  This
 		// sample only has one Loader, so we don't care about the ID.
@@ -209,10 +190,4 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		// longer using it.
 		mAdapter.swapCursor(null);
 	}
-
-	//    private void resetListItems(List<Advertisement> newItems) {
-	//        .clear();
-	//        items.addAll(newItems);
-	//        mAdapter.notifyDataSetChanged();
-	//    }
 }
