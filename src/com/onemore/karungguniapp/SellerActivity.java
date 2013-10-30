@@ -32,7 +32,7 @@ public class SellerActivity extends Activity {
             Bundle args = new Bundle();
             args.putString("selection", "owner = \"" + email + "\"");
             args.putString("orderby", null);
-            args.putString("column", AppData.Advertisements.COLUMN_NAME_DESCRIPTION);	  	 
+            args.putString("column", AppData.Advertisements.COLUMN_NAME_STATUS);	  	 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
             ads.setArguments(args);

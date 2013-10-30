@@ -1,6 +1,11 @@
 package com.omemore.karungguniapp.listview;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.ListFragment;
 import android.app.LoaderManager;
@@ -18,6 +23,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
+import android.widget.TextView;
 
 import com.onemore.karungguniapp.AppData;
 import com.onemore.karungguniapp.KGApp;
@@ -61,13 +67,31 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 		mContext = getActivity();
 		mAdapter = new SimpleCursorAdapter(getActivity(),
 				R.layout.advertisement, null,
-				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, specialColumn, AppData.Advertisements.COLUMN_NAME_PHOTO},
-				new int[] { R.id.title, R.id.distance, R.id.list_image }, 0);
+				new String[] { AppData.Advertisements.COLUMN_NAME_TITLE, AppData.Advertisements.COLUMN_NAME_DESCRIPTION, AppData.Advertisements.COLUMN_NAME_PHOTO, specialColumn},
+				new int[] { R.id.title, R.id.description, R.id.list_image, R.id.time_posted }, 0);
 		imageLoader=new ImageLoader(getActivity().getApplicationContext());
 		mAdapter.setViewBinder(new ViewBinder() {
 
 			@Override
 			public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+				if (view.getId() == R.id.time_posted) {
+					TextView text = (TextView) view;
+					if (specialColumn.equals(AppData.Advertisements.COLUMN_NAME_TIMING_END))
+					{
+					    SimpleDateFormat date_format = new SimpleDateFormat("EEE HH:mm");
+						Date date = new Date((long) Float.parseFloat(cursor.getString(columnIndex)));
+						String time = date_format.format(date);
+						text.setText(time);
+						return true;
+					}
+					else if(specialColumn.equals(AppData.Advertisements.COLUMN_NAME_DISTANCE))
+					{
+						text.setText(cursor.getInt(columnIndex) + " m");
+						return true;
+					}
+					else
+						return false;
+				}
 				if (view.getId() == R.id.list_image) {
 					ImageView image = (ImageView) view;
 					String url = cursor.getString(columnIndex);

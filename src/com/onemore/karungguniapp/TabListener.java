@@ -12,7 +12,7 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
     private final Activity mActivity;
     private final String mTag;
     private final Class<T> mClass;
-    private final Bundle mArgs;
+    private Bundle mArgs;
 
     /** Constructor used each time a new tab is created.
       * @param activity  The host Activity, used to instantiate the fragment
