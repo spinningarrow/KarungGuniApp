@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView2" 
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:background="@drawable/background_pattern_fill">
+        
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="376dp"
+            android:layout_margin="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile"
+                android:layout_gravity="center_horizontal"
+                android:textSize="45sp" />
+            
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent" 
+           android:orientation="vertical" >
+  
+  <TableLayout
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+		    <TextView
+		        android:id="@+id/editprofile_label_currentpw"
+		        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="left"
+                android:inputType="textMultiLine"
+		        android:text="Current Password" />
+		    <TextView
+		        android:id="@+id/editprofile_currentpw"
+		        android:inputType="textPassword" 
+	         	android:layout_width="0dp"
+                android:layout_weight="0.65"
+                android:singleLine="true"
+                android:editable="false"
+                android:focusable="false"/>
+   		</TableRow>
+   		
+        <TableRow>
+		    <TextView
+		        android:id="@+id/editprofile_instructions"
+		        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="@string/editprofile_instructions" />
+		</TableRow>
+
+        <TableRow>
+		    <TextView
+		        android:id="@+id/editprofile_label_newpw"
+		        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="left"
+		        android:text="New Password" />
+		    <TextView
+		        android:id="@+id/editprofile_newpw"
+		        android:inputType="textPassword" 
+	         	android:layout_width="0dp"
+                android:layout_weight="0.65"
+                android:singleLine="true"
+                android:editable="false"
+                android:focusable="false"/>
+   		</TableRow>
+   		
+        <TableRow>
+		    <TextView
+		        android:id="@+id/editprofile_label_confirmnewpw"
+		        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="left"
+		        android:text="Confirm New Password" />
+		    <TextView
+		        android:id="@+id/editprofile_confirmnewpw"
+		        android:inputType="textPassword" 
+	         	android:layout_width="0dp"
+                android:layout_weight="0.65"
+                android:singleLine="true"
+                android:editable="false"
+                android:focusable="false"/>
+   		</TableRow>
+   		
+        <TableRow>
+		    <TextView
+		        android:id="@+id/editprofile_label_displayname"
+		        android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="left"
+		        android:text="Display Name" />
+		    <TextView
+		        android:id="@+id/editprofile_displayname"
+		        android:layout_width="0dp"
+                android:layout_weight="0.65"
+                android:singleLine="true"
+                android:editable="false"
+                android:focusable="false" />
+   		</TableRow>
+
+        <TableRow>
+		    <TextView
+	        	android:id="@+id/editprofile_label_address"
+		       	android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:gravity="left"
+		        android:text="Street Address" />
+		    <TextView 
+		        android:id="@+id/editprofile_address"
+		        android:layout_width="0dp"
+                android:layout_weight="0.65"
+                android:inputType="textMultiLine"
+		        android:editable="false"
+                android:focusable="false"/>
+		</TableRow>
+
+</TableLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+         <Button
+        android:id="@+id/editprofile_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" 
+        android:layout_alignParentRight="true"
+        
+         />
+    
+    </RelativeLayout>
+    </LinearLayout>  
+	</LinearLayout>
+   	</ScrollView>

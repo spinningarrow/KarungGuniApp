@@ -27,5 +27,18 @@
     <!-- menu-related -->
     <string name="edit_profile">Edit Profile</string>
     <string name="logout">Logout</string>
-
+    
+    <!-- edit profile-related -->
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="editprofile_instructions">Any changes require your current password.</string>
+    <string name="editprofile_usernotfound">Error retrieving user details: User not found</string>
+    <string name="editprofile_connerror">Error retrieving user details: Connection error</string>
+    <string name="editprofile_loading_title">Loading..&#8230;</string>
+    <string name="editprofile_loading_message">Please wait while your details are being retrieved.</string>
+    <string name="editprofile_updating_title">Updating..&#8230;</string>
+    <string name="editprofile_updating_message">Please wait while your details are being updated.</string>
+	<string name="editprofile_compulsory">This field is compulsory.</string>
+	<string name="editprofile_passwords_different">New and confirmed passwords must match.</string>
+	<string name="editprofile_address_empty">Address is required.</string>
+	<string name="editprofile_success">User details successfully updated.</string>
 </resources>

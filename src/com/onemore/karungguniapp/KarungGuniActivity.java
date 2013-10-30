@@ -33,12 +33,11 @@ public class KarungGuniActivity extends Activity {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.edit_profile:
-	            //TODO
+	            startActivity(new Intent(getBaseContext(), EditProfile.class));
 	            return true;
 	        case R.id.logout:
 	            AccountManager.clearCurrentUser(getApplicationContext());
-	            Intent i = new Intent(getBaseContext(), Main.class);
-	            startActivity(i);
+	            startActivity(new Intent(getBaseContext(), Main.class));
 	            finish();
 	            return true;
 	        default:

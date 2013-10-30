@@ -162,6 +162,48 @@ public class AccountManager {
                 callback);
     }
 
+    // Retrieve user details for EditProfile activity
+    public static void getUserDetails(String email, String role, Handler.Callback callback){
+    	
+    	Uri table = null;
+    	// Query the RestClient for user with specified email
+        // Pass the callback to query so it can populate it
+    	if (role.equals(AppData.ROLE_KG))
+    		table = AppData.KarungGunis.CONTENT_ID_URI_BASE ;
+    	else
+    		table = AppData.Sellers.CONTENT_ID_URI_BASE;
+    	
+    	RestClient.query(
+                Uri.parse(table + email),
+                null,
+                null,
+                null,
+                null,
+                callback);
+    	
+    }
+    
+    // Retrieve user details for EditProfile activity
+    public static void setUserDetails(String email, String role, Handler.Callback callback){
+    	
+    	Uri table = null;
+
+    	if (role.equals(AppData.ROLE_KG))
+    		table = AppData.KarungGunis.CONTENT_ID_URI_BASE ;
+    	else
+    		table = AppData.Sellers.CONTENT_ID_URI_BASE;
+    	
+    	//TODO 	Update row
+//    	RestClient.update(
+//                Uri.parse(table + email),
+//                null,
+//                null,
+//                null,
+//                null,
+//                callback);
+    	
+    }
+    
     // Get the current user, if any
     public static Bundle getCurrentUser(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
