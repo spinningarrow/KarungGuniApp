@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
                 android:gravity="left"
-        android:text="User Name"
+        android:text="Display Name"
        />
 
     <EditText

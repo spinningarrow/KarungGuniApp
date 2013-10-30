@@ -121,6 +121,10 @@
         </activity>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
+        <activity 
+            android:name="com.onemore.karungguniapp.EditProfile"
+            android:label="@string/title_activity_edit_profile" >
+        </activity>
     </application>
 
 </manifest>
