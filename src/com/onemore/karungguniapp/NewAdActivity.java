@@ -4,15 +4,10 @@ import android.app.*;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -20,13 +15,17 @@ import com.cloudinary.Cloudinary;
 import com.onemore.karungguniapp.PhotoService.AlbumStorageDirFactory;
 import com.onemore.karungguniapp.PhotoService.BaseAlbumDirFactory;
 import com.onemore.karungguniapp.PhotoService.FroyoAlbumDirFactory;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.UUID;
 
 //import com.onemore.karungguniapp.PhotoService.PhotoUtil;
 
@@ -60,6 +59,16 @@ public class NewAdActivity extends Activity implements OnClickListener {
     private KGApp app;
     private static File file;
 
+    // Constants for photo upload request
+    private static final int REQUEST_CAMERA = 0;
+    private static final int REQUEST_GALLERY = 1;
+
+    // Stream to hold the photo if the user wants to upload one
+    InputStream photoInputStream;
+
+    Cloudinary cloudinary;
+    Activity self;
+
     private static HashMap<String, String> types = new HashMap<String, String>();
 
     static {
@@ -69,8 +78,6 @@ public class NewAdActivity extends Activity implements OnClickListener {
         types.put("Magazines", AdType.MAGAZINES.toString());
         types.put("Shoes", AdType.SHOES.toString());
         types.put("Others", AdType.OTHER.toString());
-
-
     }
 
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
@@ -90,10 +97,10 @@ public class NewAdActivity extends Activity implements OnClickListener {
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        self = this;
         setContentView(R.layout.new_ad);
 
         app = (KGApp) getApplication();
@@ -132,39 +139,38 @@ public class NewAdActivity extends Activity implements OnClickListener {
             mAlbumStorageDirFactory = new BaseAlbumDirFactory();
         }
 
-
         setCurrentDateOnView();
         setCurrentTimeOnView();
 
         addListenerOnButton();
 
+        // Initialize Cloudinary (uses the CLOUDINARY_URL set in AndroidManifest)
+        cloudinary = new Cloudinary(getApplicationContext());
     }
 
+    // Handle the results from the photo upload dialog (take a new photo or choose from gallery)
+    // Calls the photo upload asynchronous task which uploads the photo to Cloudinary
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch (requestCode) {
-            case 0:
-                if (resultCode == RESULT_OK) {
-                    if (resultCode == RESULT_OK) {
-//                        Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
-//                        imageview.setImageBitmap(photo);
-                        handleCameraPhoto();
-                    }
-                }
 
-                break;
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    imageview.setImageURI(selectedImage);
-                }
-                break;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CAMERA:
+                case REQUEST_GALLERY:
+
+                    try {
+                        photoInputStream = getContentResolver().openInputStream(imageReturnedIntent.getData());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+            }
         }
     }
 
     public void setCurrentDateOnView() {
-
 
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
@@ -187,7 +193,6 @@ public class NewAdActivity extends Activity implements OnClickListener {
     }
 
     public void setCurrentTimeOnView() {
-
 
         final Calendar c = Calendar.getInstance();
         hour = c.get(Calendar.HOUR_OF_DAY);
@@ -214,9 +219,7 @@ public class NewAdActivity extends Activity implements OnClickListener {
             public void onClick(View v) {
 
                 showDialog(DATE_DIALOG_ID1);
-
             }
-
         });
         btn_setDate_to.setOnClickListener(new OnClickListener() {
 
@@ -224,9 +227,7 @@ public class NewAdActivity extends Activity implements OnClickListener {
             public void onClick(View v) {
 
                 showDialog(DATE_DIALOG_ID2);
-
             }
-
         }
         );
 
@@ -236,9 +237,7 @@ public class NewAdActivity extends Activity implements OnClickListener {
             public void onClick(View v) {
 
                 showDialog(TIME_DIALOG_ID1);
-
             }
-
         });
         btn_setTime_to.setOnClickListener(new OnClickListener() {
 
@@ -246,23 +245,15 @@ public class NewAdActivity extends Activity implements OnClickListener {
             public void onClick(View v) {
 
                 showDialog(TIME_DIALOG_ID2);
-
             }
-
         });
         btn_uploadPhoto.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
                 showDialog(CHOOSE_PHOTO_DIALOG);
-
-
             }
-
         });
-
-
     }
 
     @Override
@@ -289,32 +280,23 @@ public class NewAdActivity extends Activity implements OnClickListener {
             case CHOOSE_PHOTO_DIALOG:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.choose_method_to_upload_photo).setItems(R.array.cam_choose_array, new DialogInterface.OnClickListener() {
+
                     public void onClick(DialogInterface dialog, int which) {
 
+                        // Choice: Take a photo with the camera
                         if (which == 0) {
-
                             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-//                            File testfile = new File("/storage/emulated/0/DCIM/Camera/IMG_20131029_221240.jpg");
-                            file = dispatchTakePictureIntent(0, takePicture);
-                            //startActivityForResult(takePicture, 0);
-
-                            File testUpload = new File("/mnt/sdcard/DCIM/100MEDIA/IMAG0001.jpg");
-                            new UploadPhotoTask().execute(testUpload);
-
-//                            cloudinaryTest(new File("/mnt/sdcard/DCIM/100MEDIA/IMAG0001.jpg"));
+                            startActivityForResult(takePicture, REQUEST_CAMERA);
                         }
-                        if (which == 1) {
 
-                            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(pickPhoto, 1);
+                        // Choice: Choose from gallery
+                        if (which == 1) {
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, REQUEST_GALLERY);
                         }
                     }
                 });
                 return builder.create();
-
-
         }
         return null;
     }
@@ -411,48 +393,16 @@ public class NewAdActivity extends Activity implements OnClickListener {
     public void onClick(View view) {
         if (view.getId() == R.id.ad_post) {
             String title = edit_title.getText().toString();
-            String desc = edit_desc.getText().toString();
-            String time_from = tvDisplayDate_from.getText().toString() + tvDisplayTime_from.getText().toString();
-            String time_to = tvDisplayDate_to.getText().toString() + tvDisplayTime_to.getText().toString();
-            String timing = time_from + time_to;
-            final String category = types.get(type.getSelectedItem());
-            String img_url = "drawable/kg_launcher";
-            //final String role = roles.get(mRole.getSelectedItem());
-
             boolean invalid = false;
 
             if (title.equals("")) {
                 invalid = true;
                 Toast.makeText(getApplicationContext(), "Please enter the title for the new post", Toast.LENGTH_SHORT).show();
-
             }
 
             if (invalid == false) {
-
-                // Create a new advertisement and post it
-                createAdvertisement(title, desc, img_url, category, timing);
+                new UploadPhotoTask(self).execute(photoInputStream);
             }
-
-        }
-
-
-    }
-
-    public void cloudinaryTest(File file) {
-        Map config = new HashMap();
-        config.put("cloud_name", "hsl8yvyi0");
-        config.put("api_key", "638233174111431");
-        config.put("api_secret", "19YLRLY0ZkMunO7oOJDfmkCNDB0");
-        Cloudinary cloudinary = new Cloudinary(config);
-
-        Log.w("NEW AD CLOUDINARY", cloudinary.url().generate("sample.jpg"));
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(file);
-            cloudinary.uploader().upload(fileInputStream, Cloudinary.emptyMap());
-
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
@@ -474,166 +424,67 @@ public class NewAdActivity extends Activity implements OnClickListener {
         getContentResolver().insert(AppData.Advertisements.CONTENT_ID_URI_BASE, values);
     }
 
-    private void handleCameraPhoto() {
+    // Upload a photo to the Cloudinary service
+    // The photo must be provided as a File object from the camera or file storage or whatever
+    // Only the first file provided is considered
+    // Returns a JSONObject with the details of the uploaded file (the most useful being the 'public_id')
+    private class UploadPhotoTask extends AsyncTask<InputStream, Integer, JSONObject> {
+        ProgressDialog createAdProgress;
+        Activity activity;
 
-        if (mCurrentPhotoPath != null) {
-            setPic();
-            galleryAddPic();
-            mCurrentPhotoPath = null;
+        public UploadPhotoTask(Activity activity) {
+            this.activity = activity;
         }
-
-    }
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-
-    }
-
-    private void setPic() {
-
-		/* There isn't enough memory to open up more than a couple camera photos */
-        /* So pre-scale the target bitmap into which the file is decoded */
-
-		/* Get the size of the ImageView */
-        int targetW = imageview.getWidth();
-        int targetH = imageview.getHeight();
-
-		/* Get the size of the image */
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-		/* Figure out which way needs to be reduced less */
-        int scaleFactor = 1;
-        if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-        }
-
-		/* Set bitmap options to scale the image decode target */
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-
-		/* Associate the Bitmap to the ImageView */
-        imageview.setImageBitmap(bitmap);
-
-        imageview.setVisibility(View.VISIBLE);
-
-    }
-
-    private File setUpPhotoFile() throws IOException {
-
-        File f = createImageFile();
-        mCurrentPhotoPath = f.getAbsolutePath();
-
-        return f;
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-        File albumF = getAlbumDir();
-        File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
-        return imageF;
-    }
-
-    private String getAlbumName() {
-        return getString(R.string.album_name);
-    }
-
-    private File getAlbumDir() {
-        File storageDir = null;
-
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
-            storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
-
-            if (storageDir != null) {
-                if (!storageDir.mkdirs()) {
-                    if (!storageDir.exists()) {
-                        Log.d("CameraSample", "failed to create directory");
-                        return null;
-                    }
-                }
-            }
-
-        } else {
-            Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
-        }
-
-        return storageDir;
-    }
-
-    private File dispatchTakePictureIntent(int actionCode, Intent takePictureIntent) {
-
-        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File f = null;
-        switch (actionCode) {
-            case 0:
-
-
-                try {
-                    f = setUpPhotoFile();
-                    mCurrentPhotoPath = f.getAbsolutePath();
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    f = null;
-                    mCurrentPhotoPath = null;
-                }
-                break;
-
-            default:
-                break;
-        } // switch
-
-        startActivityForResult(takePictureIntent, actionCode);
-        return f;
-    }
-
-    private class UploadPhotoTask extends AsyncTask<File, Integer, JSONObject> {
 
         @Override
-        protected JSONObject doInBackground(File... files) {
+        protected void onPreExecute() {
+            createAdProgress = ProgressDialog.show(activity, activity.getString(R.string.new_ad_uploading_title), activity.getString(R.string.new_ad_uploading_message), true);
+        }
 
-            // Initialize Cloudinary
-            Map config = new HashMap();
-            config.put("cloud_name", "hsl8yvyi0");
-            config.put("api_key", "638233174111431");
-            config.put("api_secret", "19YLRLY0ZkMunO7oOJDfmkCNDB0");
-            Cloudinary cloudinary = new Cloudinary(config);
+        @Override
+        protected JSONObject doInBackground(InputStream... inputStreams) {
 
-            Log.w("NEW AD CLOUDINARY", cloudinary.url().generate("sample.jpg"));
-            FileInputStream fileInputStream;
+            if (inputStreams[0] == null) {
+                return null;
+            }
+
             JSONObject uploadedImage = null;
 
             try {
-                fileInputStream = new FileInputStream(files[0]);
-                uploadedImage = cloudinary.uploader().upload(fileInputStream, Cloudinary.emptyMap());
-
+                uploadedImage = cloudinary.uploader().upload(inputStreams[0], Cloudinary.emptyMap());
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
 
-//            int count = urls.length;
-//            long totalSize = 0;
-//            for (int i = 0; i < count; i++) {
-//                totalSize += Downloader.downloadFile(urls[i]);
-//                publishProgress((int) ((i / (float) count) * 100));
-//                // Escape early if cancel() is called
-//                if (isCancelled()) break;
-//            }
             return uploadedImage;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+
+            if (createAdProgress.isShowing()) {
+                createAdProgress.dismiss();
+            }
+
+            String title = edit_title.getText().toString();
+            String desc = edit_desc.getText().toString();
+            String time_from = tvDisplayDate_from.getText().toString() + tvDisplayTime_from.getText().toString();
+            String time_to = tvDisplayDate_to.getText().toString() + tvDisplayTime_to.getText().toString();
+            String timing = time_from + time_to;
+            final String category = types.get(type.getSelectedItem());
+            String photoUrl = null;
+
+            // Get image URL
+            if (result != null) {
+                try {
+                    photoUrl = cloudinary.url().generate(result.getString("public_id") + ".jpg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            createAdvertisement(title, desc, photoUrl, category, timing);
+            return;
         }
     }
 }

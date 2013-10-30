@@ -33,7 +33,7 @@
     <string name="nearby">Nearby</string>
     <string name="noData">No advertisements found.</string>
     <string name="header">Load new Advertisements</string>
-    <string name="footer">Load more...</string>
+    <string name="footer">Load more&#8230;</string>
     <string name="retrieve_KG_position">my location</string>
     <string name="deal_list_network_unavailable">\"Nerwork unavailable\"</string>
     <string name="action_search">search</string>
@@ -46,5 +46,7 @@
     <string name="photo_desc">Uploaded Photo</string>
     <string name="album_name">CameraSample</string>
     <string name="new_ad">New Advertisement</string>
+    <string name="new_ad_uploading_title">Uploading image&#8230;</string>
+    <string name="new_ad_uploading_message">Please wait while the image is uploaded.</string>
 
 </resources>

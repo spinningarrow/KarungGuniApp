@@ -129,8 +129,10 @@ public class RestClient {
             Bundle result = new Bundle();
 
             HttpResponse httpResponse = httpClient.get(url, null);
-            result.putInt("status", httpResponse.getStatus());
-            result.putString("response", httpResponse.getBodyAsString());
+            if (httpResponse != null) {
+                result.putInt("status", httpResponse.getStatus());
+                result.putString("response", httpResponse.getBodyAsString());
+            }
 
             return result;
         }
