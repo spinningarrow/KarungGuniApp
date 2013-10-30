@@ -24,9 +24,9 @@ public class AccountManager {
     		final String displayName, final Handler.Callback callback) {
 
         final ParameterMap params = new ParameterMap();
-        params.put("email", email);
-        params.put("password", hashPassword(password));
-        params.put("display_name", displayName);
+        params.put(AppData.Users.COLUMN_NAME_EMAIL, email);
+        params.put(AppData.Users.COLUMN_NAME_PASSWORD, hashPassword(password));
+        params.put(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME, displayName); // could be AppData.KarungGunis; column name is the same
 
         // Callback for creating a new user in the users table
         // If the insertion is successful, it inserts the data into the karung_gunis or sellers table,
