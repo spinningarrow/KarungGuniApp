@@ -216,7 +216,7 @@ public class AppData {
             + COLUMN_NAME_STATUS + " TEXT,"
             + COLUMN_NAME_TIMING_START + " TEXT,"
             + COLUMN_NAME_TIMING_END + " TEXT,"
-            + COLUMN_NAME_DISTANCE + " TEXT,"
+            + COLUMN_NAME_DISTANCE + " INTEGER DEFAULT 0,"
             + COLUMN_NAME_DATE_CREATED + " INTEGER"
             + ");";
     }
