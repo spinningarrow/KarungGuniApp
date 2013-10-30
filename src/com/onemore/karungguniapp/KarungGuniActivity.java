@@ -23,21 +23,16 @@ public class KarungGuniActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_karung_guni);
+//		setContentView(R.layout.activity_karung_guni);
 
-        TextView tv = new TextView(this);
-        tv.setTextSize(40);
-        tv.setText(AccountManager.getCurrentUser(this).getString("email"));
-        getActionBar();
-        setContentView(tv);
     	ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	    actionBar.setDisplayShowTitleEnabled(false);
 
 	    Bundle cArgs = new Bundle();
 	    cArgs.putString("selection", null);
-	    cArgs.putString("orderby", "timing_end");
-	    cArgs.putString("column", AppData.Advertisements.COLUMN_NAME_DISTANCE);	    
+	    cArgs.putString("orderby", AppData.Advertisements.COLUMN_NAME_TIMING_END);
+	    cArgs.putString("column", AppData.Advertisements.COLUMN_NAME_TIMING_END);	    
 	    Tab tab = actionBar.newTab()
 	                       .setText(R.string.current)
 	                       .setTabListener(new TabListener<AdvertisementList>(
@@ -45,9 +40,9 @@ public class KarungGuniActivity extends Activity {
 	    actionBar.addTab(tab);
 
 	    Bundle nArgs = new Bundle();
-	    cArgs.putString("selection", null);
-	    cArgs.putString("orderby", "distance");
-	    cArgs.putString("column", AppData.Advertisements.COLUMN_NAME_DISTANCE);	  	    
+	    nArgs.putString("selection", null);
+	    nArgs.putString("orderby", AppData.Advertisements.COLUMN_NAME_DISTANCE);
+	    nArgs.putString("column", AppData.Advertisements.COLUMN_NAME_DISTANCE);	  	    
 	    tab = actionBar.newTab()
 	                   .setText(R.string.nearby)
 	                   .setTabListener(new TabListener<AdvertisementList>(
@@ -75,7 +70,7 @@ public class KarungGuniActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu, menu);
+		getMenuInflater().inflate(R.menu.karung_guni, menu);
 		return true;
 	}
 	
@@ -83,12 +78,11 @@ public class KarungGuniActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    int itemId = item.getItemId();
 		if (itemId == R.id.edit_profile) {
-			//TODO
+            startActivity(new Intent(getBaseContext(), EditProfile.class));
 			return true;
 		} else if (itemId == R.id.logout) {
 			AccountManager.clearCurrentUser(getApplicationContext());
-			Intent i = new Intent(getBaseContext(), Main.class);
-			startActivity(i);
+            startActivity(new Intent(getBaseContext(), Main.class));
 			finish();
 			return true;
 		} else {

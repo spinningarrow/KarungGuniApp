@@ -27,6 +27,8 @@ public class AppDataProvider extends ContentProvider{
 
     // Projection map for selecting columns
     private static HashMap<String, String> sUsersProjectionMap;
+    private static HashMap<String, String> sSellersProjectionMap;
+    private static HashMap<String, String> sKarungGunisProjectionMap;
     private static HashMap<String, String> sAdvertisementsProjectionMap;
 
     // Static objects block
@@ -36,6 +38,24 @@ public class AppDataProvider extends ContentProvider{
         sUsersProjectionMap.put(AppData.Users._ID, AppData.Users._ID);
         sUsersProjectionMap.put(AppData.Users.COLUMN_NAME_EMAIL, AppData.Users.COLUMN_NAME_EMAIL);
         sUsersProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
+
+        // Create projection map that returns all columns for Sellers
+        sSellersProjectionMap = new HashMap<String, String>();
+        sSellersProjectionMap.put(AppData.Sellers._ID, AppData.Sellers._ID);
+        sSellersProjectionMap.put(AppData.Sellers.COLUMN_NAME_EMAIL, AppData.Sellers.COLUMN_NAME_EMAIL);
+        sSellersProjectionMap.put(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME, AppData.Sellers.COLUMN_NAME_DISPLAY_NAME);
+        sSellersProjectionMap.put(AppData.Sellers.COLUMN_NAME_ADDRESS, AppData.Sellers.COLUMN_NAME_ADDRESS);
+        sSellersProjectionMap.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, AppData.Sellers.COLUMN_NAME_ADDRESS_LAT);
+        sSellersProjectionMap.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG, AppData.Sellers.COLUMN_NAME_ADDRESS_LONG);
+        sSellersProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
+
+        // Create projection map that returns all columns for Karung Gunis
+        sKarungGunisProjectionMap = new HashMap<String, String>();
+        sKarungGunisProjectionMap.put(AppData.KarungGunis._ID, AppData.KarungGunis._ID);
+        sKarungGunisProjectionMap.put(AppData.KarungGunis.COLUMN_NAME_EMAIL, AppData.KarungGunis.COLUMN_NAME_EMAIL);
+        sKarungGunisProjectionMap.put(AppData.KarungGunis.COLUMN_NAME_DISPLAY_NAME, AppData.KarungGunis.COLUMN_NAME_DISPLAY_NAME);
+        sKarungGunisProjectionMap.put(AppData.KarungGunis.COLUMN_NAME_RATING, AppData.KarungGunis.COLUMN_NAME_RATING);
+        sKarungGunisProjectionMap.put(AppData.COLUMN_NAME_DATE_CREATED, AppData.COLUMN_NAME_DATE_CREATED);
 
         // Create projection map that returns all columns
         sAdvertisementsProjectionMap = new HashMap<String, String>();
@@ -105,26 +125,26 @@ public class AppDataProvider extends ContentProvider{
 
             case AppDataUriMatcher.SELLERS:
                 qb.setTables(AppData.Sellers.TABLE_NAME);
-                qb.setProjectionMap(sUsersProjectionMap);
+                qb.setProjectionMap(sSellersProjectionMap);
                 defaultSortOrder = AppData.Sellers.DEFAULT_SORT_ORDER;
                 break;
 
             case AppDataUriMatcher.SELLER_ID:
                 qb.setTables(AppData.Sellers.TABLE_NAME);
-                qb.setProjectionMap(sUsersProjectionMap);
+                qb.setProjectionMap(sSellersProjectionMap);
                 qb.appendWhere(AppData.Sellers.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.Sellers.PATH_POSITION));
                 defaultSortOrder = AppData.Sellers.DEFAULT_SORT_ORDER;
                 break;
 
             case AppDataUriMatcher.KARUNG_GUNIS:
                 qb.setTables(AppData.KarungGunis.TABLE_NAME);
-                qb.setProjectionMap(sUsersProjectionMap);
+                qb.setProjectionMap(sKarungGunisProjectionMap);
                 defaultSortOrder = AppData.KarungGunis.DEFAULT_SORT_ORDER;
                 break;
 
             case AppDataUriMatcher.KARUNG_GUNI_ID:
                 qb.setTables(AppData.KarungGunis.TABLE_NAME);
-                qb.setProjectionMap(sUsersProjectionMap);
+                qb.setProjectionMap(sKarungGunisProjectionMap);
                 qb.appendWhere(AppData.KarungGunis.COLUMN_NAME_EMAIL + "=" + uri.getPathSegments().get(AppData.KarungGunis.PATH_POSITION));
                 defaultSortOrder = AppData.KarungGunis.DEFAULT_SORT_ORDER;
                 break;

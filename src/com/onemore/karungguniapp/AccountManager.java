@@ -24,9 +24,9 @@ public class AccountManager {
     		final String displayName, final Handler.Callback callback) {
 
         final ParameterMap params = new ParameterMap();
-        params.put("email", email);
-        params.put("password", hashPassword(password));
-        params.put("display_name", displayName);
+        params.put(AppData.Users.COLUMN_NAME_EMAIL, email);
+        params.put(AppData.Users.COLUMN_NAME_PASSWORD, hashPassword(password));
+        params.put(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME, displayName); // could be AppData.KarungGunis; column name is the same
 
         // Callback for creating a new user in the users table
         // If the insertion is successful, it inserts the data into the karung_gunis or sellers table,
@@ -162,6 +162,48 @@ public class AccountManager {
                 callback);
     }
 
+    // Retrieve user details for EditProfile activity
+    public static void getUserDetails(String email, String role, Handler.Callback callback){
+    	
+    	Uri table = null;
+    	// Query the RestClient for user with specified email
+        // Pass the callback to query so it can populate it
+    	if (role.equals(AppData.ROLE_KG))
+    		table = AppData.KarungGunis.CONTENT_ID_URI_BASE ;
+    	else
+    		table = AppData.Sellers.CONTENT_ID_URI_BASE;
+    	
+    	RestClient.query(
+                Uri.parse(table + email),
+                null,
+                null,
+                null,
+                null,
+                callback);
+    	
+    }
+    
+    // Retrieve user details for EditProfile activity
+    public static void setUserDetails(String email, String role, Handler.Callback callback){
+    	
+    	Uri table = null;
+
+    	if (role.equals(AppData.ROLE_KG))
+    		table = AppData.KarungGunis.CONTENT_ID_URI_BASE ;
+    	else
+    		table = AppData.Sellers.CONTENT_ID_URI_BASE;
+    	
+    	//TODO 	Update row
+//    	RestClient.update(
+//                Uri.parse(table + email),
+//                null,
+//                null,
+//                null,
+//                null,
+//                callback);
+    	
+    }
+    
     // Get the current user, if any
     public static Bundle getCurrentUser(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
