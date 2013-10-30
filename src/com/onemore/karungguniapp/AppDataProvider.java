@@ -47,7 +47,8 @@ public class AppDataProvider extends ContentProvider{
         sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_PHOTO, AppData.Advertisements.COLUMN_NAME_PHOTO);
         sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, AppData.Advertisements.COLUMN_NAME_CATEGORY);
         sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_STATUS, AppData.Advertisements.COLUMN_NAME_STATUS);
-        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_TIMING, AppData.Advertisements.COLUMN_NAME_TIMING);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_TIMING_START, AppData.Advertisements.COLUMN_NAME_TIMING_START);
+        sAdvertisementsProjectionMap.put(AppData.Advertisements.COLUMN_NAME_TIMING_END, AppData.Advertisements.COLUMN_NAME_TIMING_END);
 
     }
 

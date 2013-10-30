@@ -96,6 +96,8 @@ public class AppData {
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_DISPLAY_NAME = "display_name";
         public static final String COLUMN_NAME_ADDRESS = "address";
+        public static final String COLUMN_NAME_ADDRESS_LAT = "address_lat";
+        public static final String COLUMN_NAME_ADDRESS_LONG = "address_long";
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
@@ -105,6 +107,8 @@ public class AppData {
             + _ID + " TEXT PRIMARY KEY,"
             + COLUMN_NAME_EMAIL + " TEXT,"
             + COLUMN_NAME_ADDRESS + " TEXT,"
+            + COLUMN_NAME_ADDRESS_LAT + " TEXT,"
+            + COLUMN_NAME_ADDRESS_LONG + " TEXT,"
             + COLUMN_NAME_DISPLAY_NAME + " TEXT,"
             + COLUMN_NAME_DATE_CREATED + " INTEGER"
             + ");";
@@ -162,7 +166,8 @@ public class AppData {
     // photo_url [String]
     // category [String]
     // status [String]
-    // timing [String] TODO check
+    // timing_start [String] TODO check
+    // timing_end [String] TODO check
     public static final class Advertisements implements BaseColumns {
         private Advertisements() {}
 
@@ -193,7 +198,8 @@ public class AppData {
         public static final String COLUMN_NAME_PHOTO = "photo_url";
         public static final String COLUMN_NAME_CATEGORY = "category";
         public static final String COLUMN_NAME_STATUS = "status";
-        public static final String COLUMN_NAME_TIMING = "timing";
+        public static final String COLUMN_NAME_TIMING_START = "timing_start";
+        public static final String COLUMN_NAME_TIMING_END = "timing_end";
 
         // Default sort order
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_DATE_CREATED + " DESC";
@@ -207,7 +213,8 @@ public class AppData {
             + COLUMN_NAME_PHOTO + " TEXT,"
             + COLUMN_NAME_CATEGORY + " TEXT,"
             + COLUMN_NAME_STATUS + " TEXT,"
-            + COLUMN_NAME_TIMING + " TEXT,"
+            + COLUMN_NAME_TIMING_START + " TEXT,"
+            + COLUMN_NAME_TIMING_END + " TEXT,"
             + COLUMN_NAME_DATE_CREATED + " INTEGER"
             + ");";
     }

@@ -90,7 +90,8 @@ public class AdDetailActivity extends Activity
 		String  photo_url;
 		String  description ;
 		String  owner ;
-		String  timing ;
+		Long startTime;
+		Long endTime;
 
 		Bundle extras = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
 
@@ -103,7 +104,8 @@ public class AdDetailActivity extends Activity
 			photo_url    = null;
 			description  = null;
 			owner        = null;
-			timing       = null;
+			startTime    = null;
+			endTime      = null;
 		} else {
 			category      = extras.getString(AppData.Advertisements.COLUMN_NAME_CATEGORY);
 			title         = extras.getString(AppData.Advertisements.COLUMN_NAME_TITLE);
@@ -112,7 +114,8 @@ public class AdDetailActivity extends Activity
 			photo_url     = extras.getString(AppData.Advertisements.COLUMN_NAME_PHOTO);
 			description   = extras.getString(AppData.Advertisements.COLUMN_NAME_DESCRIPTION);
 			owner         = extras.getString(AppData.Advertisements.COLUMN_NAME_OWNER);
-			timing        = extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING);
+			startTime     = Long.parseLong(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_START));
+			endTime     = Long.parseLong(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_END));
 		}
 
 
@@ -122,7 +125,7 @@ public class AdDetailActivity extends Activity
 		tv_category.setText(category);
 		tv_description.setText(description);
 		tv_owner.setText(owner);
-		tv_timing.setText(timing);
+		tv_timing.setText(startTime.toString() + endTime.toString()); // TODO parse start and end times and show separately
 		tv_title.setText(title);
 		tv_addr.setText(testAddr);
 		ImageLoader imageLoader=new ImageLoader(this.getApplicationContext());

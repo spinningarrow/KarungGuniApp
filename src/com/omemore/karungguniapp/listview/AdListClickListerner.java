@@ -41,7 +41,8 @@ public class AdListClickListerner implements AdapterView.OnItemClickListener {
         toDetails.putExtra(AppData.Advertisements.COLUMN_NAME_PHOTO, item.getString(item.getColumnIndex(AppData.Advertisements.COLUMN_NAME_PHOTO)));
         toDetails.putExtra(AppData.Advertisements.COLUMN_NAME_DESCRIPTION, item.getString(item.getColumnIndex(AppData.Advertisements.COLUMN_NAME_DESCRIPTION)));
         toDetails.putExtra(AppData.Advertisements.COLUMN_NAME_OWNER, item.getString(item.getColumnIndex(AppData.Advertisements.COLUMN_NAME_OWNER)));
-        toDetails.putExtra(AppData.Advertisements.COLUMN_NAME_TIMING, item.getString(item.getColumnIndex(AppData.Advertisements.COLUMN_NAME_TIMING)));
+        toDetails.putExtra(AppData.Advertisements.COLUMN_NAME_TIMING_START, item.getString(item.getColumnIndex(AppData.Advertisements.COLUMN_NAME_TIMING_START)));
+        toDetails.putExtra(AppData.Advertisements.COLUMN_NAME_TIMING_END, item.getString(item.getColumnIndex(AppData.Advertisements.COLUMN_NAME_TIMING_END)));
 
         mContext.startActivity(toDetails);
     }

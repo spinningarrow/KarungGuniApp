@@ -195,7 +195,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     values.put(AppData.Advertisements.COLUMN_NAME_PHOTO, advertisement.getString(AppData.Advertisements.COLUMN_NAME_PHOTO));
                     values.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, advertisement.getString(AppData.Advertisements.COLUMN_NAME_CATEGORY));
                     values.put(AppData.Advertisements.COLUMN_NAME_STATUS, advertisement.getString(AppData.Advertisements.COLUMN_NAME_STATUS));
-                    values.put(AppData.Advertisements.COLUMN_NAME_TIMING, advertisement.getString(AppData.Advertisements.COLUMN_NAME_TIMING));
+                    values.put(AppData.Advertisements.COLUMN_NAME_TIMING_START, advertisement.getString(AppData.Advertisements.COLUMN_NAME_TIMING_START));
+                    values.put(AppData.Advertisements.COLUMN_NAME_TIMING_END, advertisement.getString(AppData.Advertisements.COLUMN_NAME_TIMING_END));
                     values.put(AppData.COLUMN_NAME_DATE_CREATED, advertisement.getString(AppData.COLUMN_NAME_DATE_CREATED));
 
                     // Insert to local DB
@@ -241,7 +242,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 params.put(AppData.Advertisements.COLUMN_NAME_PHOTO, mCursor.getString(mCursor.getColumnIndex(AppData.Advertisements.COLUMN_NAME_PHOTO)));
                 params.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, mCursor.getString(mCursor.getColumnIndex(AppData.Advertisements.COLUMN_NAME_CATEGORY)));
                 params.put(AppData.Advertisements.COLUMN_NAME_STATUS, mCursor.getString(mCursor.getColumnIndex(AppData.Advertisements.COLUMN_NAME_STATUS)));
-                params.put(AppData.Advertisements.COLUMN_NAME_TIMING, mCursor.getString(mCursor.getColumnIndex(AppData.Advertisements.COLUMN_NAME_TIMING)));
+                params.put(AppData.Advertisements.COLUMN_NAME_TIMING_START, mCursor.getString(mCursor.getColumnIndex(AppData.Advertisements.COLUMN_NAME_TIMING_START)));
+                params.put(AppData.Advertisements.COLUMN_NAME_TIMING_END, mCursor.getString(mCursor.getColumnIndex(AppData.Advertisements.COLUMN_NAME_TIMING_END)));
 //                params.put(AppData.COLUMN_NAME_DATE_CREATED, mCursor.getString(mCursor.getColumnIndex(AppData.COLUMN_NAME_DATE_CREATED)));
 
                 result = RestClient.insert(AppData.Advertisements.CONTENT_ID_URI_BASE, params, null);

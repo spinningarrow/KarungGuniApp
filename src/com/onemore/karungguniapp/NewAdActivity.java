@@ -22,10 +22,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.UUID;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 //import com.onemore.karungguniapp.PhotoService.PhotoUtil;
 
@@ -53,6 +53,8 @@ public class NewAdActivity extends Activity implements OnClickListener {
     private TextView tvDisplayTime_to;
     private DatePicker datePicker;
     private TimePicker timePicker;
+    private Long startTime;
+    private Long endTime;
     private Spinner type;
     private final Activity current = this;
     private ProgressDialog dialog = null;
@@ -406,7 +408,7 @@ public class NewAdActivity extends Activity implements OnClickListener {
         }
     }
 
-    private void createAdvertisement(String title, String description, String photoUrl, String category, String timing) {
+    private void createAdvertisement(String title, String description, String photoUrl, String category, Long startTime, Long endTime) {
         String id = "unsynced_" + UUID.randomUUID();
         String ownerEmail = AccountManager.getCurrentUser(this).getString("email");
         String status = "OPEN";
@@ -419,7 +421,8 @@ public class NewAdActivity extends Activity implements OnClickListener {
         values.put(AppData.Advertisements.COLUMN_NAME_PHOTO, photoUrl);
         values.put(AppData.Advertisements.COLUMN_NAME_CATEGORY, category);
         values.put(AppData.Advertisements.COLUMN_NAME_STATUS, status);
-        values.put(AppData.Advertisements.COLUMN_NAME_TIMING, timing);
+        values.put(AppData.Advertisements.COLUMN_NAME_TIMING_START, startTime);
+        values.put(AppData.Advertisements.COLUMN_NAME_TIMING_END, endTime);
 
         getContentResolver().insert(AppData.Advertisements.CONTENT_ID_URI_BASE, values);
     }
@@ -470,7 +473,17 @@ public class NewAdActivity extends Activity implements OnClickListener {
             String desc = edit_desc.getText().toString();
             String time_from = tvDisplayDate_from.getText().toString() + tvDisplayTime_from.getText().toString();
             String time_to = tvDisplayDate_to.getText().toString() + tvDisplayTime_to.getText().toString();
-            String timing = time_from + time_to;
+
+            // Parse dates and convert to timestamps
+            DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+
+            try {
+                startTime = dateFormat.parse(time_from).getTime() / 1000;
+                endTime = dateFormat.parse(time_to).getTime() / 1000;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             final String category = types.get(type.getSelectedItem());
             String photoUrl = null;
 
@@ -483,7 +496,7 @@ public class NewAdActivity extends Activity implements OnClickListener {
                 }
             }
 
-            createAdvertisement(title, desc, photoUrl, category, timing);
+            createAdvertisement(title, desc, photoUrl, category, startTime, endTime);
             return;
         }
     }
