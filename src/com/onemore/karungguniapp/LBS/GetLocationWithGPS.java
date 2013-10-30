@@ -131,7 +131,7 @@ public class GetLocationWithGPS extends Service {
 							location[0] = Double.parseDouble(sLat);
 						String sLong = seller.getString(seller.getColumnIndex(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG));
 						if(sLong.isEmpty())
-							location[0] = 0.0;
+							location[1] = 0.0;
 						else
 							location[1] = Double.parseDouble(sLong); 
 						dist = Double.valueOf(GeoUtil.calculateDistance(GetLocationWithGPS.myLoc, location));
