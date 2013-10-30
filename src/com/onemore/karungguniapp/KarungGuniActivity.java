@@ -78,12 +78,11 @@ public class KarungGuniActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    int itemId = item.getItemId();
 		if (itemId == R.id.edit_profile) {
-			//TODO
+            startActivity(new Intent(getBaseContext(), EditProfile.class));
 			return true;
 		} else if (itemId == R.id.logout) {
 			AccountManager.clearCurrentUser(getApplicationContext());
-			Intent i = new Intent(getBaseContext(), Main.class);
-			startActivity(i);
+            startActivity(new Intent(getBaseContext(), Main.class));
 			finish();
 			return true;
 		} else {
