@@ -173,11 +173,62 @@ public class RestClient {
         return null;
     }
 
-    // Insert into the database
+    // Insert into the server database
     public static Bundle insert(Uri uri, ParameterMap params, Handler.Callback callback) {
         String url = API_PATH + getRequestEndpoint(uri);
 
-        // If callback is null, GET the response synchronously (used in SyncAdapter)
+        // If callback is null, POST the response synchronously (used in SyncAdapter)
+        if (callback == null) {
+            Bundle result = new Bundle();
+
+            HttpResponse httpResponse = httpClient.post(url, params);
+            result.putInt("status", httpResponse.getStatus());
+            result.putString("response", httpResponse.getBodyAsString());
+
+            return result;
+        }
+
+        // POST params to the API request endpoint asynchronously
+        final Handler handler = new Handler(callback);
+        final Message message = Message.obtain();
+
+        httpClient.post(url, params, new AsyncCallback() {
+
+            // Store the result in a bundle which will then be passed as a message to the query callback
+            // result schema:
+            // int success - whether the query was successful
+            // int status - HTTP status code returned
+            // String response - raw HTTP response (the callback handler must know what to do with it)
+            Bundle result = new Bundle();
+
+            @Override
+            public void onComplete(HttpResponse httpResponse) {
+
+                // Query was successful (TODO actually maybe not, does it just mean that no error occurred from this side?)
+                result.putInt("success", 1);
+                result.putInt("status", httpResponse.getStatus());
+                result.putString("response", httpResponse.getBodyAsString());
+
+                message.setData(result);
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+                result.putInt("success", 0);
+                e.printStackTrace();
+            }
+        });
+
+        return null;
+    }
+
+    // Update server database
+    public static Bundle update(Uri uri, ParameterMap params, Handler.Callback callback) {
+        String url = API_PATH + getRequestEndpoint(uri);
+
+        // If callback is null, POST the response synchronously (used in SyncAdapter)
         if (callback == null) {
             Bundle result = new Bundle();
 

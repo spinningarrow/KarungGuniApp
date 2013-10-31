@@ -42,9 +42,7 @@
 		        android:inputType="textPassword"
 	         	android:layout_width="0dp"
                 android:layout_weight="0.65"
-                android:singleLine="true"
-                android:editable="false"
-                android:focusable="false"/>
+                android:singleLine="true" />
    		</TableRow>
    		
         <TableRow>
@@ -68,9 +66,7 @@
 		        android:inputType="textPassword" 
 	         	android:layout_width="0dp"
                 android:layout_weight="0.65"
-                android:singleLine="true"
-                android:editable="false"
-                android:focusable="false"/>
+                android:singleLine="true" />
    		</TableRow>
    		
         <TableRow>
@@ -84,9 +80,7 @@
 		        android:inputType="textPassword" 
 	         	android:layout_width="0dp"
                 android:layout_weight="0.65"
-                android:singleLine="true"
-                android:editable="false"
-                android:focusable="false"/>
+                android:singleLine="true" />
    		</TableRow>
    		
         <TableRow>
@@ -99,9 +93,7 @@
 		        android:id="@+id/editprofile_displayname"
 		        android:layout_width="0dp"
                 android:layout_weight="0.65"
-                android:singleLine="true"
-                android:editable="false"
-                android:focusable="false" />
+                android:singleLine="true" />
    		</TableRow>
 
         <TableRow>
@@ -114,9 +106,7 @@
 		        android:id="@+id/editprofile_address"
 		        android:layout_width="0dp"
                 android:layout_weight="0.65"
-                android:inputType="textMultiLine"
-		        android:editable="false"
-                android:focusable="false"/>
+                android:inputType="textMultiLine" />
 		</TableRow>
       <TableRow>
           <Button

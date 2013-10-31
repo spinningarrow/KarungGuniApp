@@ -184,18 +184,25 @@ public class AccountManager {
     }
     
     // Retrieve user details for EditProfile activity
-    public static void setUserDetails(String email, String role, Handler.Callback callback){
-    	
-    	Uri table = null;
+    public static void setUserDetails(String email, String role, ParameterMap params, Handler.Callback callback){
 
-    	if (role.equals(AppData.ROLE_KG))
-    		table = AppData.KarungGunis.CONTENT_ID_URI_BASE ;
-    	else
-    		table = AppData.Sellers.CONTENT_ID_URI_BASE;
-    	
-    	//TODO 	Update row
-//    	RestClient.update(
-//                Uri.parse(table + email),
+        Uri uri;
+        if (role.equals(AppData.ROLE_KG)) {
+            uri = Uri.parse(AppData.KarungGunis.CONTENT_ID_URI_BASE + email);
+        } else {
+            uri = Uri.parse(AppData.Sellers.CONTENT_ID_URI_BASE + email);
+
+            // Get LatLong from Seller's address
+            params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, "1");
+            params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG, "1");
+        }
+
+        // Update the user's details
+        RestClient.update(uri, params, callback);
+
+//        // Check if the user's password matches
+//        RestClient.query(
+//                Uri.parse(AppData.Users.CONTENT_ID_URI_BASE + email),
 //                null,
 //                null,
 //                null,

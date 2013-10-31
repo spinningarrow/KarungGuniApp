@@ -3,6 +3,8 @@ package com.onemore.karungguniapp;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import android.net.Uri;
+import com.turbomanage.httpclient.ParameterMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,11 +28,15 @@ public class EditProfile extends Activity {
 	
 	private Bundle prefs;
 	private String email, role;
+
+    private Activity self;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+
+        self = this;
 	    
 	    prefs = AccountManager.getCurrentUser(getApplicationContext());
 	    email = prefs.getString("email");
@@ -112,15 +118,15 @@ public class EditProfile extends Activity {
                     @Override
                     public void onClick(View view) {
                     	
-                    	String currentPw = view_currentPw.getEditableText().toString();
-            	    	String newPw = view_newPw.getEditableText().toString();
-            	    	String confirmNewPw = view_confirmNewPw.getEditableText().toString();
+//                    	final String currentPw = view_currentPw.getEditableText().toString();
+//            	    	String newPw = view_newPw.getEditableText().toString();
+//            	    	String confirmNewPw = view_confirmNewPw.getEditableText().toString();
             	    	String displayName = view_displayName.getEditableText().toString();
             	    	String address = view_address.getEditableText().toString();
             	    	
-            	    	view_currentPw.setError(null);
-                    	view_newPw.setError(null);
-                    	view_confirmNewPw.setError(null);
+//            	    	view_currentPw.setError(null);
+//                    	view_newPw.setError(null);
+//                    	view_confirmNewPw.setError(null);
                     	view_displayName.setError(null);
                     	view_address.setError(null);
                     	
@@ -130,20 +136,33 @@ public class EditProfile extends Activity {
                     	if (TextUtils.isEmpty(displayName)) {
                             invalid = true;
                             view_displayName.setError(getString(R.string.editprofile_compulsory));
-                        } else if (TextUtils.isEmpty(currentPw)) {
+                        } /*else if (TextUtils.isEmpty(currentPw)) {
                             invalid = true;
                             view_currentPw.setError(getString(R.string.editprofile_compulsory));
                         } else if ((!TextUtils.isEmpty(newPw) || !TextUtils.isEmpty(confirmNewPw))
                         		&& !TextUtils.equals(newPw, confirmNewPw)) {
                             invalid = true;
                             view_newPw.setError(getString(R.string.editprofile_passwords_different));
-                        } else if (role.equals(AppData.ROLE_SELLER) && TextUtils.isEmpty(address)){
+                        }*/ else if (role.equals(AppData.ROLE_SELLER) && TextUtils.isEmpty(address)){
                         	invalid = true;
                         	view_address.setError(getString(R.string.editprofile_address_empty));
                         }
                         
 
                         if (invalid == false) {
+
+                            // Set the parameters to update the user details
+                            final ParameterMap params = new ParameterMap();
+                            params.put("update", "true"); // REST API looks for this
+
+                            if (role.equals(AppData.ROLE_KG)) {
+                                params.put(AppData.KarungGunis.COLUMN_NAME_DISPLAY_NAME, displayName);
+                            } else {
+                                params.put(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME, displayName);
+                                params.put(AppData.Sellers.COLUMN_NAME_ADDRESS, address);
+//                                params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, "1");
+//                                params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG, "1");
+                            }
                     	
                         	Handler.Callback setUserDetailsCallback = new Handler.Callback() {
                                 Bundle result;
@@ -173,6 +192,25 @@ public class EditProfile extends Activity {
                                             Toast.makeText(getApplicationContext(), getString(R.string.editprofile_usernotfound), Toast.LENGTH_LONG).show();
                                             return false;
                                         }
+
+//                                        // If the password hash doesn't match, ask the user to enter the password again
+//                                        if (!AccountManager.hashPassword(currentPw).equals(user.getString(AppData.Users.COLUMN_NAME_PASSWORD))) {
+//                                            Log.w("ACCOUNT_MANAGER", "ERROR: Password mismatch.");
+//
+//                                            progressDialog.dismiss();
+//                                            Toast.makeText(getApplicationContext(), R.string.login_incorrect, Toast.LENGTH_LONG).show();
+//                                            return false;
+//                                        }
+
+//                                        // Update the user details
+//                                        Uri uri;
+//                                        if (role.equals(AppData.ROLE_KG)) {
+//                                            uri = Uri.parse(AppData.KarungGunis.CONTENT_ID_URI_BASE + email);
+//                                        } else {
+//                                            uri = Uri.parse(AppData.Sellers.CONTENT_ID_URI_BASE + email);
+//                                        }
+
+//                                        Bundle result = RestClient.update(uri, params, null);
                                         
                                         // Display success
                                         Toast.makeText(getApplicationContext(), getString(R.string.editprofile_success), Toast.LENGTH_LONG).show();
@@ -192,8 +230,8 @@ public class EditProfile extends Activity {
                             };
                             
 	                        // Show a progress dialog to the user while updating profile asynchronously
-	                        progressDialog = ProgressDialog.show(getApplicationContext(), getString(R.string.editprofile_updating_title), getString(R.string.editprofile_updating_message), true);
-	                        AccountManager.setUserDetails(email, role, setUserDetailsCallback);
+	                        progressDialog = ProgressDialog.show(self, getString(R.string.editprofile_updating_title), getString(R.string.editprofile_updating_message), true);
+                            AccountManager.setUserDetails(email, role, params, setUserDetailsCallback);
                         }
                     }
                 });
