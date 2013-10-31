@@ -122,6 +122,8 @@ public class GetLocationWithGPS extends Service {
 						Cursor seller = getContentResolver().query(AppData.Sellers.CONTENT_URI,
 								new String[] {AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, AppData.Sellers.COLUMN_NAME_ADDRESS_LONG}, 
 								AppData.Sellers.COLUMN_NAME_EMAIL + " = \"" + owner + "\"", null, null);
+						if (seller == null || seller.getCount() != 1) 
+							continue;
 						seller.moveToFirst();
 						double[] location = new double[2];
 						String sLat = seller.getString(seller.getColumnIndex(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT));

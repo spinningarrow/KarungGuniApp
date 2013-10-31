@@ -139,10 +139,10 @@ public class AdDetailActivity extends Activity
 		//tv_timing.setText(startTime.toString() + endTime.toString()); // TODO parse start and end times and show separately
 
         SimpleDateFormat date_format_s = new SimpleDateFormat("EEE HH:mm");
-        Date date = new Date((long) startTime);
+        Date date = new Date((long) startTime  * 1000);
         String time1 = date_format_s.format(date);
         SimpleDateFormat date_format_e = new SimpleDateFormat("EEE HH:mm");
-        Date date2 = new Date((long) endTime);
+        Date date2 = new Date((long) endTime  * 1000);
         String time2 = date_format_e.format(date2);
         tv_timing_s.setText(time1 + " - " + time2);
 

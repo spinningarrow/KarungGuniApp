@@ -76,7 +76,7 @@ implements LoaderManager.LoaderCallbacks<Cursor>
 					if (specialColumn.equals(AppData.Advertisements.COLUMN_NAME_TIMING_END))
 					{
 					    SimpleDateFormat date_format = new SimpleDateFormat("EEE HH:mm");
-						Date date = new Date((long) Float.parseFloat(cursor.getString(columnIndex)));
+						Date date = new Date((long) Float.parseFloat(cursor.getString(columnIndex)) * 1000);
 						String time = date_format.format(date);
 						text.setText(time);
 						return true;
