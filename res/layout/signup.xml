@@ -29,7 +29,7 @@
             <!--android:orientation="vertical" >-->
   
   <TableLayout
-          android:layout_marginTop="30dp"
+
 
           style="@style/TableBodyRow"
         >

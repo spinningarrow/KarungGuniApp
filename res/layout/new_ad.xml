@@ -6,14 +6,14 @@
             android:layout_height="fill_parent">
             <!--android:background="@drawable/background_pattern_fill">-->
 
-    <LinearLayout
-            android:id="@+id/linearLayout_new_ad"
-            android:layout_width="match_parent"
-            android:layout_height="376dp"
-            android:layout_margin="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical" >
+    <!--<LinearLayout-->
+            <!--android:id="@+id/linearLayout_new_ad"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="376dp"-->
+            <!--android:layout_margin="15dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:orientation="vertical" >-->
 
         <!--<TextView-->
                 <!--android:id="@+id/new_ad_header"-->
@@ -29,7 +29,6 @@
                 <!--android:orientation="vertical" >-->
 
             <TableLayout
-                    android:layout_marginTop="30dp"
 
                     style="@style/TableBodyRow"
                     >
@@ -73,7 +72,7 @@
                 <TableRow>
                     <TextView android:id="@+id/lbl_time_avail"
                               style="@style/TableBodyText"
-                                android:text="Time Available: "/>
+                                android:text="Time"/>
                 </TableRow>
 
                 <TableRow>
@@ -162,7 +161,7 @@
                     <TextView
                             android:id="@+id/lbl_new_ad_photo"
                             style="@style/TableBodyText"
-                            android:text="Upload a Photo"
+                            android:text="Upload Photo"
                             />
 
                     <Button
@@ -184,6 +183,7 @@
                             android:layout_gravity="center"/>
                 </TableRow>
                 <TableRow>
+                    <TextView/>
                     <Button
                             android:id="@+id/ad_post"
                             style="@style/NewAdButton"
@@ -192,24 +192,28 @@
 
                             />
                 </TableRow>
+                <TableRow>
+                    <DatePicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:id="@+id/datePicker" android:layout_column="10" android:visibility="gone"/>
+                    <TimePicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/timePicker" android:layout_column="29" android:visibility="gone"/>
+                </TableRow>
 
 
 
             </TableLayout>
-            <RelativeLayout
-                    android:id="@+id/relativeLayout1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+            <!--<RelativeLayout-->
+                    <!--android:id="@+id/relativeLayout1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" >-->
 
-                <DatePicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.7"
-                        android:id="@+id/datePicker" android:layout_column="10" android:visibility="gone"/>
-                <TimePicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/timePicker" android:layout_column="29" android:visibility="gone"/>
+
+
 
                 <!--<Button-->
                         <!--android:id="@+id/ad_post"-->
@@ -219,7 +223,7 @@
 
                         <!--/>-->
 
-            </RelativeLayout>
-        </LinearLayout>
+            <!--</RelativeLayout>-->
+        <!--</LinearLayout>-->
     <!--</LinearLayout>-->
 </ScrollView>

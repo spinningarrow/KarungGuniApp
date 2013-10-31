@@ -55,7 +55,7 @@
 
     
     <!-- edit profile-related -->
-    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="editprofile_instructions">Any changes require your current password.</string>
     <string name="editprofile_usernotfound">Error retrieving user details: User not found</string>
     <string name="editprofile_connerror">Error retrieving user details: Connection error</string>

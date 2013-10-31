@@ -32,7 +32,6 @@
 
             <TableLayout
 
-                    android:layout_margin="30dp"
                     style="@style/TableBodyRow">
                 <TableRow >
                     <TextView
@@ -164,18 +163,21 @@
                             android:id="@+id/btn_request" />
 
                 </TableRow>
+                <TableRow>
+                    <ImageView android:id="@+id/dt_img_view"
+                               android:layout_width="500dp" android:layout_height="500dp"
+                               android:scaleType="fitStart" android:visibility="gone"/>
+                    <TextView  android:id="@+id/dt_dist"
+                               android:layout_width="500dp" android:layout_height="500dp"
+                               android:visibility="gone"/>
+                </TableRow>
 
 
 
 
             </TableLayout>
 
-            <ImageView android:id="@+id/dt_img_view"
-                       android:layout_width="500dp" android:layout_height="500dp"
-                       android:scaleType="fitStart" android:visibility="gone"/>
-            <TextView  android:id="@+id/dt_dist"
-                       android:layout_width="500dp" android:layout_height="500dp"
-                       android:visibility="gone"/>
+
             <!--<ImageView-->
                     <!--android:id="@+id/dt_img_view"-->
                     <!--android:layout_width="wrap_content"-->

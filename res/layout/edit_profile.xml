@@ -3,48 +3,43 @@
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollView2" 
         android:layout_width="fill_parent" 
-        android:layout_height="fill_parent"
-        android:background="@drawable/background_pattern_fill">
+        android:layout_height="fill_parent" >
+        <!--android:background="@drawable/background_pattern_fill">-->
         
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="376dp"
-            android:layout_margin="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical" >
+        <!--<LinearLayout-->
+            <!--android:id="@+id/linearLayout2"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="376dp"-->
+            <!--android:layout_margin="15dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:orientation="vertical" >-->
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit Profile"
-                android:layout_gravity="center_horizontal"
-                android:textSize="45sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView2"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Edit Profile"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:textSize="45sp" />-->
             
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent" 
-           android:orientation="vertical" >
+       <!--<LinearLayout-->
+           <!--android:layout_width="match_parent"-->
+           <!--android:layout_height="match_parent" -->
+           <!--android:orientation="vertical" >-->
   
   <TableLayout
-        android:layout_marginTop="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/TableBodyRow" >
 
         <TableRow>
 		    <TextView
 		        android:id="@+id/editprofile_label_currentpw"
-		        android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.35"
-                android:gravity="left"
+                style="@style/TableBodyText"
                 android:inputType="textMultiLine"
 		        android:text="Current Password" />
 		    <EditText
 		        android:id="@+id/editprofile_currentpw"
-		        android:inputType="textPassword" 
+		        android:inputType="textPassword"
 	         	android:layout_width="0dp"
                 android:layout_weight="0.65"
                 android:singleLine="true"
@@ -65,11 +60,9 @@
         <TableRow>
 		    <TextView
 		        android:id="@+id/editprofile_label_newpw"
-		        android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.35"
-                android:gravity="left"
-		        android:text="New Password" />
+                style="@style/TableBodyText"
+
+                android:text="New Password" />
 		    <EditText
 		        android:id="@+id/editprofile_newpw"
 		        android:inputType="textPassword" 
@@ -83,11 +76,9 @@
         <TableRow>
 		    <TextView
 		        android:id="@+id/editprofile_label_confirmnewpw"
-		        android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.35"
-                android:gravity="left"
-		        android:text="Confirm New Password" />
+                style="@style/TableBodyText"
+
+                android:text="Confirm New Password" />
 		    <EditText
 		        android:id="@+id/editprofile_confirmnewpw"
 		        android:inputType="textPassword" 
@@ -101,11 +92,9 @@
         <TableRow>
 		    <TextView
 		        android:id="@+id/editprofile_label_displayname"
-		        android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.35"
-                android:gravity="left"
-		        android:text="Display Name" />
+                style="@style/TableBodyText"
+
+                android:text="Display Name" />
 		    <EditText
 		        android:id="@+id/editprofile_displayname"
 		        android:layout_width="0dp"
@@ -118,11 +107,9 @@
         <TableRow>
 		    <TextView
 	        	android:id="@+id/editprofile_label_address"
-		       	android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.35"
-                android:gravity="left"
-		        android:text="Street Address" />
+                style="@style/TableBodyText"
+
+                android:text="Street Address" />
 		    <EditText
 		        android:id="@+id/editprofile_address"
 		        android:layout_width="0dp"
@@ -131,23 +118,32 @@
 		        android:editable="false"
                 android:focusable="false"/>
 		</TableRow>
+      <TableRow>
+          <Button
+                  android:id="@+id/editprofile_submit"
+                  style="@style/NewAdButton"
+                  android:text="Submit"
+                  android:layout_alignParentRight="true"
+
+                  />
+      </TableRow>
 
 </TableLayout>
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        
-         <Button
-        android:id="@+id/editprofile_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit" 
-        android:layout_alignParentRight="true"
-        
-         />
-    
-    </RelativeLayout>
-    </LinearLayout>  
-	</LinearLayout>
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/relativeLayout1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" >-->
+        <!---->
+         <!--&lt;!&ndash;<Button&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/editprofile_submit"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="Submit" &ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;&ndash;&gt;-->
+         <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!---->
+    <!--</RelativeLayout>-->
+    <!--</LinearLayout>  -->
+	<!--</LinearLayout>-->
    	</ScrollView>
