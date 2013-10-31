@@ -5,26 +5,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
             <!--android:background="@drawable/background_pattern_fill">-->
-
-    <!--<LinearLayout-->
-            <!--android:id="@+id/linearLayout_new_ad"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="376dp"-->
-            <!--android:layout_margin="15dp"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:orientation="vertical" >-->
-
-        <!--<TextView-->
-                <!--android:id="@+id/dt_title"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Title"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:textSize="45sp" />-->
-
-
-
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -134,5 +114,6 @@
                        android:layout_centerInParent="true"
                        android:layout_gravity="center"  android:contentDescription="TODO"
                        android:layout_below="@id/dt_table"/>
-    <!--</LinearLayout>-->
+   
+        </RelativeLayout>
 </ScrollView>
