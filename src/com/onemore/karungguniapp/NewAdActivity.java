@@ -4,6 +4,8 @@ import android.app.*;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,10 +20,7 @@ import com.onemore.karungguniapp.PhotoService.FroyoAlbumDirFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -162,7 +161,20 @@ public class NewAdActivity extends Activity implements OnClickListener {
                 case REQUEST_GALLERY:
 
                     try {
-                        photoInputStream = getContentResolver().openInputStream(imageReturnedIntent.getData());
+                        InputStream is;
+                        if (imageReturnedIntent.getData() != null) {
+                            is = getContentResolver().openInputStream(imageReturnedIntent.getData());
+                        } else {
+                            Bitmap bitmap = (Bitmap) imageReturnedIntent.getExtras().get("data");
+
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+
+                            byte[] bitmapdata = bos.toByteArray();
+
+                            is = new ByteArrayInputStream(bitmapdata);
+                        }
+                        photoInputStream = is;
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
