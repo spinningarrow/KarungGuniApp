@@ -101,21 +101,46 @@
                             android:text="Time Available"
                             />
 
-                    <TextView
-                            android:id="@+id/dt_timing"
-                            style="@style/TableBodyText_notB"
-                            android:gravity="left"
-                            />
+                    <!--<TextView-->
+                            <!--android:id="@+id/dt_timing"-->
+                            <!--style="@style/TableBodyText_notB"-->
+                            <!--android:gravity="left"-->
+                            <!--/>-->
 
 
                 </TableRow>
+                <TableRow>
+                <TextView
+                        android:id="@+id/lbl_timing_s"
+                        style="@style/TableBodyText"
+                        android:text="From:"
+                        />
+                    <TextView
+                    android:id="@+id/dt_timing_s"
+                    style="@style/TableBodyText_notB"
+                    android:gravity="left"
+                    />
+                </TableRow>
+                <TableRow>
+                <TextView
+                        android:id="@+id/lbl_timing_e"
+                        style="@style/TableBodyText"
+                        android:text="To:"
+                        />
+                    <TextView
+                            android:id="@+id/dt_timing_e"
+                            style="@style/TableBodyText_notB"
+                            android:gravity="left"
+                            />
+            </TableRow>
+
 
                 <TableRow>
 
                     <TextView
                             android:id="@+id/lbl_desc"
                             style="@style/TableBodyText"
-                            android:text="DESC"
+                            android:text="Description"
                             />
 
                     <TextView
@@ -131,6 +156,8 @@
                             style="@style/NewAdButton"
                             android:text="Find the Location"
                             android:id="@+id/btn_gmap" />
+                   </TableRow>
+                <TableRow>
                     <Button
                             style="@style/NewAdButton"
                             android:text="Request Detail Address"

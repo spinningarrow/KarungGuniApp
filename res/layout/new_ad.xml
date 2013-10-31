@@ -183,6 +183,15 @@
                             android:contentDescription="@string/photo_desc"
                             android:layout_gravity="center"/>
                 </TableRow>
+                <TableRow>
+                    <Button
+                            android:id="@+id/ad_post"
+                            style="@style/NewAdButton"
+                            android:text="Post"
+                            android:layout_alignParentRight="true"
+
+                            />
+                </TableRow>
 
 
 
@@ -202,13 +211,13 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/timePicker" android:layout_column="29" android:visibility="gone"/>
 
-                <Button
-                        android:id="@+id/ad_post"
-                        style="@style/NewAdButton"
-                        android:text="Post"
-                        android:layout_alignParentRight="true"
+                <!--<Button-->
+                        <!--android:id="@+id/ad_post"-->
+                        <!--style="@style/NewAdButton"-->
+                        <!--android:text="Post"-->
+                        <!--android:layout_alignParentRight="true"-->
 
-                        />
+                        <!--/>-->
 
             </RelativeLayout>
         </LinearLayout>

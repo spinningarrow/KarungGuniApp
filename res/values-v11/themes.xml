@@ -3,7 +3,7 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="AppTheme" parent="android:Theme.Holo.Light">
+  <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
 
     <item name="android:editTextBackground">@drawable/edit_text_holo_light</item>
 
@@ -25,7 +25,10 @@
       <item name="android:windowBackground">@color/C_darkblue</item>
 
       <item name="android:colorBackgroundCacheHint">@color/WhiteSmoke</item>
-      <item name="android:actionBarTabTextStyle">@style/CustomActionBarTheme</item>
+      <!--<item name="android:actionBarTabTextStyle">@style/CustomActionBarTheme</item>-->
+      <!--<item name="android:actionBarStyle">@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse</item>-->
+      <!--<item name="android:spinnersSt">@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse</item>-->
+
       <!--<item name="android:spinnerStyle">@style/SpinnerTheme</item>-->
       <!--<item name="android:actionBarWidgetTheme">@style/CustomActionBarTheme</item>-->
 

@@ -2,6 +2,7 @@ package com.onemore.karungguniapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.omemore.karungguniapp.listview.ImageLoader;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -34,8 +38,10 @@ public class AdDetailActivity extends Activity
 	private TextView tv_photo_url    ;
 	private TextView tv_description  ;
 	private TextView tv_owner        ;
-	private TextView tv_timing       ;
-	private ImageView photo;
+	//private TextView tv_timing       ;
+    private TextView tv_timing_s;
+    private TextView tv_timing_e;
+    private ImageView photo;
 	private  TextView tv_addr;
 	private  Button btn_gmap;
 
@@ -63,7 +69,10 @@ public class AdDetailActivity extends Activity
 		photo  =(ImageView)findViewById(R.id.dt_img_view)  ;
 		tv_description=(TextView)findViewById(R.id.dt_description)   ;
 		tv_owner      =(TextView)findViewById(R.id.dt_owner) ;
-		tv_timing     =(TextView)findViewById(R.id.dt_timing) ;
+//		tv_timing     =(TextView)findViewById(R.id.dt_timing) ;
+        tv_timing_s     =(TextView)findViewById(R.id.dt_timing_s) ;
+        tv_timing_e     =(TextView)findViewById(R.id.dt_timing_e) ;
+
 		tv_addr =(TextView)findViewById(R.id.dt_addr);
 		btn_gmap = (Button) findViewById(R.id.btn_gmap);
 
@@ -84,6 +93,8 @@ public class AdDetailActivity extends Activity
 		String  photo_url;
 		String  description ;
 		String  owner ;
+        String  addr = null;
+        String  displayName = null;
 		Long startTime;
 		Long endTime;
 
@@ -100,6 +111,8 @@ public class AdDetailActivity extends Activity
 			owner        = null;
 			startTime    = null;
 			endTime      = null;
+            addr         = null;
+            displayName         = null;
 		} else {
 			category      = extras.getString(AppData.Advertisements.COLUMN_NAME_CATEGORY);
 			title         = extras.getString(AppData.Advertisements.COLUMN_NAME_TITLE);
@@ -108,6 +121,14 @@ public class AdDetailActivity extends Activity
 			photo_url     = extras.getString(AppData.Advertisements.COLUMN_NAME_PHOTO);
 			description   = extras.getString(AppData.Advertisements.COLUMN_NAME_DESCRIPTION);
 			owner         = extras.getString(AppData.Advertisements.COLUMN_NAME_OWNER);
+
+            Cursor mCursor = getContentResolver().query(AppData.Sellers.CONTENT_ID_URI_BASE, null, "EMAIL = ?", new String[] { owner }, null);
+            if (mCursor != null && mCursor.getCount() == 1) {
+                mCursor.moveToFirst();
+                addr = mCursor.getString(mCursor.getColumnIndex(AppData.Sellers.COLUMN_NAME_ADDRESS));
+                displayName = mCursor.getString(mCursor.getColumnIndex(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME));
+            }
+
 			startTime     = (long) Float.parseFloat(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_START));
 			endTime     = (long) Float.parseFloat(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_END));
 		}
@@ -118,10 +139,23 @@ public class AdDetailActivity extends Activity
 		//progressBar.setIndeterminate(true);
 		tv_category.setText(category);
 		tv_description.setText(description);
-		tv_owner.setText(owner);
-		tv_timing.setText(startTime.toString() + endTime.toString()); // TODO parse start and end times and show separately
+		tv_owner.setText(displayName);
+		//tv_timing.setText(startTime.toString() + endTime.toString()); // TODO parse start and end times and show separately
+
+        SimpleDateFormat date_format_s = new SimpleDateFormat("EEE HH:mm");
+        Date date = new Date((long) startTime);
+        String time1 = date_format_s.format(date);
+        tv_timing_s.setText(time1);
+
+        SimpleDateFormat date_format_e = new SimpleDateFormat("EEE HH:mm");
+        Date date2 = new Date((long) endTime);
+        String time2 = date_format_e.format(date2);
+        tv_timing_e.setText(time2);
+
+//        tv_timing_e.setText(endTime.toString());
 		tv_title.setText(title);
-		tv_addr.setText(testAddr);
+//		tv_addr.setText(testAddr);
+        tv_addr.setText(addr);
 		ImageLoader imageLoader=new ImageLoader(this.getApplicationContext());
 		imageLoader.DisplayImage(photo_url, photo);
 
