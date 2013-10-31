@@ -25,10 +25,10 @@
 
 
 
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
+        <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical" >-->
 
             <TableLayout
 
@@ -187,6 +187,6 @@
 
                     <!--android:layout_gravity="center|right|top" android:src="@drawable/kg_launcher"/>-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
     <!--</LinearLayout>-->
 </ScrollView>

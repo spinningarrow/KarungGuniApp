@@ -1,13 +1,5 @@
 package com.onemore.karungguniapp;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import android.net.Uri;
-import com.turbomanage.httpclient.ParameterMap;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -16,15 +8,21 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+import com.turbomanage.httpclient.ParameterMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class EditProfile extends Activity {
 	
-	private EditText view_currentPw, view_newPw, view_confirmNewPw, view_displayName, view_address;
-	private ProgressDialog progressDialog;
+//	private EditText view_currentPw, view_newPw, view_confirmNewPw, view_displayName, view_address;
+private EditText  view_displayName, view_address;
+
+    private ProgressDialog progressDialog;
 	
 	private Bundle prefs;
 	private String email, role;
@@ -43,9 +41,9 @@ public class EditProfile extends Activity {
 	    role = prefs.getString("role");
 	    
 	    setContentView(R.layout.edit_profile);
-    	view_currentPw = (EditText)findViewById(R.id.editprofile_currentpw);
-    	view_newPw = (EditText)findViewById(R.id.editprofile_newpw); 
-    	view_confirmNewPw = (EditText)findViewById(R.id.editprofile_confirmnewpw); 
+//    	view_currentPw = (EditText)findViewById(R.id.editprofile_currentpw);
+//    	view_newPw = (EditText)findViewById(R.id.editprofile_newpw);
+//    	view_confirmNewPw = (EditText)findViewById(R.id.editprofile_confirmnewpw);
     	view_displayName = (EditText)findViewById(R.id.editprofile_displayname);
     	view_address = (EditText)findViewById(R.id.editprofile_address);
     	

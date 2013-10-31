@@ -22,7 +22,9 @@
       <item name="android:textColorSecondary">@color/White</item>
       <item name="android:textColorSecondary">@color/WhiteSmoke</item>
       <!--<item name="android:windowTitleSize">30</item>-->
-      <item name="android:windowBackground">@color/C_darkblue</item>
+      <item name="android:windowBackground">@color/C_darkblue</item> \
+
+
 
       <item name="android:colorBackgroundCacheHint">@color/WhiteSmoke</item>
       <!--<item name="android:actionBarTabTextStyle">@style/CustomActionBarTheme</item>-->
