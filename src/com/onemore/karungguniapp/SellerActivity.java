@@ -54,7 +54,7 @@ public class SellerActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    int itemId = item.getItemId();
 		if (itemId == R.id.edit_profile) {
-			//TODO
+			startActivity(new Intent(getBaseContext(), EditProfile.class));
 			return true;
 		} 
 		else if (itemId == R.id.logout) {
