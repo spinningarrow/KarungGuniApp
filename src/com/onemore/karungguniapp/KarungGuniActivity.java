@@ -31,7 +31,7 @@ public class KarungGuniActivity extends Activity {
 
 	    Bundle cArgs = new Bundle();
 	    cArgs.putString("selection", null);
-	    cArgs.putString("orderby", AppData.Advertisements.COLUMN_NAME_TIMING_END);
+	    cArgs.putString("orderby", "CAST(" + AppData.Advertisements.COLUMN_NAME_TIMING_END +  " AS REAL)");
 	    cArgs.putString("column", AppData.Advertisements.COLUMN_NAME_TIMING_END);	    
 	    Tab tab = actionBar.newTab()
 	                       .setText(R.string.current)
