@@ -43,9 +43,9 @@ public class EditProfile extends Activity {
 	    role = prefs.getString("role");
 	    
 	    setContentView(R.layout.edit_profile);
-    	view_currentPw = (EditText)findViewById(R.id.editprofile_currentpw);
-    	view_newPw = (EditText)findViewById(R.id.editprofile_newpw); 
-    	view_confirmNewPw = (EditText)findViewById(R.id.editprofile_confirmnewpw); 
+//    	view_currentPw = (EditText)findViewById(R.id.editprofile_currentpw);
+//    	view_newPw = (EditText)findViewById(R.id.editprofile_newpw);
+//    	view_confirmNewPw = (EditText)findViewById(R.id.editprofile_confirmnewpw);
     	view_displayName = (EditText)findViewById(R.id.editprofile_displayname);
     	view_address = (EditText)findViewById(R.id.editprofile_address);
     	
