@@ -33,7 +33,7 @@
     <!-- KGlist -->
     <string name="current">Current</string>
     <string name="nearby">Nearby</string>
-    <string name="noData">No advertisements found.</string>
+    <string name="noData">Loading..</string>
     <string name="header">Load new Advertisements</string>
     <string name="footer">Load more&#8230;</string>
     <string name="retrieve_KG_position">my location</string>
