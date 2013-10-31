@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+import com.onemore.karungguniapp.LBS.GeoUtil;
 import com.turbomanage.httpclient.ParameterMap;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -186,19 +188,24 @@ public class AccountManager {
     // Retrieve user details for EditProfile activity
     public static void setUserDetails(String email, String role, ParameterMap params, Handler.Callback callback){
 
-        Uri uri;
-        if (role.equals(AppData.ROLE_KG)) {
-            uri = Uri.parse(AppData.KarungGunis.CONTENT_ID_URI_BASE + email);
-        } else {
-            uri = Uri.parse(AppData.Sellers.CONTENT_ID_URI_BASE + email);
+        // Add role to params
+//        params.put("role", role);
 
-            // Get LatLong from Seller's address
-            params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, "1");
-            params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG, "1");
-        }
+        new AddressLatLongTask(email, role, params, callback).execute(params);
 
-        // Update the user's details
-        RestClient.update(uri, params, callback);
+//        Uri uri;
+//        if (role.equals(AppData.ROLE_KG)) {
+//            uri = Uri.parse(AppData.KarungGunis.CONTENT_ID_URI_BASE + email);
+//        } else {
+//            uri = Uri.parse(AppData.Sellers.CONTENT_ID_URI_BASE + email);
+//
+//            // Get LatLong from Seller's address
+//            params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, "1");
+//            params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG, "1");
+//        }
+//
+//        // Update the user's details
+//        RestClient.update(uri, params, callback);
 
 //        // Check if the user's password matches
 //        RestClient.query(
@@ -209,6 +216,53 @@ public class AccountManager {
 //                null,
 //                callback);
     	
+    }
+
+    private static class AddressLatLongTask extends AsyncTask<ParameterMap, Void, double[]> {
+
+        String email;
+        String role;
+        ParameterMap params;
+        Handler.Callback callback;
+
+        public AddressLatLongTask(String email, String role, ParameterMap params, Handler.Callback callback) {
+            this.email = email;
+            this.role = role;
+            this.params = params;
+            this.callback = callback;
+        }
+
+        @Override
+        protected double[] doInBackground(ParameterMap... parameterMaps) {
+            ParameterMap params = parameterMaps[0];
+
+            if (role.equals(AppData.ROLE_KG)) {
+                return null;
+            }
+
+            else {
+                String parsed_addr = params.get("address").replace(" ", "+");
+                double[] seller_location =  GeoUtil.getLatLongFromAddress(parsed_addr);
+                return seller_location;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(double[] latLongResult) {
+            Uri uri;
+
+            if (role.equals(AppData.ROLE_KG)) {
+                uri = Uri.parse(AppData.KarungGunis.CONTENT_ID_URI_BASE + email);
+            } else {
+                uri = Uri.parse(AppData.Sellers.CONTENT_ID_URI_BASE + email);
+
+                // Get LatLong from result
+                params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LAT, Double.toString(latLongResult[0]));
+                params.put(AppData.Sellers.COLUMN_NAME_ADDRESS_LONG, Double.toString(latLongResult[1]));
+            }
+
+            RestClient.update(uri, params, callback);
+        }
     }
     
     // Get the current user, if any
