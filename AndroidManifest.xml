@@ -120,6 +120,7 @@
         </activity>
         <activity
             android:name="com.onemore.karungguniapp.AdDetailActivity"
+            android:parentActivityName="com.onemore.karungguniapp.KarungGuniActivity"
             android:label="@string/ad_detail">
         </activity>
 

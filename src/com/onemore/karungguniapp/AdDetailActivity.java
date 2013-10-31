@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.omemore.karungguniapp.listview.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -40,7 +42,6 @@ public class AdDetailActivity extends Activity
 	private TextView tv_owner        ;
 	//private TextView tv_timing       ;
     private TextView tv_timing_s;
-    private TextView tv_timing_e;
     private ImageView photo;
 	private  TextView tv_addr;
 	private  Button btn_gmap;
@@ -60,21 +61,17 @@ public class AdDetailActivity extends Activity
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ad_detail);
-
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		tv_category = (TextView)findViewById(R.id.dt_category);
-		tv_title      =(TextView)findViewById(R.id.dt_title)   ;
-		tv_dist = (TextView)findViewById(R.id.dt_dist);
+		tv_title      =(TextView)findViewById(R.id.dt_title);
 		//tv_id         =(TextView)findViewById(R.id)
 		//tv_status     =(TextView)findViewById(R.id.dt_status)
 		photo  =(ImageView)findViewById(R.id.dt_img_view)  ;
-		tv_description=(TextView)findViewById(R.id.dt_description)   ;
-		tv_owner      =(TextView)findViewById(R.id.dt_owner) ;
-//		tv_timing     =(TextView)findViewById(R.id.dt_timing) ;
+		tv_description=(TextView)findViewById(R.id.dt_description);
+		tv_owner      =(TextView)findViewById(R.id.dt_owner);
         tv_timing_s     =(TextView)findViewById(R.id.dt_timing_s) ;
-        tv_timing_e     =(TextView)findViewById(R.id.dt_timing_e) ;
 
 		tv_addr =(TextView)findViewById(R.id.dt_addr);
-		btn_gmap = (Button) findViewById(R.id.btn_gmap);
 
 		app = (KGApp) getApplication();
 
@@ -128,8 +125,7 @@ public class AdDetailActivity extends Activity
                 addr = mCursor.getString(mCursor.getColumnIndex(AppData.Sellers.COLUMN_NAME_ADDRESS));
                 displayName = mCursor.getString(mCursor.getColumnIndex(AppData.Sellers.COLUMN_NAME_DISPLAY_NAME));
             }
-
-			startTime     = (long) Float.parseFloat(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_START));
+            startTime     = (long) Float.parseFloat(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_START));
 			endTime     = (long) Float.parseFloat(extras.getString(AppData.Advertisements.COLUMN_NAME_TIMING_END));
 		}
 
@@ -145,36 +141,32 @@ public class AdDetailActivity extends Activity
         SimpleDateFormat date_format_s = new SimpleDateFormat("EEE HH:mm");
         Date date = new Date((long) startTime);
         String time1 = date_format_s.format(date);
-        tv_timing_s.setText(time1);
-
         SimpleDateFormat date_format_e = new SimpleDateFormat("EEE HH:mm");
         Date date2 = new Date((long) endTime);
         String time2 = date_format_e.format(date2);
-        tv_timing_e.setText(time2);
+        tv_timing_s.setText(time1 + " - " + time2);
 
 //        tv_timing_e.setText(endTime.toString());
 		tv_title.setText(title);
 //		tv_addr.setText(testAddr);
-        tv_addr.setText(addr);
+        tv_addr.setText(addr, TextView.BufferType.SPANNABLE);
 		ImageLoader imageLoader=new ImageLoader(this.getApplicationContext());
 		imageLoader.DisplayImage(photo_url, photo);
 
 
 
-		btn_gmap.setOnClickListener(new View.OnClickListener(){
+		tv_addr.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
 				if (latitude !=-1&& longitude!=-1){
-					String mockAddr = "block274A jurong west Avenue 3, Singapore";
 					//                    latitude =  1.351909;
 					//                    longitude = 103.703675;
 					//                    int zoom=16;
-					String uri = "https://maps.google.com/maps?saddr=&daddr="+parseAddress(mockAddr);
+					String uri = "https://maps.google.com/maps?saddr=&daddr="+parseAddress(tv_addr.getText().toString());
 					Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
 					startActivity(i);
 
 				}else{
-					btn_gmap.setText("Location not Available");
-
+					Toast.makeText(getApplicationContext(), "Location Not Available", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					startActivity(intent);
 				}
