@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.widget.Button;
 
+
+import com.onemore.karungguniapp.AccountManager;
 import com.onemore.karungguniapp.LoginActivity;
 import com.onemore.karungguniapp.Main;
 
@@ -19,6 +21,8 @@ public class LoginButtonTest extends ActivityUnitTestCase<Main> {
 
 	protected void setUp() throws Exception {
 		super.setUp();
+
+		AccountManager.clearCurrentUser(this.getInstrumentation().getTargetContext());
 		mLaunchIntent = new Intent(getInstrumentation()
                 .getTargetContext(), Main.class);
 		
