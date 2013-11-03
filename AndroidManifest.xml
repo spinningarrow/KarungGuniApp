@@ -28,7 +28,7 @@
         android:icon="@drawable/kg_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:name = ".KGApp">
+        android:name = ".KGApp" android:debuggable="true">
 
         <provider
             android:name="com.onemore.karungguniapp.AppDataProvider"
