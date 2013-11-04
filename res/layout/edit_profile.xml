@@ -112,10 +112,11 @@
 		    <TextView
 	        	android:id="@+id/editprofile_label_address"
                 style="@style/TableBodyText"
-
+				android:visibility="gone"
                 android:text="Street Address" />
 		    <EditText
 		        android:id="@+id/editprofile_address"
+		        android:visibility="gone"
 		        android:layout_width="0dp"
                 android:layout_weight="0.65"
                 android:inputType="textMultiLine" />

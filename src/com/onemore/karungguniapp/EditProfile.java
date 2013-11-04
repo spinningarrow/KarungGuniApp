@@ -1,5 +1,11 @@
 package com.onemore.karungguniapp;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -9,18 +15,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-import com.turbomanage.httpclient.ParameterMap;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import com.turbomanage.httpclient.ParameterMap;
 
 public class EditProfile extends Activity {
 	
 //	private EditText view_currentPw, view_newPw, view_confirmNewPw, view_displayName, view_address;
 private EditText  view_displayName, view_address;
+private TextView view_address_label;
 
     private ProgressDialog progressDialog;
 	
@@ -46,9 +50,11 @@ private EditText  view_displayName, view_address;
 //    	view_confirmNewPw = (EditText)findViewById(R.id.editprofile_confirmnewpw);
     	view_displayName = (EditText)findViewById(R.id.editprofile_displayname);
     	view_address = (EditText)findViewById(R.id.editprofile_address);
+    	view_address_label = (TextView)findViewById(R.id.editprofile_label_address);
     	
-	    if (role.equals(AppData.ROLE_KG)){
-	    	view_address.setVisibility(View.GONE);
+	    if (role.equals(AppData.ROLE_SELLER)){
+	    	view_address_label.setVisibility(View.VISIBLE);
+	    	view_address.setVisibility(View.VISIBLE);
 	    }
 	    
 	    
