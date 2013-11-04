@@ -41,6 +41,26 @@ public class EditProfileUITest extends ActivityInstrumentationTestCase2<KarungGu
 		// Test pre-population of fields
 		EditText displayName = (EditText)solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_displayname);
 		assertEquals("Not Sahil",displayName.getText().toString());
+		
+		// Input validation test
+		solo.enterText(displayName, "");
+		solo.clickOnView(solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_submit));
+		assertEquals(solo.getCurrentActivity().getString(com.onemore.karungguniapp.R.string.editprofile_compulsory),
+						displayName.getError().toString());
+		
+		// Test update of profile details
+		solo.enterText(displayName, "Display Name2");
+		solo.clickOnView(solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_submit));
+		solo.waitForDialogToClose();
+		solo.goBack();
+		solo.clickOnActionBarItem(com.onemore.karungguniapp.R.id.edit_profile);
+		solo.waitForDialogToClose();
+		assertEquals("Display Name2", displayName.getText().toString());
+		
+		// Undo update of profile details
+		solo.enterText(displayName, "Not Sahil");
+		solo.clickOnView(solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_submit));
+		solo.waitForDialogToClose();
 	}
 	protected void tearDown() throws Exception {
 		AccountManager.clearCurrentUser(this.getInstrumentation().getTargetContext());

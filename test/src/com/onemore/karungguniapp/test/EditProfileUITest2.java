@@ -43,6 +43,30 @@ public class EditProfileUITest2 extends ActivityInstrumentationTestCase2<SellerA
 		EditText address = (EditText)solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_address);
 		assertEquals("Display Name", displayName.getText().toString());
 		assertEquals("32 Nanyang Crescent, Singapore 637658", address.getText().toString());
+		
+		// Input validation test
+		solo.enterText(displayName, "SellerABC");
+		solo.enterText(address, "");
+		solo.clickOnView(solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_submit));
+		assertEquals(solo.getCurrentActivity().getString(com.onemore.karungguniapp.R.string.editprofile_address_empty),
+						address.getError().toString());
+		
+		// Test update of profile details
+		solo.enterText(displayName, "Display Name2");
+		solo.enterText(address, "33 Nanyang Crescent, Singapore 637658");
+		solo.clickOnView(solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_submit));
+		solo.waitForDialogToClose();
+		solo.goBack();
+		solo.clickOnActionBarItem(com.onemore.karungguniapp.R.id.edit_profile);
+		solo.waitForDialogToClose();
+		assertEquals("Display Name2", displayName.getText().toString());
+		assertEquals("33 Nanyang Crescent, Singapore 637658", address.getText().toString());
+		
+		// Undo update of profile details
+		solo.enterText(displayName, "Display Name");
+		solo.enterText(address, "32 Nanyang Crescent, Singapore 637658");
+		solo.clickOnView(solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_submit));
+		solo.waitForDialogToClose();
 	}
 	protected void tearDown() throws Exception {
 		AccountManager.clearCurrentUser(this.getInstrumentation().getTargetContext());
