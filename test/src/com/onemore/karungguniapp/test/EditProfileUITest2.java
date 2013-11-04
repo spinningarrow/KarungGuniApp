@@ -2,6 +2,7 @@ package com.onemore.karungguniapp.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
+import android.widget.EditText;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.onemore.karungguniapp.AccountManager;
@@ -36,6 +37,12 @@ public class EditProfileUITest2 extends ActivityInstrumentationTestCase2<SellerA
 		solo.waitForDialogToClose();
 		assertEquals(View.VISIBLE,solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_label_address).getVisibility());
 		assertEquals(View.VISIBLE,solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_address).getVisibility());
+		
+		// Test pre-population of fields
+		EditText displayName = (EditText)solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_displayname);
+		EditText address = (EditText)solo.getCurrentActivity().findViewById(com.onemore.karungguniapp.R.id.editprofile_address);
+		assertEquals("Display Name", displayName.getText().toString());
+		assertEquals("32 Nanyang Crescent, Singapore 637658", address.getText().toString());
 	}
 	protected void tearDown() throws Exception {
 		AccountManager.clearCurrentUser(this.getInstrumentation().getTargetContext());
