@@ -20,7 +20,7 @@
     <string name="login_incorrect">Incorrect username or password. Please try again or create a new account if you have not already done so.</string>
 
     <!-- signup-related -->
-    <string name="signup">Sing Up</string>
+    <string name="signup">Sign Up</string>
     <string name="signup_progress_title">Creating account&#8230;</string>
     <string name="signup_progress_message">Please wait while your brand new account is created.</string>
     <string name="signup_user_exists">An account associated with your email address already exists. Use the Sign In button to login.</string>
