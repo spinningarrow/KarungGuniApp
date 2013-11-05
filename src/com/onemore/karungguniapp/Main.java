@@ -38,19 +38,10 @@ import java.io.IOException;
 import java.util.HashMap;
 
 
-public class Main extends Activity implements
-        ConnectionCallbacks, OnConnectionFailedListener {
-
-    private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
-    private static final int DIALOG_GET_GOOGLE_PLAY_SERVICES = 1;
-    private static final int REQUEST_CODE_SIGN_IN = 1;
-    private static final int REQUEST_CODE_GET_GOOGLE_PLAY_SERVICES = 2;
+public class Main extends Activity {
 
     private ProgressDialog signingIn;
     private ProgressDialog mConnectionProgressDialog;
-
-    private PlusClient mPlusClient;
-    private ConnectionResult mConnectionResult;
 
     public static String APP_ID = "521174844642024";
 
@@ -66,7 +57,6 @@ public class Main extends Activity implements
     public static final String ACCOUNT = "dummyaccount";
     public static final String ACCOUNT_TYPE = "com.onemore.karungguniapp";
 
-    
     ImageButton btnfacebook;
 
     private static HashMap<String, String> roles = new HashMap<String, String>();
@@ -118,10 +108,6 @@ public class Main extends Activity implements
             finish();
         }
 
-        mPlusClient = new PlusClient.Builder(this, this, this)
-                .setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
-                .build();
-
         mConnectionProgressDialog = new ProgressDialog(this);
         mConnectionProgressDialog.setMessage("Signing in...");
 
@@ -129,8 +115,7 @@ public class Main extends Activity implements
 
         login = (Button) findViewById(R.id.signin);
         signup = (Button) findViewById(R.id.signup);
-     //   google = (ImageButton) findViewById(R.id.google);
-       // google.setOnClickListener(this);
+
         btnfacebook = (ImageButton) findViewById(R.id.fbbtn);
 
         btnfacebook.setOnClickListener(new View.OnClickListener() {
@@ -178,8 +163,6 @@ public class Main extends Activity implements
             }
         });
 
-     //   findViewById(R.id.google).setOnClickListener(this);
-
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent i = new Intent(Main.this, LoginActivity.class);
@@ -194,155 +177,6 @@ public class Main extends Activity implements
             }
         });
     }
-    
-    /*
-    @Override
-    public void onClick(View view) {
-
-//        showPopup(Main.this);
-
-        if (view.getId() == R.id.google && !mPlusClient.isConnected()) {
-            if (mConnectionResult == null) {
-                mConnectionProgressDialog.show();
-            } else {
-                try {
-                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
-                } catch (SendIntentException e) {
-                    // Try connecting again.
-                    mConnectionResult = null;
-                    mPlusClient.connect();
-                }
-            }
-        }
-    }*/
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mPlusClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mPlusClient.disconnect();
-    }
-
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        if (mConnectionProgressDialog.isShowing()) {
-            // The user clicked the sign-in button already. Start to resolve
-            // connection errors. Wait until onConnected() to dismiss the
-            // connection dialog.
-            if (result.hasResolution()) {
-                try {
-                    result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
-                } catch (SendIntentException e) {
-                    mPlusClient.connect();
-                }
-            }
-        }
-
-        // Save the intent so that we can start an activity when the user clicks
-        // the sign-in button.
-        mConnectionResult = result;
-
-    }
-
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        // TODO Auto-generated method stub
-
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
-
-        mConnectionProgressDialog.dismiss();
-        if (mPlusClient.getCurrentPerson() != null) {
-            String email = mPlusClient.getAccountName();
-            Person currentPerson = mPlusClient.getCurrentPerson();
-            String displayName = currentPerson.getDisplayName();
-
-
-            Handler.Callback createWithEmailCallback = new Handler.Callback() {
-                Bundle result;
-                JSONObject user;
-//                    Uri uri;
-
-                @Override
-                public boolean handleMessage(Message message) {
-                    result = message.getData();
-
-                    if (result.getInt("success") != 1 || result.getInt("status") != 201) {
-                        // Dismiss the progress dialog
-                        signingIn.dismiss();
-                        Log.w("ACCOUNT_MANAGER", "Insert role table error occurred");
-
-                        // Show an error to the user if a user with that email address already exists
-                        if (result.getInt("status") == 409) {
-                            Toast toast = Toast.makeText(getApplicationContext(), R.string.signup_user_exists, Toast.LENGTH_LONG);
-                            toast.show();
-                        }
-                        return false;
-                    }
-
-                    try {
-                        user = RestClient.parseJsonObject(new ByteArrayInputStream(result.getString("response").getBytes("UTF-8")));
-
-                        // Set the current user in the Shared Preferences so it can be used by other activities
-                        AccountManager.setCurrentUser(getApplicationContext(), user.getString("email"), role);
-                        Intent intent = null;
-
-                        if (role.equals(AppData.ROLE_KG)) {
-                            intent = new Intent(getBaseContext(), KarungGuniActivity.class);
-                        } else if (role.equals(AppData.ROLE_SELLER)) {
-                            intent = new Intent(getBaseContext(), SellerActivity.class);
-                        }
-
-                        // Dismiss the progress dialog and start the new activity
-                        signingIn.dismiss();
-                        startActivity(intent);
-                        finish();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        return false;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-
-                    return true;
-                }
-            };
-
-            // Show a progress dialog to the user
-            signingIn = ProgressDialog.show(this, getString(R.string.signup_progress_title), getString(R.string.signup_progress_message), true);
-
-            // Create a new user with the supplied details
-            AccountManager.createWithEmail(email, "", role, displayName, createWithEmailCallback);
-        }
-    }
-
-    @Override
-    public void onDisconnected() {
-        // TODO Auto-generated method stub
-
-    }
-
-	/*
-	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-	    if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
-	        mConnectionResult = null;
-	        mPlusClient.connect();
-	    } else{
-	    	 super.onActivityResult(requestCode, responseCode, intent);
-	 	    FacebookUtil.onActivityResult(this, requestCode, responseCode, intent);
-	 	}
-	    }
-	}*/
 
     @Override
     protected void onActivityResult(int _requestCode, int _resultCode, Intent _data) {
