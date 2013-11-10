@@ -22,11 +22,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.plus.PlusClient;
-import com.google.android.gms.plus.model.people.Person;
+
 import com.turbomanage.httpclient.ParameterMap;
 import org.json.JSONException;
 import org.json.JSONObject;
