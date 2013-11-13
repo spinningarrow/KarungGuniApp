@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.omemore.karungguniapp.listview.ImageLoader;
+import com.onemore.karungguniapp.listview.ImageLoader;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

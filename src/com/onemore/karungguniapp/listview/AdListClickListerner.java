@@ -1,4 +1,4 @@
-package com.omemore.karungguniapp.listview;
+package com.onemore.karungguniapp.listview;
 
 import android.content.Context;
 import android.content.Intent;

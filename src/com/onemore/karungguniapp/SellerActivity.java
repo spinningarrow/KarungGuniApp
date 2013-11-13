@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.omemore.karungguniapp.listview.AdvertisementList;
+import com.onemore.karungguniapp.listview.AdvertisementList;
 
 public class SellerActivity extends Activity {
 

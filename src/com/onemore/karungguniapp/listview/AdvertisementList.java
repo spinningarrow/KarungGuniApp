@@ -1,4 +1,4 @@
-package com.omemore.karungguniapp.listview;
+package com.onemore.karungguniapp.listview;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -10,9 +10,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-import com.omemore.karungguniapp.listview.AdvertisementList;
+import com.onemore.karungguniapp.listview.AdvertisementList;
 import com.onemore.karungguniapp.LBS.GetLocationWithGPS;
 
 public class KarungGuniActivity extends Activity {
